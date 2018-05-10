@@ -7,8 +7,15 @@
 </head>
 <body class="pt-4">
 <div class="container">
-    <h1>Socket Test</h1>
-    <div id="messages"></div>
+    <div id="app">
+        <h1>Socket Test</h1>
+        <div class="badge badge-success mb-4" v-if="connected">verbunden</div>
+        <div v-for="card in cards" id="cards">
+            <div class="card">
+                {{card}}
+            </div>
+        </div>
+    </div>
 </div>
 <script src="dist/js/libs/jquery.min.js"></script>
 <script src="dist/js/libs/vue.min.js"></script>

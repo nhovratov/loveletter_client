@@ -1,12 +1,19 @@
-var conn = (function () {
-    var conn = new WebSocket('ws://127.0.0.1:8080');
+var app = new Vue({
+    el: "#app",
+    data: {
+        connected: false,
+        cards: []
+    },
+    beforeMount: function () {
+        window.conn = new WebSocket('ws://127.0.0.1:8080');
 
-    conn.onopen = function (e) {
-        document.getElementById('messages').innerHTML += "<p>Du bist verbunden!</p>";
-    };
+        conn.onopen = function (e) {
+            app.connected = true;
+        };
 
-    conn.onmessage = function (e) {
+        conn.onmessage = function (e) {
+            app.cards = JSON.parse(e.data);
+        };
+    }
 
-    };
-    return conn;
-}());
+});
