@@ -19,6 +19,9 @@
             </ul>
             <button class="btn btn-primary" v-if="isHost() && gameCanStart()" v-on:click="startGame()">Spiel starten</button>
         </div>
+        <div class="loveletter" v-if="loveletter.global.gameStarted">
+            Loveletter!
+        </div>
     </div>
 </div>
 <script src="dist/js/libs/jquery.min.js"></script>

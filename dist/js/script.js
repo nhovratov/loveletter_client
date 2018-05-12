@@ -1,6 +1,10 @@
 var app = new Vue({
     el: "#app",
     data: {
+        loveletter: {
+            global: {},
+            local: {}
+        },
         game: {
             global: {},
             local: {}
@@ -19,7 +23,12 @@ var app = new Vue({
         };
 
         conn.onmessage = function (e) {
-            app.game = JSON.parse(e.data);
+            var data = JSON.parse(e.data);
+            if (data.dataType === "game") {
+                app.loveletter = data;
+            } else {
+                app.game = JSON.parse(e.data);
+            }
             if (!Cookies.get('id')) {
                 Cookies.set('id', app.game.local.id);
                 conn.send(JSON.stringify(app.game.local));
