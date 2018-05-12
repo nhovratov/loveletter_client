@@ -12,10 +12,17 @@ var app = new Vue({
 
         conn.onopen = function (e) {
             app.local.connected = true;
+            if (Cookies.get('id')) {
+                app.game.local.id = Cookies.get('id');
+                conn.send(JSON.stringify(app.game.local));
+            }
         };
 
         conn.onmessage = function (e) {
             app.game = JSON.parse(e.data);
+            if (!Cookies.get('id')) {
+                Cookies.set('id', app.game.local.id);
+            }
         };
     }
 

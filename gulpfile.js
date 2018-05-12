@@ -27,7 +27,8 @@ gulp.task('theme-css', function () {
 gulp.task('js', function () {
     return gulp.src([
         'node_modules/jquery/dist/jquery.min.js',
-        'node_modules/vue/dist/vue.min.js'
+        'node_modules/vue/dist/vue.min.js',
+        'node_modules/js-cookie/src/js.cookie.js'
     ])
         .pipe(lec())
         .pipe(gulp.dest('dist/js/libs'));
