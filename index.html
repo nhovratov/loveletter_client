@@ -21,6 +21,12 @@
         </div>
         <div class="loveletter" v-if="loveletter.global.gameStarted">
             <h2>Love Letter</h2>
+            <div>
+                <p>Karten, die aus dem Spiel sind: </p>
+                <ul>
+                    <li v-for="card in loveletter.global.outOfGameCards">{{card.name}}</li>
+                </ul>
+            </div>
             <p>Deine Karten:</p>
             <div class="d-flex">
                 <div class="card" v-for="card in loveletter.local.cards">
