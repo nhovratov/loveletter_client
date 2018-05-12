@@ -7258,6 +7258,9 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6; } }
 
 .lobby {
+  position: absolute;
+  left: 0;
+  bottom: 0;
   width: 400px;
   background-color: #ced4da;
   padding: 15px; }
