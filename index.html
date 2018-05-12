@@ -9,11 +9,15 @@
 <div class="container">
     <div id="app">
         <h1>Socket Test</h1>
-        <div class="badge badge-success mb-4" v-if="connected">verbunden</div>
-        <div v-for="card in cards" id="cards">
+        <div class="badge badge-success mb-4" v-if="local.connected">verbunden</div>
+        <div v-for="card in local.cards" id="cards">
             <div class="card">
                 {{card}}
             </div>
+        </div>
+        <div class="lobby">
+            <h2 class="lobby__header">Lobby</h2>
+            <div class="lobby__connections">Spieler online: {{game.global.connections}}</div>
         </div>
     </div>
 </div>
