@@ -22,13 +22,17 @@ var app = new Vue({
             app.game = JSON.parse(e.data);
             if (!Cookies.get('id')) {
                 Cookies.set('id', app.game.local.id);
+                conn.send(JSON.stringify(app.game.local));
             }
         };
     },
     methods: {
 
         isHost: function () {
-            return this.game.local.id == this.game.global.hostid;
+            if (this.game.global.hostid) {
+                return this.game.local.id == this.game.global.hostid;
+            }
+            return false;
         },
 
         gameCanStart: function () {
