@@ -10,12 +10,12 @@
     <div id="app">
         <h1>Socket Test</h1>
         <div class="badge badge-success mb-4" v-if="local.connected">verbunden #{{game.local.id}}</div>
-        <div class="badge badge-info mb-4" v-if="game.global.hostid == game.local.id">Host</div>
+        <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
             <div class="lobby__connections">Spieler online: {{getActivePlayerCount()}}</div>
             <ul>
-                <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-for="player in game.global.players">#{{player.id}} <span v-if="player.id == game.local.id">(you)</span> <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span><span class="badge badge-danger" v-if="!player.connected">disconnected</span></li>
+                <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-if="game.global.players" v-for="player in game.global.players">#{{player.id}} <span v-if="player.id == game.local.id">(you)</span> <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span><span class="badge badge-danger" v-if="!player.connected">disconnected</span></li>
             </ul>
             <button class="btn btn-primary" v-if="isHost() && gameCanStart()" v-on:click="startGame()">Spiel starten</button>
         </div>

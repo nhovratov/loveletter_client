@@ -40,7 +40,9 @@ var app = new Vue({
         },
 
         startGame: function () {
-            console.log('start game');
+            window.conn.send(JSON.stringify({
+                "action": "start"
+            }));
         },
 
         getActivePlayerCount: function () {
