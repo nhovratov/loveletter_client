@@ -17,7 +17,7 @@
             <ul>
                 <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-if="game.global.players" v-for="player in game.global.players">#{{player.id}} <span v-if="player.id == game.local.id">(you)</span> <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span><span class="badge badge-danger" v-if="!player.connected">disconnected</span></li>
             </ul>
-            <button class="btn btn-primary" v-if="isHost() && gameCanStart()" v-on:click="startGame()">Spiel starten</button>
+            <button class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted" v-on:click="startGame()">Spiel starten</button>
         </div>
         <div class="loveletter" v-if="loveletter.global.gameStarted">
             Loveletter!
