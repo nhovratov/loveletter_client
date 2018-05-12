@@ -20,7 +20,21 @@
             <button class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted" v-on:click="startGame()">Spiel starten</button>
         </div>
         <div class="loveletter" v-if="loveletter.global.gameStarted">
-            Loveletter!
+            <h2>Love Letter</h2>
+            <p>Deine Karten:</p>
+            <div class="d-flex">
+                <div class="card" v-for="card in loveletter.local.cards">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{card.name}} ({{card.value}})
+                        </h5>
+                        <p class="card-text">
+                            {{card.effect}}
+                        </p>
+                        <a href="#" class="btn btn-primary">Karte spielen</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

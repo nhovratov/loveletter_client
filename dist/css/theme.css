@@ -7266,3 +7266,8 @@ a.text-dark:hover, a.text-dark:focus {
   padding: 15px; }
   .lobby__header {
     font-size: 18px; }
+
+.card {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 250px;
+          flex: 0 0 250px; }
