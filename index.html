@@ -11,11 +11,6 @@
         <h1>Socket Test</h1>
         <div class="badge badge-success mb-4" v-if="local.connected">verbunden #{{game.local.id}}</div>
         <div class="badge badge-info mb-4" v-if="game.global.hostid == game.local.id">Host</div>
-        <div v-for="card in local.cards" id="cards">
-            <div class="card">
-                {{card}}
-            </div>
-        </div>
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
             <div class="lobby__connections">Spieler online: {{getActivePlayerCount()}}</div>
