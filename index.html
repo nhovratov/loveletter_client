@@ -17,7 +17,11 @@
         </div>
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
+            <p>Du: <strong>#{{game.local.id}}</strong></p>
             <div class="lobby__connections">Spieler online: {{game.global.connections}}</div>
+            <ul>
+                <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-for="player in game.global.players">#{{player.id}}</li>
+            </ul>
         </div>
     </div>
 </div>
