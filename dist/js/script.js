@@ -32,11 +32,24 @@ var app = new Vue({
         },
 
         gameCanStart: function () {
-            return this.game.global.connections >= 2;
+            return this.getActivePlayerCount() >= 2;
         },
 
         startGame: function () {
+            console.log('start game');
+        },
 
+        getActivePlayerCount: function () {
+            var count = 0;
+            if (!this.game.global.players) {
+                return 0;
+            }
+            this.game.global.players.forEach(function (player) {
+                if (player.connected) {
+                    count += 1;
+                }
+            });
+            return count;
         }
 
     }
