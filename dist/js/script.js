@@ -20,6 +20,11 @@ var app = new Vue({
                 app.game.local.id = Cookies.get('id');
                 conn.send(JSON.stringify(app.game.local));
             }
+
+            if (Cookies.get('name')) {
+                app.game.local.name = Cookies.get('name');
+                conn.send(JSON.stringify(app.game.local));
+            }
         };
 
         conn.onmessage = function (e) {
@@ -65,6 +70,16 @@ var app = new Vue({
                 }
             });
             return count;
+        },
+
+        setName: function () {
+            Cookies.set('name', $('#username').val());
+            app.game.local.name = Cookies.get('name');
+            conn.send(JSON.stringify(app.game.local));
+        },
+
+        hasUsername: function () {
+            return Cookies.get('name');
         }
 
     }
