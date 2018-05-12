@@ -9,7 +9,8 @@
 <div class="container">
     <div id="app">
         <h1>Socket Test</h1>
-        <div class="badge badge-success mb-4" v-if="local.connected">verbunden</div>
+        <div class="badge badge-success mb-4" v-if="local.connected">verbunden #{{game.local.id}}</div>
+        <div class="badge badge-info mb-4" v-if="game.global.hostid == game.local.id">Host</div>
         <div v-for="card in local.cards" id="cards">
             <div class="card">
                 {{card}}
@@ -17,10 +18,9 @@
         </div>
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
-            <p>Du: <strong>#{{game.local.id}}</strong></p>
             <div class="lobby__connections">Spieler online: {{game.global.connections}}</div>
             <ul>
-                <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-for="player in game.global.players">#{{player.id}}</li>
+                <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-for="player in game.global.players">#{{player.id}} <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span></li>
             </ul>
         </div>
     </div>
