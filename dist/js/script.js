@@ -24,6 +24,21 @@ var app = new Vue({
                 Cookies.set('id', app.game.local.id);
             }
         };
+    },
+    methods: {
+
+        isHost: function () {
+            return this.game.local.id == this.game.global.hostid;
+        },
+
+        gameCanStart: function () {
+            return this.game.global.connections >= 2;
+        },
+
+        startGame: function () {
+
+        }
+
     }
 
 });

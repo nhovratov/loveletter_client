@@ -22,6 +22,7 @@
             <ul>
                 <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-for="player in game.global.players">#{{player.id}} <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span></li>
             </ul>
+            <button class="btn btn-primary" v-if="isHost() && gameCanStart()" v-on:click="startGame()">Spiel starten</button>
         </div>
     </div>
 </div>
