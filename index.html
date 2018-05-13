@@ -25,7 +25,7 @@
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
             <!-- Game status -->
-            <span v-if="!loveletter.global.gameStarted">Spiel wird vorbereitet...</span>
+            <span>{{game.global.status}}</span>
 
             <!-- Username enter -->
             <div v-if="!hasUsername()">
