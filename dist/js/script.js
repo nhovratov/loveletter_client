@@ -49,6 +49,13 @@ var app = new Vue({
             return false;
         },
 
+        isPlayersTurn: function (id) {
+            if (this.game.local.id == this.loveletter.global.playerTurn) {
+                return true;
+            }
+            return false;
+        },
+
         gameCanStart: function () {
             return this.getActivePlayerCount() >= 2;
         },

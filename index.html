@@ -9,7 +9,12 @@
 <div class="container">
     <div id="app">
         <h1>Love Letter</h1>
-        <div class="badge badge-success mb-4" v-if="local.connected">verbunden <span v-if="game.local.name">{{game.local.name}}</span> #{{game.local.id}}</div>
+        <div
+                class="badge badge-success mb-4"
+                v-if="local.connected"
+        >
+            verbunden <span v-if="game.local.name">{{game.local.name}}</span> #{{game.local.id}}
+        </div>
         <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
         <!-- Lobby -->
         <div class="lobby">
@@ -29,11 +34,24 @@
 
             <!-- Connection list -->
             <ul>
-                <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-if="game.global.players" v-for="player in game.global.players"><span v-if="player.name">{{player.name}}</span> #{{player.id}} <span v-if="player.id == game.local.id">(you)</span> <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span><span class="badge badge-danger" v-if="!player.connected">disconnected</span></li>
+                <li
+                        v-bind:class="{'font-weight-bold': player.id == game.local.id}"
+                        v-if="game.global.players" v-for="player in game.global.players"
+                >
+                    <span v-if="player.name">{{player.name}}</span>
+                    #{{player.id}} <span v-if="player.id == game.local.id">(you)</span>
+                    <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span>
+                    <span class="badge badge-danger" v-if="!player.connected">disconnected</span>
+                </li>
             </ul>
 
             <!-- Start game button, smash it! -->
-            <button class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted" v-on:click="startGame()">Spiel starten</button>
+            <button
+                    class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted"
+                    v-on:click="startGame()"
+            >
+                Spiel starten
+            </button>
         </div>
 
         <!-- Game -->
@@ -61,10 +79,24 @@
                 </div>
             </div>
 
+            <!-- Players in Love Letter -->
             <p>Spieler:</p>
             <ul class="list-group mb-4">
-                <li class="list-group-item" v-bind:class="[{active: player.id == loveletter.global.playerTurn}]" v-for="player in loveletter.global.players">
+                <li
+                        class="list-group-item d-flex align-items-center"
+                        v-bind:class="[{active: player.id == loveletter.global.playerTurn}]"
+                        v-for="player in loveletter.global.players"
+                >
                     {{player.name}} #{{player.id}}
+                    <button
+                            v-if="player.id != game.local.id
+                            && isPlayersTurn()
+                            && loveletter.global.waitingForPlayerToChoosePlayer"
+
+                            class="btn btn-warning ml-auto"
+                    >
+                        auswählen
+                    </button>
                 </li>
             </ul>
 
@@ -80,7 +112,9 @@
                             {{card.effect}}
                         </p>
                         <button
-                                v-if="loveletter.global.playerTurn == game.local.id && loveletter.global.waitingForPlayerToChooseCard"
+                                v-if="loveletter.global.playerTurn == game.local.id
+                                && loveletter.global.waitingForPlayerToChooseCard"
+
                                 v-on:click="chooseCard(index)"
                                 class="btn btn-primary"
                         >
