@@ -13,7 +13,7 @@
         <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
-            <span v-if="!loveletter.global.gameStarted">Spiel wird vorbereitet...</span><span v-if="loveletter.global.gameStarted">Spiel läuft...</span>
+            <span v-if="!loveletter.global.gameStarted">Spiel wird vorbereitet...</span><span v-if="loveletter.global.gameStarted">{{loveletter.global.status}}</span>
             <div v-if="!hasUsername()">
             <label class="custom-control-label" for="username">Dein Name:</label><input v-on:keyup.enter="setName" class="form-control" type="text" id="username">
             </div>
@@ -24,7 +24,7 @@
             <button class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted" v-on:click="startGame()">Spiel starten</button>
         </div>
         <div class="loveletter" v-if="loveletter.global.gameStarted">
-            <div class="mb-2" v-if="!loveletter.global.firstPlayerSelected">
+            <div class="mb-2" v-if="!loveletter.global.firstPlayerSelected && isHost()">
                 <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
                 <button class="btn btn-primary btn-sm mr-2" v-for="player in loveletter.global.players">{{player.name}} #{{player.id}}</button>
             </div>
@@ -44,7 +44,7 @@
                         <p class="card-text">
                             {{card.effect}}
                         </p>
-                        <a href="#" class="btn btn-primary">Karte spielen</a>
+                        <a v-if="loveletter.global.firstPlayerSelected && loveletter.global.playerTurn.id == game.local.id" href="#" class="btn btn-primary">Karte spielen</a>
                     </div>
                 </div>
             </div>
