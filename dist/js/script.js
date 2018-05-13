@@ -59,6 +59,15 @@ var app = new Vue({
             }));
         },
 
+        selectFirstPlayer: function (id) {
+            window.conn.send(JSON.stringify({
+                "action": "selectFirstPlayer",
+                "params": {
+                    "id": id
+                }
+            }));
+        },
+
         getActivePlayerCount: function () {
             var count = 0;
             if (!this.game.global.players) {
