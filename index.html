@@ -9,6 +9,7 @@
 <div class="container">
     <div id="app">
         <h1>Love Letter</h1>
+        <!-- Connectivity -->
         <div
                 class="badge badge-success mb-4"
                 v-if="local.connected"
@@ -16,12 +17,15 @@
             verbunden <span v-if="game.local.name">{{game.local.name}}</span> #{{game.local.id}}
         </div>
         <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
+
+        <!-- Game status -->
+        <div v-if="loveletter.global.gameStarted" class="alert alert-info">{{loveletter.global.status}}</div>
+
         <!-- Lobby -->
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
             <!-- Game status -->
             <span v-if="!loveletter.global.gameStarted">Spiel wird vorbereitet...</span>
-            <span v-if="loveletter.global.gameStarted">{{loveletter.global.status}}</span>
 
             <!-- Username enter -->
             <div v-if="!hasUsername()">
