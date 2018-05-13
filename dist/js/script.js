@@ -68,6 +68,15 @@ var app = new Vue({
             }));
         },
 
+        chooseCard: function (index) {
+            window.conn.send(JSON.stringify({
+                "action": "chooseCard",
+                "params": {
+                    "index": index
+                }
+            }));
+        },
+
         getActivePlayerCount: function () {
             var count = 0;
             if (!this.game.global.players) {
