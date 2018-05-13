@@ -11,29 +11,64 @@
         <h1>Love Letter</h1>
         <div class="badge badge-success mb-4" v-if="local.connected">verbunden <span v-if="game.local.name">{{game.local.name}}</span> #{{game.local.id}}</div>
         <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
+        <!-- Lobby -->
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
-            <span v-if="!loveletter.global.gameStarted">Spiel wird vorbereitet...</span><span v-if="loveletter.global.gameStarted">{{loveletter.global.status}}</span>
+            <!-- Game status -->
+            <span v-if="!loveletter.global.gameStarted">Spiel wird vorbereitet...</span>
+            <span v-if="loveletter.global.gameStarted">{{loveletter.global.status}}</span>
+
+            <!-- Username enter -->
             <div v-if="!hasUsername()">
-            <label class="custom-control-label" for="username">Dein Name:</label><input v-on:keyup.enter="setName" class="form-control" type="text" id="username">
+                <label class="custom-control-label" for="username">Dein Name:</label>
+                <input v-on:keyup.enter="setName" class="form-control" type="text" id="username">
             </div>
+
+            <!-- Player num -->
             <div class="lobby__connections">Spieler online: {{getActivePlayerCount()}}</div>
+
+            <!-- Connection list -->
             <ul>
                 <li v-bind:class="{'font-weight-bold': player.id == game.local.id}" v-if="game.global.players" v-for="player in game.global.players"><span v-if="player.name">{{player.name}}</span> #{{player.id}} <span v-if="player.id == game.local.id">(you)</span> <span class="badge badge-info" v-if="player.id == game.global.hostid">Host</span><span class="badge badge-danger" v-if="!player.connected">disconnected</span></li>
             </ul>
+
+            <!-- Start game button, smash it! -->
             <button class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted" v-on:click="startGame()">Spiel starten</button>
         </div>
+
+        <!-- Game -->
         <div class="loveletter" v-if="loveletter.global.gameStarted">
+
+            <!-- Select first player -->
             <div class="mb-2" v-if="!loveletter.global.firstPlayerSelected && isHost()">
                 <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
-                <button class="btn btn-primary btn-sm mr-2" v-for="player in loveletter.global.players" v-on:click="selectFirstPlayer(player.id)">{{player.name}} #{{player.id}}</button>
+                <button
+                        class="btn btn-primary btn-sm mr-2"
+                        v-for="player in loveletter.global.players"
+                        v-on:click="selectFirstPlayer(player.id)"
+                >
+                    {{player.name}} #{{player.id}}
+                </button>
             </div>
+
+            <!-- Removed cards (if only 2 people play) -->
             <div v-if="loveletter.global.players.length == 2">
-                <p>Karten, die aus dem Spiel sind: </p>
-                <ul>
-                    <li v-for="card in loveletter.global.outOfGameCards">{{card.name}}</li>
-                </ul>
+                <div class="alert alert-warning">
+                    <span>Karten, die aus dem Spiel sind: </span>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item" v-for="card in loveletter.global.outOfGameCards">{{card.name}}</li>
+                    </ul>
+                </div>
             </div>
+
+            <p>Spieler:</p>
+            <ul class="list-group mb-4">
+                <li class="list-group-item" v-bind:class="[{active: player.id == loveletter.global.playerTurn}]" v-for="player in loveletter.global.players">
+                    {{player.name}} #{{player.id}}
+                </li>
+            </ul>
+
+            <!-- Hand cards -->
             <p>Deine Karten:</p>
             <div class="d-flex mb-4">
                 <div class="card mr-2" v-for="(card, index) in loveletter.local.cards">
@@ -44,10 +79,18 @@
                         <p class="card-text">
                             {{card.effect}}
                         </p>
-                        <button v-if="loveletter.global.playerTurn == game.local.id && loveletter.global.waitingForPlayer" v-on:click="chooseCard(index)" class="btn btn-primary">Karte spielen</button>
+                        <button
+                                v-if="loveletter.global.playerTurn == game.local.id && loveletter.global.waitingForPlayer"
+                                v-on:click="chooseCard(index)"
+                                class="btn btn-primary"
+                        >
+                            Karte spielen
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <!-- card on field -->
             <p>Spielfeld:</p>
             <div class="d-flex mb-4">
                 <div class="card" v-for="card in loveletter.global.openCards">
@@ -61,6 +104,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
