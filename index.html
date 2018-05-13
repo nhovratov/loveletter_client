@@ -143,8 +143,10 @@
                         </p>
                         <button
                             class="btn btn-danger"
-                            v-if="isPlayersTurn
+                            v-if="isPlayersTurn()
                             && loveletter.global.activeCard.effectFinished"
+
+                            v-on:click="depositActiveCard"
                         >
                             Auf Ablagestapel
                         </button>

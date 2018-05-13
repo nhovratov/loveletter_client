@@ -93,6 +93,12 @@ var app = new Vue({
             }));
         },
 
+        depositActiveCard: function () {
+            window.conn.send(JSON.stringify({
+                "action": "depositActiveCard"
+            }));
+        },
+
         getActivePlayerCount: function () {
             var count = 0;
             if (!this.game.global.players) {
