@@ -13,6 +13,7 @@
         <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
+            <span v-if="!loveletter.global.gameStarted">Spiel wird vorbereitet...</span><span v-if="loveletter.global.gameStarted">Spiel läuft...</span>
             <div v-if="!hasUsername()">
             <label class="custom-control-label" for="username">Dein Name:</label><input v-on:keyup.enter="setName" class="form-control" type="text" id="username">
             </div>
