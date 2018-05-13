@@ -24,7 +24,11 @@
             <button class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted" v-on:click="startGame()">Spiel starten</button>
         </div>
         <div class="loveletter" v-if="loveletter.global.gameStarted">
-            <div>
+            <div class="mb-2" v-if="!loveletter.global.firstPlayerSelected">
+                <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
+                <button class="btn btn-primary btn-sm mr-2" v-for="player in loveletter.global.players">{{player.name}} #{{player.id}}</button>
+            </div>
+            <div v-if="loveletter.global.players.length == 2">
                 <p>Karten, die aus dem Spiel sind: </p>
                 <ul>
                     <li v-for="card in loveletter.global.outOfGameCards">{{card.name}}</li>
