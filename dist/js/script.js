@@ -84,6 +84,15 @@ var app = new Vue({
             }));
         },
 
+        selectPlayerForEffect: function (id) {
+            window.conn.send(JSON.stringify({
+                "action": "selectPlayerForEffect",
+                "params": {
+                    "id": id
+                }
+            }));
+        },
+
         getActivePlayerCount: function () {
             var count = 0;
             if (!this.game.global.players) {
