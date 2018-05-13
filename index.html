@@ -80,7 +80,7 @@
                             {{card.effect}}
                         </p>
                         <button
-                                v-if="loveletter.global.playerTurn == game.local.id && loveletter.global.waitingForPlayer"
+                                v-if="loveletter.global.playerTurn == game.local.id && loveletter.global.waitingForPlayerToChooseCard"
                                 v-on:click="chooseCard(index)"
                                 class="btn btn-primary"
                         >
