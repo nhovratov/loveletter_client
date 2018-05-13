@@ -99,6 +99,19 @@ var app = new Vue({
             }));
         },
 
+        selectGuardianEffectCard: function (card) {
+            window.conn.send(JSON.stringify({
+                "action": "selectGuardianEffectCard",
+                "params": {
+                    "card": card
+                }
+            }));
+        },
+
+        isOutOfGame: function (id) {
+            return this.loveletter.global.outOfGamePlayers.indexOf(id) !== -1;
+        },
+
         getActivePlayerCount: function () {
             var count = 0;
             if (!this.game.global.players) {

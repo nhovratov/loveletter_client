@@ -88,10 +88,16 @@
             <ul class="list-group mb-4">
                 <li
                     class="list-group-item d-flex align-items-center"
-                    v-bind:class="[{active: player.id == loveletter.global.playerTurn}]"
+                    v-bind:class="[{active: player.id == loveletter.global.playerTurn}, {disabled: !loveletter.local.ingame}]"
                     v-for="player in loveletter.global.players"
                 >
                     {{player.name}} #{{player.id}}
+                    <span
+                        class="ml-2 badge badge-dark"
+                        v-if="isOutOfGame(player.id)"
+                    >
+                        ausgeschieden
+                    </span>
                     <button
                         v-if="player.id != game.local.id
                         && isPlayersTurn()
@@ -105,6 +111,25 @@
                     </button>
                 </li>
             </ul>
+
+            <!-- Guardian Effect selectable cards -->
+            <div v-if="isPlayersTurn() && !loveletter.global.guardianEffectCardSelected">
+                <p>Wähle die Karte, die {{loveletter.global.guardianEffectChosenPlayer}} auf der Hand hält!</p>
+                <ul class="list-group mb-4">
+                    <li
+                        class="list-group-item d-flex align-items-center"
+                        v-for="card in loveletter.global.guardianEffectSelectableCards"
+                    >
+                        {{card}}
+                        <button
+                            class="btn btn-sm btn-success ml-auto"
+                            v-on:click="selectGuardianEffectCard(card)"
+                        >
+                            auswählen
+                        </button>
+                    </li>
+                </ul>
+            </div>
 
             <!-- Hand cards -->
             <p>Deine Karten:</p>

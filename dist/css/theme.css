@@ -7258,11 +7258,11 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6; } }
 
 .lobby {
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
-  width: 400px;
-  background-color: #ced4da;
+  width: 370px;
+  background-color: rgba(206, 212, 218, 0.5);
   padding: 15px; }
   .lobby__header {
     font-size: 18px; }
