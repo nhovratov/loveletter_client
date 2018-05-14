@@ -101,7 +101,8 @@
                     <button
                         v-if="player.id != game.local.id
                         && isPlayersTurn()
-                        && loveletter.global.waitingForPlayerToChoosePlayer"
+                        && loveletter.global.waitingForPlayerToChoosePlayer
+                        && !isOutOfGame(player.id)"
 
                         v-on:click="selectPlayerForEffect(player.id)"
 
@@ -144,7 +145,8 @@
                         </p>
                         <button
                             v-if="loveletter.global.playerTurn == game.local.id
-                            && loveletter.global.waitingForPlayerToChooseCard"
+                            && loveletter.global.waitingForPlayerToChooseCard
+                            && !isOutOfGame(app.game.local.id)"
 
                             v-on:click="chooseCard(index)"
                             class="btn btn-primary"
