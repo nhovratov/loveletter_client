@@ -181,7 +181,7 @@
                             && loveletter.global.activeCard.effectFinished
                             && !isGameFinished()"
 
-                            v-on:click="depositActiveCard"
+                            v-on:click="discardActiveCard"
                         >
                             Auf Ablagestapel
                         </button>
@@ -190,9 +190,9 @@
             </div>
 
             <p>Ablagestapel:</p>
-            <div v-for="(card, index) in loveletter.global.depositedCards">
+            <div v-for="(card, index) in loveletter.global.discardPile">
                 <div class="d-flex">
-                    <div class="card" v-if="index == loveletter.global.depositedCards.length - 1">
+                    <div class="card" v-if="index == loveletter.global.discardPile.length - 1">
                         <div class="card-body">
                             <h5 class="card-title">
                                 {{card.name}} ({{card.value}})

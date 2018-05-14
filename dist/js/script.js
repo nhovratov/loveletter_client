@@ -93,9 +93,9 @@ var app = new Vue({
             }));
         },
 
-        depositActiveCard: function () {
+        discardActiveCard: function () {
             window.conn.send(JSON.stringify({
-                "action": "depositActiveCard"
+                "action": "discardActiveCard"
             }));
         },
 
