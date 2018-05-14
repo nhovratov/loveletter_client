@@ -179,6 +179,19 @@
                 </div>
             </div>
 
+            <p>Ablagestapel:</p>
+            <div class="d-flex mb-4" v-for="(card, index) in loveletter.global.depositedCards">
+                <div class="card" v-if="index == loveletter.global.depositedCards.length - 1">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{card.name}} ({{card.value}})
+                        </h5>
+                        <p class="card-text">
+                            {{card.effect}}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
