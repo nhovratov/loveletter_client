@@ -112,6 +112,14 @@ var app = new Vue({
             return this.loveletter.global.outOfGamePlayers.indexOf(id) !== -1;
         },
 
+        isGameFinished: function () {
+          return this.loveletter.global.gameFinished;
+        },
+
+        isWinner: function (id) {
+          return id == this.loveletter.global.winner;
+        },
+
         getActivePlayerCount: function () {
             var count = 0;
             if (!this.game.global.players) {

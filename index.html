@@ -98,6 +98,12 @@
                     >
                         ausgeschieden
                     </span>
+                    <span
+                        class="ml-2 badge badge-success"
+                        v-if="isGameFinished && isWinner(player.id)"
+                    >
+                        gewonnen
+                    </span>
                     <button
                         v-if="player.id != game.local.id
                         && isPlayersTurn()
@@ -146,7 +152,8 @@
                         <button
                             v-if="loveletter.global.playerTurn == game.local.id
                             && loveletter.global.waitingForPlayerToChooseCard
-                            && !isOutOfGame(app.game.local.id)"
+                            && !isOutOfGame(app.game.local.id)
+                            && !isGameFinished()"
 
                             v-on:click="chooseCard(index)"
                             class="btn btn-primary"
@@ -171,7 +178,8 @@
                         <button
                             class="btn btn-danger"
                             v-if="isPlayersTurn()
-                            && loveletter.global.activeCard.effectFinished"
+                            && loveletter.global.activeCard.effectFinished
+                            && !isGameFinished()"
 
                             v-on:click="depositActiveCard"
                         >
