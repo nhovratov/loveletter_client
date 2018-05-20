@@ -21,7 +21,7 @@ var app = new Vue({
                 conn.send(JSON.stringify(app.game.local));
             }
 
-            if (Cookies.get('name')) {
+            if (Cookies.get('name') && Cookies.get('id')) {
                 app.game.local.name = Cookies.get('name');
                 conn.send(JSON.stringify(app.game.local));
             }
