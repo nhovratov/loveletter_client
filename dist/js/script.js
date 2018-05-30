@@ -35,7 +35,7 @@ var app = new Vue({
                 app.game = JSON.parse(e.data);
             }
             if (!Cookies.get('id')) {
-                Cookies.set('id', app.game.local.id);
+                Cookies.set('id', app.game.local.id, { expires: 30 });
                 conn.send(JSON.stringify(app.game.local));
             }
         };
@@ -140,7 +140,7 @@ var app = new Vue({
         },
 
         setName: function () {
-            Cookies.set('name', $('#username').val());
+            Cookies.set('name', $('#username').val(), { expires: 30 });
             app.game.local.name = Cookies.get('name');
             conn.send(JSON.stringify(app.game.local));
         },
