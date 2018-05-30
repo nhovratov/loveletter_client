@@ -19,7 +19,7 @@
         <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
 
         <!-- Game status -->
-        <div v-if="loveletter.global.gameStarted" class="alert alert-info">{{loveletter.global.status}}</div>
+        <div v-if="loveletter.global.status != ''" class="alert alert-info">{{loveletter.global.status}}</div>
 
         <!-- Lobby -->
         <div class="lobby">
@@ -59,7 +59,7 @@
         </div>
 
         <!-- Game -->
-        <div class="loveletter" v-if="loveletter.global.gameStarted">
+        <div class="loveletter" v-if="loveletter.global.gameStarted || loveletter.global.winner != ''">
 
             <!-- Select first player -->
             <div class="mb-2" v-if="loveletter.global.waitFor == 'firstPlayerSelect' && isHost()">
@@ -74,13 +74,11 @@
             </div>
 
             <!-- Removed cards (if only 2 people play) -->
-            <div v-if="loveletter.global.players.length == 2">
-                <div class="alert alert-warning">
-                    <span>Karten, die aus dem Spiel sind: </span>
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item" v-for="card in loveletter.global.outOfGameCards">{{card.name}}</li>
-                    </ul>
-                </div>
+            <div class="alert alert-warning" v-if="loveletter.global.outOfGameCards">
+                <span>Karten, die aus dem Spiel sind: </span>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item" v-for="card in loveletter.global.outOfGameCards">{{card.name}}</li>
+                </ul>
             </div>
 
             <!-- Players in Love Letter -->
@@ -192,7 +190,7 @@
             <p>Ablagestapel:</p>
             <div v-for="(card, index) in loveletter.global.discardPile">
                 <div class="d-flex">
-                    <div class="card" v-if="index == loveletter.global.discardPile.length - 1">
+                    <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">
                                 {{card.name}} ({{card.value}})
