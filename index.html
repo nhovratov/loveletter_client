@@ -73,6 +73,16 @@
                 </button>
             </div>
 
+            <div class="alert alert-success"
+                 v-if="loveletter.global.waitFor == 'finishLookingAtCard'
+                        && isPlayersTurn()"
+            >
+                Diese Karte wurde durch den Priester aufgedeckt: {{loveletter.local.priestEffectVisibleCard}}
+                <button class="btn btn-success" v-on:click="finishLookingAtCard">
+                    Fertig mit angucken
+                </button>
+            </div>
+
             <!-- Removed cards (if only 2 people play) -->
             <div class="alert alert-warning" v-if="loveletter.global.outOfGameCards">
                 <span>Karten, die aus dem Spiel sind: </span>

@@ -108,6 +108,12 @@ var app = new Vue({
             }));
         },
 
+        finishLookingAtCard: function () {
+            window.conn.send(JSON.stringify({
+                "action": "finishLookingAtCard"
+            }));
+        },
+
         isOutOfGame: function (id) {
             return this.loveletter.global.outOfGamePlayers.indexOf(id) !== -1;
         },
