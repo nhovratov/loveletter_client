@@ -75,7 +75,7 @@
 
             <div class="alert alert-success"
                  v-if="loveletter.global.waitFor == 'finishLookingAtCard'
-                        && isPlayersTurn()"
+                        && isPlayerTurn()"
             >
                 Diese Karte wurde durch den Priester aufgedeckt: {{loveletter.local.priestEffectVisibleCard}}
                 <button class="btn btn-success" v-on:click="finishLookingAtCard">
@@ -112,15 +112,22 @@
                     >
                         gewonnen
                     </span>
+                    <span
+                        class="ml-2 badge badge-info"
+                        v-if="isProtected(player.id)"
+                    >
+                        geschützt
+                    </span>
                     <button
                         v-if="player.id != game.local.id
-                        && isPlayersTurn()
+                        && isPlayerTurn()
                         && loveletter.global.waitFor == 'choosePlayer'
-                        && !isOutOfGame(player.id)"
+                        && !isOutOfGame(player.id)
+                        && !isProtected(player.id)"
 
                         v-on:click="selectPlayerForEffect(player.id)"
 
-                        class="btn btn-warning ml-auto"
+                        class="btn btn-sm btn-warning ml-auto"
                     >
                         auswählen
                     </button>
@@ -128,7 +135,7 @@
             </ul>
 
             <!-- Guardian Effect selectable cards -->
-            <div v-if="isPlayersTurn() && loveletter.global.waitFor == 'chooseGuardianEffectCard'">
+            <div v-if="isPlayerTurn() && loveletter.global.waitFor == 'chooseGuardianEffectCard'">
                 <p>Wähle die Karte, die {{loveletter.global.guardianEffectChosenPlayer}} auf der Hand hält!</p>
                 <ul class="list-group mb-4">
                     <li
@@ -185,13 +192,23 @@
                         </p>
                         <button
                             class="btn btn-danger"
-                            v-if="isPlayersTurn()
-                            && loveletter.global.waitFor == 'discardCard'
-                            && !isGameFinished()"
+                            v-if="isPlayerTurn()
+                            && !isGameFinished()
+                            && !(loveletter.global.waitFor == 'placeMaidCard')
+                            && (loveletter.global.waitFor == 'discardCard' || noSelectablePlayer())"
 
                             v-on:click="discardActiveCard"
                         >
                             Auf Ablagestapel
+                        </button>
+                        <button class="btn btn-success"
+                                v-if="isPlayerTurn()
+                                && loveletter.global.waitFor == 'placeMaidCard'
+                                && !isGameFinished()"
+
+                                v-on:click="placeMaidCard"
+                        >
+                            Offen vor dich hinlegen
                         </button>
                     </div>
                 </div>

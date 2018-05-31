@@ -35,7 +35,7 @@ var app = new Vue({
                 app.game = JSON.parse(e.data);
             }
             if (!Cookies.get('id')) {
-                Cookies.set('id', app.game.local.id, { expires: 30 });
+                Cookies.set('id', app.game.local.id, {expires: 30});
                 conn.send(JSON.stringify(app.game.local));
             }
         };
@@ -49,11 +49,20 @@ var app = new Vue({
             return false;
         },
 
-        isPlayersTurn: function (id) {
+        isPlayerTurn: function () {
             if (this.game.local.id == this.loveletter.global.playerTurn) {
                 return true;
             }
             return false;
+        },
+
+        isProtected: function (id) {
+            return this.loveletter.global.protectedPlayers.indexOf(id) !== -1;
+        },
+
+        noSelectablePlayer: function () {
+          return (this.game.global.players.length - 1)
+              === (this.loveletter.global.protectedPlayers.length + this.loveletter.global.outOfGamePlayers.length);
         },
 
         gameCanStart: function () {
@@ -114,16 +123,22 @@ var app = new Vue({
             }));
         },
 
+        placeMaidCard: function () {
+            window.conn.send(JSON.stringify({
+                "action": "placeMaidCard"
+            }));
+        },
+
         isOutOfGame: function (id) {
             return this.loveletter.global.outOfGamePlayers.indexOf(id) !== -1;
         },
 
         isGameFinished: function () {
-          return this.loveletter.global.gameFinished;
+            return this.loveletter.global.gameFinished;
         },
 
         isWinner: function (id) {
-          return id == this.loveletter.global.winner;
+            return id == this.loveletter.global.winner;
         },
 
         getActivePlayerCount: function () {
@@ -140,7 +155,7 @@ var app = new Vue({
         },
 
         setName: function () {
-            Cookies.set('name', $('#username').val(), { expires: 30 });
+            Cookies.set('name', $('#username').val(), {expires: 30});
             app.game.local.name = Cookies.get('name');
             conn.send(JSON.stringify(app.game.local));
         },
