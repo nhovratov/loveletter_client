@@ -62,15 +62,8 @@
         <div class="loveletter" v-if="loveletter.global.gameStarted || loveletter.global.winner != ''">
 
             <!-- Select first player -->
-            <div class="mb-2" v-if="loveletter.global.waitFor == 'firstPlayerSelect' && isHost()">
+            <div class="mb-2" v-if="loveletter.global.waitFor == 'selectFirstPlayer' && isHost()">
                 <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
-                <button
-                    class="btn btn-primary btn-sm mr-2"
-                    v-for="player in loveletter.global.players"
-                    v-on:click="selectFirstPlayer(player.id)"
-                >
-                    {{player.name}} #{{player.id}}
-                </button>
             </div>
 
             <div class="alert alert-success"
@@ -84,7 +77,11 @@
             </div>
 
             <!-- Removed cards (if only 2 people play) -->
-            <div class="alert alert-warning" v-if="loveletter.global.outOfGameCards">
+            <div
+                class="alert alert-warning"
+                v-if="loveletter.global.outOfGameCards
+                   && loveletter.global.outOfGameCards.length > 0"
+            >
                 <span>Karten, die aus dem Spiel sind: </span>
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item" v-for="card in loveletter.global.outOfGameCards">{{card.name}}</li>
@@ -96,7 +93,10 @@
             <ul class="list-group mb-4">
                 <li
                     class="list-group-item d-flex align-items-center"
-                    v-bind:class="[{active: player.id == loveletter.global.playerTurn}, {disabled: !loveletter.local.ingame}]"
+                    v-bind:class="[
+                        {active: player.id == loveletter.global.playerTurn},
+                        {disabled: !loveletter.local.ingame}
+                    ]"
                     v-for="player in loveletter.global.players"
                 >
                     {{player.name}} #{{player.id}}
@@ -125,12 +125,20 @@
                         && !isOutOfGame(player.id)
                         && !isProtected(player.id)"
 
-                        v-on:click="selectPlayerForEffect(player.id)"
+                        v-on:click="choosePlayer(player.id)"
 
                         class="btn btn-sm btn-warning ml-auto"
                     >
                         auswählen
                     </button>
+                    <button
+                        class="ml-2 btn btn-primary btn-sm"
+                        v-if="loveletter.global.waitFor == 'selectFirstPlayer' && isHost()"
+                        v-on:click="selectFirstPlayer(player.id)"
+                    >
+                        auswählen
+                    </button>
+
                 </li>
             </ul>
 
@@ -145,7 +153,7 @@
                         {{card}}
                         <button
                             class="btn btn-sm btn-success ml-auto"
-                            v-on:click="selectGuardianEffectCard(card)"
+                            v-on:click="chooseGuardianEffectCard(card)"
                         >
                             auswählen
                         </button>
@@ -195,9 +203,9 @@
                             v-if="isPlayerTurn()
                             && !isGameFinished()
                             && !(loveletter.global.waitFor == 'placeMaidCard')
-                            && (loveletter.global.waitFor == 'discardCard' || noSelectablePlayer())"
+                            && (loveletter.global.waitFor == 'confirmDiscardCard' || noSelectablePlayer())"
 
-                            v-on:click="discardActiveCard"
+                            v-on:click="confirmDiscardCard()"
                         >
                             Auf Ablagestapel
                         </button>

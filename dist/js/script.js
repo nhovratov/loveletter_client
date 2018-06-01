@@ -93,24 +93,24 @@ var app = new Vue({
             }));
         },
 
-        selectPlayerForEffect: function (id) {
+        choosePlayer: function (id) {
             window.conn.send(JSON.stringify({
-                "action": "selectPlayerForEffect",
+                "action": "choosePlayer",
                 "params": {
                     "id": id
                 }
             }));
         },
 
-        discardActiveCard: function () {
+        confirmDiscardCard: function () {
             window.conn.send(JSON.stringify({
-                "action": "discardActiveCard"
+                "action": "confirmDiscardCard"
             }));
         },
 
-        selectGuardianEffectCard: function (card) {
+        chooseGuardianEffectCard: function (card) {
             window.conn.send(JSON.stringify({
-                "action": "selectGuardianEffectCard",
+                "action": "chooseGuardianEffectCard",
                 "params": {
                     "card": card
                 }
