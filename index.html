@@ -195,13 +195,13 @@
             <!-- card on field -->
             <p>Spielfeld:</p>
             <div class="d-flex mb-4">
-                <div class="card" v-for="card in loveletter.global.openCards">
+                <div class="card" v-if="loveletter.global.activeCard">
                     <div class="card-body">
                         <h5 class="card-title">
-                            {{card.name}} ({{card.value}})
+                            {{loveletter.global.activeCard.name}} ({{loveletter.global.activeCard.value}})
                         </h5>
                         <p class="card-text">
-                            {{card.effect}}
+                            {{loveletter.global.activeCard.effect}}
                         </p>
                         <button
                             class="btn btn-danger"
