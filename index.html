@@ -18,9 +18,6 @@
         </div>
         <div class="badge badge-info mb-4" v-if="isHost()">Host</div>
 
-        <!-- Game status -->
-        <div v-if="loveletter.global.status != ''" class="alert alert-info">{{loveletter.global.status}}</div>
-
         <!-- Lobby -->
         <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
@@ -59,7 +56,13 @@
         </div>
 
         <!-- Game -->
-        <div class="loveletter" v-if="loveletter.global.gameStarted || loveletter.global.winner != ''">
+        <div
+            class="loveletter"
+            v-if="loveletter.global.gameStarted
+            || (loveletter.global.winners && loveletter.global.winners.length != 0)"
+        >
+            <!-- Game status -->
+            <div v-if="loveletter.global.status != ''" class="alert alert-info">{{loveletter.global.status}}</div>
 
             <!-- Select first player -->
             <div class="mb-2" v-if="loveletter.global.waitFor == 'selectFirstPlayer' && isHost()">

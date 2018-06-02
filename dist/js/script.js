@@ -139,7 +139,7 @@ var app = new Vue({
         },
 
         isWinner: function (id) {
-            return id == this.loveletter.global.winner;
+            return this.loveletter.global.winners.indexOf(id) !== -1;
         },
 
         getActivePlayerCount: function () {
