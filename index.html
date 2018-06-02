@@ -119,12 +119,17 @@
                         geschützt
                     </span>
                     <button
-                        v-if="player.id != game.local.id
-                        && isPlayerTurn()
-                        && loveletter.global.waitFor == 'choosePlayer'
+                        v-if="
+                           isPlayerTurn()
                         && !isOutOfGame(player.id)
-                        && !isProtected(player.id)"
-
+                        && !isProtected(player.id)
+                        &&
+                        (
+                             player.id != game.local.id
+                          && loveletter.global.waitFor == 'choosePlayer'
+                          ||
+                             loveletter.global.waitFor == 'chooseAnyPlayer'
+                        )"
                         v-on:click="choosePlayer(player.id)"
 
                         class="btn btn-sm btn-warning ml-auto"

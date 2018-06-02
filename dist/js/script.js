@@ -61,7 +61,8 @@ var app = new Vue({
         },
 
         noSelectablePlayer: function () {
-          return (this.game.global.players.length - 1)
+          return !(this.loveletter.global.waitFor === 'chooseAnyPlayer')
+              && (this.game.global.players.length - 1)
               === (this.loveletter.global.protectedPlayers.length + this.loveletter.global.outOfGamePlayers.length);
         },
 
@@ -95,7 +96,7 @@ var app = new Vue({
 
         choosePlayer: function (id) {
             window.conn.send(JSON.stringify({
-                "action": "choosePlayer",
+                "action": this.loveletter.global.waitFor,
                 "params": {
                     "id": id
                 }
