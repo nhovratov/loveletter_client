@@ -184,7 +184,8 @@
                             v-if="loveletter.global.playerTurn == game.local.id
                             && loveletter.global.waitFor == 'chooseCard'
                             && !isOutOfGame(app.game.local.id)
-                            && !isGameFinished()"
+                            && !isGameFinished()
+                            && !preventedByCountess(card.name)"
 
                             v-on:click="chooseCard(index)"
                             class="btn btn-primary"

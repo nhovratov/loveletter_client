@@ -66,6 +66,19 @@ var app = new Vue({
               === (this.loveletter.global.protectedPlayers.length + this.loveletter.global.outOfGamePlayers.length);
         },
 
+        preventedByCountess: function(cardname) {
+            var cards = [];
+            var mustPlayCards = ['König', 'Prinz'];
+
+            this.loveletter.local.cards.forEach(function(item) {
+                cards.push(item['name']);
+            });
+            if (cards.indexOf('Gräfin') === -1) {
+                return false;
+            }
+            return mustPlayCards.indexOf(cardname) !== -1; 
+        },
+
         gameCanStart: function () {
             return this.getActivePlayerCount() >= 2;
         },
