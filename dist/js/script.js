@@ -3,7 +3,11 @@ var app = new Vue({
     data: {
         loveletter: {
             global: {},
-            local: {}
+            local: {
+                cards: [],
+                openEffectCards: [],
+                priestEffectVisibleCard: []
+            }
         },
         game: {
             global: {},
@@ -18,29 +22,56 @@ var app = new Vue({
             app.local.connected = true;
             if (Cookies.get('id')) {
                 app.game.local.id = Cookies.get('id');
+                if (Cookies.get('name')) {
+                    app.game.local.name = Cookies.get('name');
+                }
                 conn.send(JSON.stringify(app.game.local));
             }
 
-            if (Cookies.get('name') && Cookies.get('id')) {
-                app.game.local.name = Cookies.get('name');
-                conn.send(JSON.stringify(app.game.local));
-            }
         };
 
         conn.onmessage = function (e) {
             var data = JSON.parse(e.data);
             if (data.dataType === "game") {
-                app.loveletter = data;
+                app.loveletter.global = data.global;
+                app.loveletter.local.openEffectCards = data.local.openEffectCards;
+                app.loveletter.local.priestEffectVisibleCard = data.local.priestEffectVisibleCard;
+                app.fetchCards(data.local.cards);
             } else {
                 app.game = JSON.parse(e.data);
             }
             if (!Cookies.get('id')) {
                 Cookies.set('id', app.game.local.id, {expires: 30});
+                if (Cookies.get('name')) {
+                    app.game.local.name = Cookies.get('name');
+                }
                 conn.send(JSON.stringify(app.game.local));
             }
         };
     },
     methods: {
+
+        fetchCards: function(cards) {
+            var currentCards = this.loveletter.local.cards;
+            var currentCardsLength = currentCards.length;
+            var diff = cards.length - currentCardsLength;
+            if (diff > 0) {
+                for (var i = 0; i < diff; i++) {
+                    currentCards.push(cards[currentCardsLength + i]);
+                }
+            } else if (diff < 0) {
+                while (diff < 0) {
+                    currentCards.pop();
+                    diff++;
+                }
+            } else {
+                currentCards.forEach(function (item, index) {
+                    if (item['name'] !== cards[index]['name']) {
+                        currentCards[index] = cards[index];
+                    }
+                });
+            }
+        },
 
         isHost: function () {
             if (this.game.global.hostid) {
