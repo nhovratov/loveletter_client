@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "animate.css": "^3.6.1",
     "autoprefixer": "^7.2.6",
     "bootstrap": "^4.1.1",
     "extend": "^3.0.1",

@@ -171,8 +171,13 @@
 
             <!-- Hand cards -->
             <p>Deine Karten:</p>
-            <div class="d-flex mb-4">
-                <div class="card mr-2" v-for="(card, index) in loveletter.local.cards">
+            <transition-group
+                    tag="div"
+                    class="mb-4 d-flex"
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+            >
+                <div class="card mr-2" v-for="(card, key) in loveletter.local.cards" v-bind:key="card">
                     <div class="card-body">
                         <h5 class="card-title">
                             {{card.name}} ({{card.value}})
@@ -181,20 +186,20 @@
                             {{card.effect}}
                         </p>
                         <button
-                            v-if="loveletter.global.playerTurn == game.local.id
-                            && loveletter.global.waitFor == 'chooseCard'
-                            && !isOutOfGame(app.game.local.id)
-                            && !isGameFinished()
-                            && !preventedByCountess(card.name)"
+                                v-if="loveletter.global.playerTurn == game.local.id
+                                && loveletter.global.waitFor == 'chooseCard'
+                                && !isOutOfGame(app.game.local.id)
+                                && !isGameFinished()
+                                && !preventedByCountess(card.name)"
 
-                            v-on:click="chooseCard(index)"
-                            class="btn btn-primary"
+                                v-on:click="chooseCard(key)"
+                                class="btn btn-primary"
                         >
                             Karte spielen
                         </button>
                     </div>
                 </div>
-            </div>
+            </transition-group>
 
             <!-- card on field -->
             <p>Spielfeld:</p>

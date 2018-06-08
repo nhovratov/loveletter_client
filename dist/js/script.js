@@ -4,7 +4,7 @@ var app = new Vue({
         loveletter: {
             global: {},
             local: {
-                cards: [],
+                cards: {},
                 openEffectCards: [],
                 priestEffectVisibleCard: []
             }
@@ -52,24 +52,18 @@ var app = new Vue({
     methods: {
 
         fetchCards: function(cards) {
+                console.log(cards);
             var currentCards = this.loveletter.local.cards;
-            var currentCardsLength = currentCards.length;
-            var diff = cards.length - currentCardsLength;
-            if (diff > 0) {
-                for (var i = 0; i < diff; i++) {
-                    currentCards.push(cards[currentCardsLength + i]);
+            for (var key in currentCards) {
+                if (!cards.hasOwnProperty(key)) {
+                    delete currentCards[key];
                 }
-            } else if (diff < 0) {
-                while (diff < 0) {
-                    currentCards.pop();
-                    diff++;
+            }
+            for (var key in cards) {
+                if (!currentCards.hasOwnProperty(key)) {
+                    console.log(key);
+                    currentCards[key] = cards[key];
                 }
-            } else {
-                currentCards.forEach(function (item, index) {
-                    if (item['name'] !== cards[index]['name']) {
-                        currentCards[index] = cards[index];
-                    }
-                });
             }
         },
 
@@ -100,10 +94,9 @@ var app = new Vue({
         preventedByCountess: function(cardname) {
             var cards = [];
             var mustPlayCards = ['König', 'Prinz'];
-
-            this.loveletter.local.cards.forEach(function(item) {
-                cards.push(item['name']);
-            });
+            for (var key in app.loveletter.local.cards) {
+                cards.push(app.loveletter.local.cards[key]['name']);
+            }
             if (cards.indexOf('Gräfin') === -1) {
                 return false;
             }
@@ -129,11 +122,11 @@ var app = new Vue({
             }));
         },
 
-        chooseCard: function (index) {
+        chooseCard: function (key) {
             window.conn.send(JSON.stringify({
                 "action": "chooseCard",
                 "params": {
-                    "index": index
+                    "key": key
                 }
             }));
         },
