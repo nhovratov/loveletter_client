@@ -52,7 +52,6 @@ var app = new Vue({
     methods: {
 
         fetchCards: function(cards) {
-                console.log(cards);
             var currentCards = this.loveletter.local.cards;
             for (var key in currentCards) {
                 if (!cards.hasOwnProperty(key)) {
@@ -61,7 +60,6 @@ var app = new Vue({
             }
             for (var key in cards) {
                 if (!currentCards.hasOwnProperty(key)) {
-                    console.log(key);
                     currentCards[key] = cards[key];
                 }
             }

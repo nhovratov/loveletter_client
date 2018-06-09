@@ -27,7 +27,7 @@
             <!-- Username enter -->
             <div v-if="!hasUsername()">
                 <label class="custom-control-label" for="username">Dein Name:</label>
-                <input v-on:keyup.enter="setName" class="form-control" type="text" id="username">
+                <input @keyup.enter="setName" class="form-control" type="text" id="username">
             </div>
 
             <!-- Player num -->
@@ -54,7 +54,7 @@
             <!-- Start game button, smash it! -->
             <button
                 class="btn btn-primary" v-if="isHost() && gameCanStart() && !loveletter.global.gameStarted"
-                v-on:click="startGame()"
+                @click="startGame()"
             >
                 Spiel starten
             </button>
@@ -79,7 +79,7 @@
                         && isPlayerTurn()"
             >
                 Diese Karte wurde durch den Priester aufgedeckt: {{loveletter.local.priestEffectVisibleCard}}
-                <button class="btn btn-success" v-on:click="finishLookingAtCard">
+                <button class="btn btn-success" @click="finishLookingAtCard">
                     Fertig mit angucken
                 </button>
             </div>
@@ -101,7 +101,7 @@
             <ul class="list-group mb-4">
                 <li
                     class="list-group-item d-flex align-items-center"
-                    v-bind:class="[
+                    :class="[
                         {active: player.id == loveletter.global.playerTurn},
                         {disabled: !loveletter.local.ingame}
                     ]"
@@ -138,7 +138,7 @@
                           ||
                              loveletter.global.waitFor == 'chooseAnyPlayer'
                         )"
-                        v-on:click="choosePlayer(player.id)"
+                        @click="choosePlayer(player.id)"
 
                         class="btn btn-sm btn-warning ml-auto"
                     >
@@ -147,7 +147,7 @@
                     <button
                         class="ml-2 btn btn-primary btn-sm"
                         v-if="loveletter.global.waitFor == 'selectFirstPlayer' && isHost()"
-                        v-on:click="selectFirstPlayer(player.id)"
+                        @click="selectFirstPlayer(player.id)"
                     >
                         auswählen
                     </button>
@@ -166,7 +166,7 @@
                         {{card}}
                         <button
                             class="btn btn-sm btn-success ml-auto"
-                            v-on:click="chooseGuardianEffectCard(card)"
+                            @click="chooseGuardianEffectCard(card)"
                         >
                             auswählen
                         </button>
@@ -182,7 +182,7 @@
                     enter-active-class="animated fadeIn"
                     leave-active-class="animated fadeOut"
             >
-                <div class="card mr-2" v-for="(card, key) in loveletter.local.cards" v-bind:key="card">
+                <div class="card mr-2" v-for="(card, key) in loveletter.local.cards" :key="key">
                     <div class="card-body">
                         <h5 class="card-title">
                             {{card.name}} ({{card.value}})
@@ -193,11 +193,11 @@
                         <button
                                 v-if="loveletter.global.playerTurn == game.local.id
                                 && loveletter.global.waitFor == 'chooseCard'
-                                && !isOutOfGame(app.game.local.id)
+                                && !isOutOfGame(game.local.id)
                                 && !isGameFinished()
                                 && !preventedByCountess(card.name)"
 
-                                v-on:click="chooseCard(key)"
+                                @click="chooseCard(key)"
                                 class="btn btn-primary"
                         >
                             Karte spielen
@@ -224,7 +224,7 @@
                             && !(loveletter.global.waitFor == 'placeMaidCard')
                             && (loveletter.global.waitFor == 'confirmDiscardCard' || noSelectablePlayer())"
 
-                            v-on:click="confirmDiscardCard()"
+                            @click="confirmDiscardCard()"
                         >
                             Auf Ablagestapel
                         </button>
@@ -233,7 +233,7 @@
                                 && loveletter.global.waitFor == 'placeMaidCard'
                                 && !isGameFinished()"
 
-                                v-on:click="placeMaidCard"
+                                @click="placeMaidCard"
                         >
                             Offen vor dich hinlegen
                         </button>
