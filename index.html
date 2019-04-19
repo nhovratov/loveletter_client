@@ -26,7 +26,7 @@
 
             <!-- Username enter -->
             <div v-if="!hasUsername()">
-                <label class="custom-control-label" for="username">Dein Name:</label>
+                <label for="username">Dein Name:</label>
                 <input @keyup.enter="setName" class="form-control" type="text" id="username">
             </div>
 
@@ -236,7 +236,6 @@
         </div>
     </div>
 </div>
-<script src="dist/js/libs/jquery.min.js"></script>
 <script src="dist/js/libs/js.cookie.js"></script>
 <script src="dist/js/libs/vue.js"></script>
 <script src="dist/js/script.js"></script>

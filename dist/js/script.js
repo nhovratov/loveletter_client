@@ -27,9 +27,14 @@ var app = new Vue({
                 players: [],
                 hostid: ''
             },
-            local: {}
+            local: {
+                id: '',
+                name: ''
+            }
         },
-        local: {}
+        local: {
+            connected: false
+        }
     },
     mounted: function () {
         window.conn = new WebSocket('ws://192.168.178.34:8080');
@@ -144,18 +149,8 @@ var app = new Vue({
             return this.loveletter.global.winners.includes(id);
         },
 
-        setName: function () {
-            Cookies.set('name', $('#username').val(), {expires: 30});
-            app.game.local.name = Cookies.get('name');
-            conn.send(JSON.stringify(app.game.local));
-        },
-
         hasUsername: function () {
             return Cookies.get('name');
-        },
-
-        isConnected: function () {
-            return this.local.connected;
         },
 
         isPlayerConnected: function (id) {
@@ -166,14 +161,6 @@ var app = new Vue({
                 }
             });
             return connected;
-        },
-
-        setId: function (id) {
-            this.game.local.id = id;
-        },
-
-        isGameStarted: function () {
-            return this.loveletter.global.gameStarted;
         },
 
         canChoosePlayer: function (id) {
@@ -221,12 +208,30 @@ var app = new Vue({
             return this.getIngamePlayers().length;
         },
 
+        isConnected: function () {
+            return this.local.connected;
+        },
+
         getName: function () {
             return this.game.local.name;
         },
 
+        setName: function () {
+            Cookies.set('name', document.getElementById('username').value, {expires: 30});
+            this.game.local.name = Cookies.get('name');
+            conn.send(JSON.stringify(this.game.local));
+        },
+
         getId: function () {
             return this.game.local.id;
+        },
+
+        setId: function (id) {
+            this.game.local.id = id;
+        },
+
+        isGameStarted: function () {
+            return this.loveletter.global.gameStarted;
         },
 
         getStatus: function () {
