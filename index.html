@@ -219,11 +219,7 @@
                         </p>
                         <button
                             class="btn btn-danger"
-                            v-if="isPlayerTurn()
-                            && !isGameFinished()
-                            && !(loveletter.global.waitFor == 'placeMaidCard')
-                            && (loveletter.global.waitFor == 'confirmDiscardCard' || noSelectablePlayer())"
-
+                            v-if="canPressDiscard()"
                             @click="confirmDiscardCard()"
                         >
                             Auf Ablagestapel

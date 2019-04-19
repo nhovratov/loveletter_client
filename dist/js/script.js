@@ -51,7 +51,7 @@ var app = new Vue({
     },
     methods: {
 
-        fetchCards: function(cards) {
+        fetchCards: function (cards) {
             var currentCards = this.loveletter.local.cards;
             for (var key in currentCards) {
                 if (!cards.hasOwnProperty(key)) {
@@ -83,13 +83,20 @@ var app = new Vue({
             return this.loveletter.global.protectedPlayers.indexOf(id) !== -1;
         },
 
-        noSelectablePlayer: function () {
-          return !(this.loveletter.global.waitFor === 'chooseAnyPlayer')
-              && (this.game.global.players.length - 1)
-              === (this.loveletter.global.protectedPlayers.length + this.loveletter.global.outOfGamePlayers.length);
+        canPressDiscard: function () {
+            return this.isPlayerTurn()
+                && !this.isGameFinished()
+                && (
+                    this.getWaitFor() === 'confirmDiscardCard'
+                    || (this.getWaitFor() === 'choosePlayer' && !this.selectablePlayerExists())
+                )
         },
 
-        preventedByCountess: function(cardname) {
+        selectablePlayerExists: function () {
+            return (this.getIngamePlayersCount() - this.getUnselectablePlayersCount()) > 1;
+        },
+
+        preventedByCountess: function (cardname) {
             var cards = [];
             var mustPlayCards = ['König', 'Prinz'];
             for (var key in app.loveletter.local.cards) {
@@ -98,7 +105,7 @@ var app = new Vue({
             if (cards.indexOf('Gräfin') === -1) {
                 return false;
             }
-            return mustPlayCards.indexOf(cardname) !== -1; 
+            return mustPlayCards.indexOf(cardname) !== -1;
         },
 
         gameCanStart: function () {
@@ -179,15 +186,23 @@ var app = new Vue({
 
         getActivePlayerCount: function () {
             var count = 0;
-            if (!this.game.global.players) {
+            if (!this.getPlayers()) {
                 return 0;
             }
-            this.game.global.players.forEach(function (player) {
+            this.getPlayers().forEach(function (player) {
                 if (player.connected) {
                     count += 1;
                 }
             });
             return count;
+        },
+
+        getPlayers: function () {
+            return this.game.global.players;
+        },
+
+        getIngamePlayers: function () {
+            return this.loveletter.global.players;
         },
 
         setName: function () {
@@ -198,6 +213,34 @@ var app = new Vue({
 
         hasUsername: function () {
             return Cookies.get('name');
+        },
+
+        getProtectedPlayers: function () {
+            return this.loveletter.global.protectedPlayers;
+        },
+
+        getIngamePlayersCount: function () {
+            return this.getIngamePlayers().length;
+        },
+
+        getOutOfGamePlayers: function () {
+            return this.loveletter.global.outOfGamePlayers;
+        },
+
+        getProtectedPlayersCount: function () {
+            return this.getProtectedPlayers().length;
+        },
+
+        getOutOfGamePlayersCount: function () {
+            return this.getOutOfGamePlayers().length;
+        },
+
+        getUnselectablePlayersCount: function () {
+            return this.getProtectedPlayersCount() + this.getOutOfGamePlayersCount()
+        },
+
+        getWaitFor: function () {
+            return this.loveletter.global.waitFor;
         }
 
     }
