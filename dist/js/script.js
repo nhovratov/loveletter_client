@@ -89,27 +89,11 @@ var app = new Vue({
         },
 
         isPlayerTurn: function () {
-            if (this.getId() === this.getPlayerTurn()) {
-                return true;
-            }
-            return false;
+            return this.getId() === this.getPlayerTurn();
         },
 
         isProtected: function (id) {
             return this.getProtectedPlayers().includes(id);
-        },
-
-        canPressStartGame: function () {
-            return !this.isGameStarted() && this.isHost() && this.isGameReady()
-        },
-
-        canPressDiscard: function () {
-            return this.isPlayerTurn()
-                && !this.isGameFinished()
-                && (
-                    this.getWaitFor() === 'confirmDiscardCard'
-                    || (this.getWaitFor() === 'choosePlayer' && !this.selectablePlayerExists())
-                )
         },
 
         selectablePlayerExists: function () {
@@ -141,57 +125,10 @@ var app = new Vue({
             }));
         },
 
-        selectFirstPlayer: function (id) {
+        send: function (params) {
             window.conn.send(JSON.stringify({
-                "action": "selectFirstPlayer",
-                "params": {
-                    "id": id
-                }
-            }));
-        },
-
-        chooseCard: function (key) {
-            window.conn.send(JSON.stringify({
-                "action": "chooseCard",
-                "params": {
-                    "key": key
-                }
-            }));
-        },
-
-        choosePlayer: function (id) {
-            window.conn.send(JSON.stringify({
-                "action": this.loveletter.global.waitFor,
-                "params": {
-                    "id": id
-                }
-            }));
-        },
-
-        confirmDiscardCard: function () {
-            window.conn.send(JSON.stringify({
-                "action": "confirmDiscardCard"
-            }));
-        },
-
-        chooseGuardianEffectCard: function (card) {
-            window.conn.send(JSON.stringify({
-                "action": "chooseGuardianEffectCard",
-                "params": {
-                    "card": card
-                }
-            }));
-        },
-
-        finishLookingAtCard: function () {
-            window.conn.send(JSON.stringify({
-                "action": "finishLookingAtCard"
-            }));
-        },
-
-        placeMaidCard: function () {
-            window.conn.send(JSON.stringify({
-                "action": "placeMaidCard"
+                'action': '',
+                params: params || {}
             }));
         },
 
@@ -207,27 +144,6 @@ var app = new Vue({
             return this.loveletter.global.winners.includes(id);
         },
 
-        getActivePlayerCount: function () {
-            var count = 0;
-            if (!this.getPlayers()) {
-                return 0;
-            }
-            this.getPlayers().forEach(function (player) {
-                if (player.connected) {
-                    count += 1;
-                }
-            });
-            return count;
-        },
-
-        getPlayers: function () {
-            return this.game.global.players;
-        },
-
-        getIngamePlayers: function () {
-            return this.loveletter.global.players;
-        },
-
         setName: function () {
             Cookies.set('name', $('#username').val(), {expires: 30});
             app.game.local.name = Cookies.get('name');
@@ -236,34 +152,6 @@ var app = new Vue({
 
         hasUsername: function () {
             return Cookies.get('name');
-        },
-
-        getProtectedPlayers: function () {
-            return this.loveletter.global.protectedPlayers;
-        },
-
-        getIngamePlayersCount: function () {
-            return this.getIngamePlayers().length;
-        },
-
-        getOutOfGamePlayers: function () {
-            return this.loveletter.global.outOfGamePlayers;
-        },
-
-        getProtectedPlayersCount: function () {
-            return this.getProtectedPlayers().length;
-        },
-
-        getOutOfGamePlayersCount: function () {
-            return this.getOutOfGamePlayers().length;
-        },
-
-        getUnselectablePlayersCount: function () {
-            return this.getProtectedPlayersCount() + this.getOutOfGamePlayersCount()
-        },
-
-        getWaitFor: function () {
-            return this.loveletter.global.waitFor;
         },
 
         isConnected: function () {
@@ -280,64 +168,12 @@ var app = new Vue({
             return connected;
         },
 
-        getName: function () {
-            return this.game.local.name;
-        },
-
-        getId: function () {
-            return this.game.local.id;
-        },
-
         setId: function (id) {
             this.game.local.id = id;
         },
 
-        getStatus: function () {
-            return this.game.global.status;
-        },
-
-        getHostId: function () {
-            return this.game.global.hostid;
-        },
-
         isGameStarted: function () {
             return this.loveletter.global.gameStarted;
-        },
-
-        getWinners: function () {
-            return this.loveletter.global.winners;
-        },
-
-        isBoardVisible: function () {
-            return this.isGameStarted() || this.getWinners().length > 0
-        },
-
-        getGameStatus: function () {
-            return this.loveletter.global.status;
-        },
-
-        canSelectedFirstPlayer: function () {
-            return this.getWaitFor() === 'selectFirstPlayer' && this.isHost();
-        },
-
-        canLookAtPlayerCard: function () {
-            return this.getWaitFor() === 'finishLookingAtCard' && this.isPlayerTurn()
-        },
-
-        getPriestEffectVisibleCard: function () {
-            return this.loveletter.local.priestEffectVisibleCard;
-        },
-
-        isOutOfGameCardsVisible: function () {
-            return this.getOutOfGameCards().length > 0
-        },
-
-        getOutOfGameCards: function () {
-            return this.loveletter.global.outOfGameCards;
-        },
-
-        getPlayerTurn: function () {
-            return this.loveletter.global.playerTurn;
         },
 
         canChoosePlayer: function (id) {
@@ -348,12 +184,77 @@ var app = new Vue({
                 && (id !== this.getId() || this.getWaitFor() === 'chooseAnyPlayer');
         },
 
-        canSelectFirstPlayer: function () {
-            return this.getWaitFor() === 'selectFirstPlayer' && this.isHost();
+        canChooseCard: function (card) {
+            return this.getWaitFor() === 'chooseCard'
+                && this.getPlayerTurn() === this.getId()
+                && !this.isOutOfGame(this.getId())
+                && !this.isGameFinished()
+                && !this.preventedByCountess(card.name)
         },
 
-        canSelectGuardianEffect: function () {
-            return this.getWaitFor() === 'chooseGuardianEffectCard' && this.isPlayerTurn()
+        getActivePlayerCount: function () {
+            var count = 0;
+            if (!this.getPlayers()) {
+                return 0;
+            }
+            this.getPlayers().forEach(function (player) {
+                if (player.connected) {
+                    count += 1;
+                }
+            });
+            return count;
+        },
+
+        getUnselectablePlayersCount: function () {
+            return this.getProtectedPlayersCount() + this.getOutOfGamePlayersCount()
+        },
+
+        getProtectedPlayersCount: function () {
+            return this.getProtectedPlayers().length;
+        },
+
+        getOutOfGamePlayersCount: function () {
+            return this.getOutOfGamePlayers().length;
+        },
+
+        getIngamePlayersCount: function () {
+            return this.getIngamePlayers().length;
+        },
+
+        getName: function () {
+            return this.game.local.name;
+        },
+
+        getId: function () {
+            return this.game.local.id;
+        },
+
+        getStatus: function () {
+            return this.game.global.status;
+        },
+
+        getHostId: function () {
+            return this.game.global.hostid;
+        },
+
+        getPlayers: function () {
+            return this.game.global.players;
+        },
+
+        getCards: function () {
+            return this.loveletter.local.cards;
+        },
+
+        getPriestEffectVisibleCard: function () {
+            return this.loveletter.local.priestEffectVisibleCard;
+        },
+
+        getDiscardPile: function () {
+            return this.loveletter.global.discardPile;
+        },
+
+        getActiveCard: function () {
+            return this.loveletter.global.activeCard;
         },
 
         getGuardianEffectChosenPlayer: function () {
@@ -364,20 +265,47 @@ var app = new Vue({
             return this.loveletter.global.guardianEffectSelectableCards;
         },
 
-        canChooseCard: function (card) {
-            return this.getWaitFor() === 'chooseCard'
-                && this.getPlayerTurn() === this.getId()
-                && !this.isOutOfGame(this.getId())
+        getOutOfGameCards: function () {
+            return this.loveletter.global.outOfGameCards;
+        },
+
+        getPlayerTurn: function () {
+            return this.loveletter.global.playerTurn;
+        },
+
+        getGameStatus: function () {
+            return this.loveletter.global.status;
+        },
+
+        getWinners: function () {
+            return this.loveletter.global.winners;
+        },
+
+        getWaitFor: function () {
+            return this.loveletter.global.waitFor;
+        },
+
+        getProtectedPlayers: function () {
+            return this.loveletter.global.protectedPlayers;
+        },
+
+        getOutOfGamePlayers: function () {
+            return this.loveletter.global.outOfGamePlayers;
+        },
+
+        getIngamePlayers: function () {
+            return this.loveletter.global.players;
+        },
+    },
+
+    computed: {
+        canPressDiscard: function () {
+            return this.isPlayerTurn()
                 && !this.isGameFinished()
-                && !this.preventedByCountess(card.name)
-        },
-
-        getCards: function () {
-            return this.loveletter.local.cards;
-        },
-
-        getActiveCard: function () {
-            return this.loveletter.global.activeCard;
+                && (
+                    this.getWaitFor() === 'confirmDiscardCard'
+                    || (this.getWaitFor() === 'choosePlayer' && !this.selectablePlayerExists())
+                )
         },
 
         canPlaceMaidCard: function () {
@@ -386,10 +314,32 @@ var app = new Vue({
                 && !this.isGameFinished()
         },
 
-        getDiscardPile: function () {
-            return this.loveletter.global.discardPile;
-        }
-    },
+        canSelectFirstPlayer: function () {
+            return this.getWaitFor() === 'selectFirstPlayer' && this.isHost();
+        },
 
-    computed: {}
+        canSelectGuardianEffect: function () {
+            return this.getWaitFor() === 'chooseGuardianEffectCard' && this.isPlayerTurn()
+        },
+
+        canSelectedFirstPlayer: function () {
+            return this.getWaitFor() === 'selectFirstPlayer' && this.isHost();
+        },
+
+        canLookAtPlayerCard: function () {
+            return this.getWaitFor() === 'finishLookingAtCard' && this.isPlayerTurn()
+        },
+
+        canPressStartGame: function () {
+            return !this.isGameStarted() && this.isHost() && this.isGameReady()
+        },
+
+        isOutOfGameCardsVisible: function () {
+            return this.getOutOfGameCards().length > 0
+        },
+
+        isBoardVisible: function () {
+            return this.isGameStarted() || this.getWinners().length > 0
+        },
+    }
 });
