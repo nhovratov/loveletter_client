@@ -70,12 +70,12 @@
             <div v-if="getGameStatus()" class="alert alert-info">{{getGameStatus()}}</div>
 
             <!-- Select first player -->
-            <div class="mb-2" v-if="canSelectFirstPlayer">
+            <div class="mb-2" v-if="can('selectFirstPlayer')">
                 <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
             </div>
 
             <div class="alert alert-success d-flex align-items-center"
-                 v-if="canLookAtPlayerCard"
+                 v-if="can('finishLookingAtCard')"
             >
                 Diese Karte wurde durch den Priester aufgedeckt: {{getPriestEffectVisibleCard()}}
                 <button
@@ -136,7 +136,7 @@
                     </button>
                     <button
                         class="ml-2 btn btn-primary btn-sm"
-                        v-if="canSelectFirstPlayer"
+                        v-if="can('selectFirstPlayer')"
                         @click="send({id: player.id})"
                     >
                         auswählen
@@ -145,7 +145,7 @@
             </ul>
 
             <!-- Guardian Effect selectable cards -->
-            <div v-if="canSelectGuardianEffect">
+            <div v-if="can('chooseGuardianEffectCard')">
                 <p>Wähle die Karte, die {{getGuardianEffectChosenPlayer()}} auf der Hand hält!</p>
                 <ul class="list-group mb-4">
                     <li
@@ -203,13 +203,13 @@
                         </p>
                         <button
                             class="btn btn-danger"
-                            v-if="canConfirmDiscardCard"
+                            v-if="can('confirmDiscardCard')"
                             @click="send()"
                         >
                             Auf Ablagestapel
                         </button>
                         <button class="btn btn-success"
-                                v-if="canPlaceMaidCard"
+                                v-if="can('placeMaidCard')"
                                 @click="send()"
                         >
                             Offen vor dich hinlegen

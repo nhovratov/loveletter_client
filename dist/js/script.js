@@ -70,7 +70,6 @@ var app = new Vue({
         };
     },
     methods: {
-
         send: function (params, action = '') {
             window.conn.send(JSON.stringify({
                 action: action,
@@ -78,8 +77,8 @@ var app = new Vue({
             }));
         },
 
-        startGame: function() {
-          this.send({}, 'start');
+        startGame: function () {
+            this.send({}, 'start');
         },
 
         fetchCards: function (cards) {
@@ -130,6 +129,10 @@ var app = new Vue({
 
         hasUsername: function () {
             return Cookies.get('name');
+        },
+
+        can: function (action) {
+            return action === this.getAllowedAction();
         },
 
         canChoosePlayer: function (id) {
@@ -264,26 +267,6 @@ var app = new Vue({
     },
 
     computed: {
-        canConfirmDiscardCard: function () {
-            return this.getAllowedAction() === 'confirmDiscardCard';
-        },
-
-        canPlaceMaidCard: function () {
-            return this.getAllowedAction() === 'placeMaidCard';
-        },
-
-        canSelectFirstPlayer: function () {
-            return this.getAllowedAction() === 'selectFirstPlayer';
-        },
-
-        canSelectGuardianEffect: function () {
-            return this.getAllowedAction() === 'chooseGuardianEffectCard';
-        },
-
-        canLookAtPlayerCard: function () {
-            return this.getAllowedAction() === 'finishLookingAtCard';
-        },
-
         canStartGame: function () {
             return this.getCanStartGame() && !this.isGameStarted();
         },
