@@ -54,7 +54,7 @@
             <!-- Start game button, smash it! -->
             <button
                 class="btn btn-primary"
-                v-if="canPressStartGame"
+                v-if="canStartGame"
                 @click="startGame()"
             >
                 Spiel starten
@@ -70,7 +70,7 @@
             <div v-if="getGameStatus()" class="alert alert-info">{{getGameStatus()}}</div>
 
             <!-- Select first player -->
-            <div class="mb-2" v-if="canSelectedFirstPlayer">
+            <div class="mb-2" v-if="canSelectFirstPlayer">
                 <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
             </div>
 
@@ -203,7 +203,7 @@
                         </p>
                         <button
                             class="btn btn-danger"
-                            v-if="canPressDiscard"
+                            v-if="canConfirmDiscardCard"
                             @click="send()"
                         >
                             Auf Ablagestapel
