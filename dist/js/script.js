@@ -48,18 +48,16 @@ var app = new Vue({
                 }
                 conn.send(JSON.stringify(app.game.local));
             }
-
         };
 
         conn.onmessage = function (e) {
             var data = JSON.parse(e.data);
             if (data.dataType === "game") {
                 app.loveletter.global = data.global;
-                app.loveletter.local.openEffectCards = data.local.openEffectCards;
-                app.loveletter.local.priestEffectVisibleCard = data.local.priestEffectVisibleCard;
+                app.loveletter.local = data.local;
                 app.fetchCards(data.local.cards);
             } else {
-                app.game = JSON.parse(e.data);
+                app.game = data;
             }
             if (!Cookies.get('id')) {
                 Cookies.set('id', app.getId(), {expires: 30});
