@@ -72,37 +72,19 @@ var app = new Vue({
     },
     methods: {
 
+        send: function (params, action = '') {
+            window.conn.send(JSON.stringify({
+                action: action,
+                params: params || {}
+            }));
+        },
+
+        startGame: function() {
+          this.send({}, 'start');
+        },
+
         fetchCards: function (cards) {
-            var currentCards = this.loveletter.local.cards;
-            for (var key in currentCards) {
-                if (!cards.hasOwnProperty(key)) {
-                    delete currentCards[key];
-                }
-            }
-            for (var key in cards) {
-                if (!currentCards.hasOwnProperty(key)) {
-                    currentCards[key] = cards[key];
-                }
-            }
-        },
-
-        isHost: function () {
-            if (this.getHostId()) {
-                return this.getId() === this.getHostId();
-            }
-            return false;
-        },
-
-        isPlayerTurn: function () {
-            return this.getId() === this.getPlayerTurn();
-        },
-
-        isProtected: function (id) {
-            return this.getProtectedPlayers().includes(id);
-        },
-
-        selectablePlayerExists: function () {
-            return (this.getIngamePlayersCount() - this.getUnselectablePlayersCount()) > 1;
+            this.setCards(cards);
         },
 
         preventedByCountess: function (cardname) {
@@ -120,38 +102,6 @@ var app = new Vue({
             return mustPlayCards.includes(cardname);
         },
 
-        isGameReady: function () {
-            return this.getActivePlayerCount() >= 2;
-        },
-
-        startGame: function () {
-            window.conn.send(JSON.stringify({
-                "action": "start"
-            }));
-        },
-
-        send: function (params) {
-            window.conn.send(JSON.stringify({
-                'action': '',
-                params: params || {}
-            }));
-        },
-
-        isOutOfGame: function (id) {
-            return this.loveletter.global.outOfGamePlayers.indexOf(id) !== -1;
-        },
-
-        isGameFinished: function () {
-            return this.loveletter.global.gameFinished;
-        },
-
-        isWinner: function (id) {
-            return this.loveletter.global.winners.includes(id);
-        },
-
-        hasUsername: function () {
-            return Cookies.get('name');
-        },
 
         isPlayerConnected: function (id) {
             var connected = false;
@@ -161,6 +111,38 @@ var app = new Vue({
                 }
             });
             return connected;
+        },
+
+        isHost: function () {
+            return this.getId() === this.getHostId();
+        },
+
+        isPlayerTurn: function () {
+            return this.getId() === this.getPlayerTurn();
+        },
+
+        isProtected: function (id) {
+            return this.getProtectedPlayers().includes(id);
+        },
+
+        isGameReady: function () {
+            return this.getActivePlayerCount() >= 2;
+        },
+
+        isOutOfGame: function (id) {
+            return this.getOutOfGamePlayers().includes(id);
+        },
+
+        isWinner: function (id) {
+            return this.getWinners().includes(id);
+        },
+
+        selectablePlayerExists: function () {
+            return (this.getIngamePlayersCount() - this.getUnselectablePlayersCount()) > 1;
+        },
+
+        hasUsername: function () {
+            return Cookies.get('name');
         },
 
         canChoosePlayer: function (id) {
@@ -234,6 +216,10 @@ var app = new Vue({
             return this.loveletter.global.gameStarted;
         },
 
+        isGameFinished: function () {
+            return this.loveletter.global.gameFinished;
+        },
+
         getStatus: function () {
             return this.game.global.status;
         },
@@ -248,6 +234,10 @@ var app = new Vue({
 
         getCards: function () {
             return this.loveletter.local.cards;
+        },
+
+        setCards: function (cards) {
+            return this.loveletter.local.cards = cards;
         },
 
         getPriestEffectVisibleCard: function () {
