@@ -85,23 +85,17 @@ var app = new Vue({
             this.setCards(cards);
         },
 
-        preventedByCountess: function (cardname) {
-            var cards = [];
-            var mustPlayCards = ['König', 'Prinz'];
-            var handCards = this.getCards();
-            for (var key in handCards) {
-                if (handCards.hasOwnProperty(key)) {
-                    cards.push(handCards[key]['name']);
-                }
-            }
-            if (!cards.includes('Gräfin')) {
-                return false;
-            }
-            return mustPlayCards.includes(cardname);
+        getUsername: function () {
+            return Cookies.get('name');
         },
 
+        setUsername: function () {
+            Cookies.set('name', document.getElementById('username').value, {expires: 30});
+            this.game.local.name = Cookies.get('name');
+            conn.send(JSON.stringify(this.game.local));
+        },
 
-        isPlayerConnected: function (id) {
+        isUserConnected: function (id) {
             var connected = false;
             this.getPlayers().forEach(function (player) {
                 if (player.id === id) {
@@ -111,24 +105,24 @@ var app = new Vue({
             return connected;
         },
 
-        isHost: function () {
-            return this.getId() === this.getHostId();
+        getId: function () {
+            return this.game.local.id;
         },
 
-        isProtected: function (id) {
-            return this.getProtectedPlayers().includes(id);
+        setId: function (id) {
+            this.game.local.id = id;
         },
 
-        isOutOfGame: function (id) {
-            return this.getOutOfGamePlayers().includes(id);
+        getCanStartGame: function () {
+            return this.game.local.canStartGame;
         },
 
-        isWinner: function (id) {
-            return this.getWinners().includes(id);
+        getHostId: function () {
+            return this.game.global.hostid;
         },
 
-        hasUsername: function () {
-            return Cookies.get('name');
+        getPlayers: function () {
+            return this.game.global.players;
         },
 
         can: function (action) {
@@ -143,7 +137,92 @@ var app = new Vue({
         },
 
         canChooseCard: function (card) {
-            return this.getAllowedAction() === 'chooseCard' && !this.preventedByCountess(card.name);
+            return this.getAllowedAction() === 'chooseCard' && !this.isPreventedByCountess(card.name);
+        },
+
+        isPreventedByCountess: function (cardname) {
+            var cards = [];
+            var mustPlayCards = ['König', 'Prinz'];
+            var handCards = this.getCards();
+            for (var key in handCards) {
+                if (handCards.hasOwnProperty(key)) {
+                    cards.push(handCards[key]['name']);
+                }
+            }
+            if (!cards.includes('Gräfin')) {
+                return false;
+            }
+            return mustPlayCards.includes(cardname);
+        },
+
+        isProtected: function (id) {
+            return this.getProtectedPlayers().includes(id);
+        },
+
+        isOutOfGame: function (id) {
+            return this.getOutOfGamePlayers().includes(id);
+        },
+
+        isWinner: function (id) {
+            return this.getWinners().includes(id);
+        },
+
+        isGameStarted: function () {
+            return this.loveletter.global.gameStarted;
+        },
+
+        getAllowedAction: function () {
+            return this.loveletter.local.allowedAction;
+        },
+
+        getCards: function () {
+            return this.loveletter.local.cards;
+        },
+
+        setCards: function (cards) {
+            return this.loveletter.local.cards = cards;
+        },
+
+        getOutOfGameCards: function () {
+            return this.loveletter.global.outOfGameCards;
+        },
+
+        getProtectedPlayers: function () {
+            return this.loveletter.global.protectedPlayers;
+        },
+
+        getOutOfGamePlayers: function () {
+            return this.loveletter.global.outOfGamePlayers;
+        },
+
+        getWinners: function () {
+            return this.loveletter.global.winners;
+        }
+    },
+
+    computed: {
+        canStartGame: function () {
+            return this.getCanStartGame() && !this.isGameStarted();
+        },
+
+        isOutOfGameCardsVisible: function () {
+            return this.getOutOfGameCards().length > 0
+        },
+
+        isBoardVisible: function () {
+            return this.isGameStarted() || this.getWinners().length > 0
+        },
+
+        isHost: function () {
+            return this.getId() === this.getHostId();
+        },
+
+        isConnected: function () {
+            return this.local.connected;
+        },
+
+        isGameFinished: function () {
+            return this.loveletter.global.gameFinished;
         },
 
         getActivePlayerCount: function () {
@@ -159,54 +238,8 @@ var app = new Vue({
             return count;
         },
 
-        isConnected: function () {
-            return this.local.connected;
-        },
-
         getName: function () {
             return this.game.local.name;
-        },
-
-        setName: function () {
-            Cookies.set('name', document.getElementById('username').value, {expires: 30});
-            this.game.local.name = Cookies.get('name');
-            conn.send(JSON.stringify(this.game.local));
-        },
-
-        getId: function () {
-            return this.game.local.id;
-        },
-
-        setId: function (id) {
-            this.game.local.id = id;
-        },
-
-        isGameStarted: function () {
-            return this.loveletter.global.gameStarted;
-        },
-
-        isGameFinished: function () {
-            return this.loveletter.global.gameFinished;
-        },
-
-        getStatus: function () {
-            return this.game.global.status;
-        },
-
-        getHostId: function () {
-            return this.game.global.hostid;
-        },
-
-        getPlayers: function () {
-            return this.game.global.players;
-        },
-
-        getCards: function () {
-            return this.loveletter.local.cards;
-        },
-
-        setCards: function (cards) {
-            return this.loveletter.local.cards = cards;
         },
 
         getPriestEffectVisibleCard: function () {
@@ -215,6 +248,10 @@ var app = new Vue({
 
         getDiscardPile: function () {
             return this.loveletter.global.discardPile;
+        },
+
+        getStatus: function () {
+            return this.game.global.status;
         },
 
         getActiveCard: function () {
@@ -229,10 +266,6 @@ var app = new Vue({
             return this.loveletter.global.guardianEffectSelectableCards;
         },
 
-        getOutOfGameCards: function () {
-            return this.loveletter.global.outOfGameCards;
-        },
-
         getPlayerTurn: function () {
             return this.loveletter.global.playerTurn;
         },
@@ -241,42 +274,8 @@ var app = new Vue({
             return this.loveletter.global.status;
         },
 
-        getWinners: function () {
-            return this.loveletter.global.winners;
-        },
-
-        getProtectedPlayers: function () {
-            return this.loveletter.global.protectedPlayers;
-        },
-
-        getOutOfGamePlayers: function () {
-            return this.loveletter.global.outOfGamePlayers;
-        },
-
         getIngamePlayers: function () {
             return this.loveletter.global.players;
-        },
-
-        getAllowedAction: function () {
-            return this.loveletter.local.allowedAction;
-        },
-
-        getCanStartGame: function () {
-            return this.game.local.canStartGame;
-        }
-    },
-
-    computed: {
-        canStartGame: function () {
-            return this.getCanStartGame() && !this.isGameStarted();
-        },
-
-        isOutOfGameCardsVisible: function () {
-            return this.getOutOfGameCards().length > 0
-        },
-
-        isBoardVisible: function () {
-            return this.isGameStarted() || this.getWinners().length > 0
         },
     }
 });
