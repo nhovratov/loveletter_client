@@ -171,7 +171,7 @@
                     enter-active-class="animated fadeIn"
                     leave-active-class="animated fadeOut"
             >
-                <div class="card mr-2" v-for="(card, key) in getCards()" :key="card.id">
+                <div class="card mr-2" v-for="(card, key) in getCards()" :key="card.cardnumber">
                     <div class="card-body">
                         <h5 class="card-title">
                             {{card.name}} ({{card.value}})
