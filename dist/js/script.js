@@ -38,7 +38,7 @@ var app = new Vue({
         }
     },
     mounted: function () {
-        window.conn = new WebSocket('ws://192.168.178.34:8080');
+        window.conn = new WebSocket('ws://192.168.178.63:8080');
 
         conn.onopen = function (e) {
             app.local.connected = true;
