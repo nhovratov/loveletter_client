@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "lodash": "^4.17.15",
+    "lodash.template": "^4.5.0",
     "natives": "^1.1.6"
   }
 }
