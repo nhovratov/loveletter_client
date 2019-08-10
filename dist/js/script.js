@@ -39,19 +39,26 @@ var app = new Vue({
     },
     mounted: function () {
         window.conn = new WebSocket('ws://192.168.178.63:8080');
+        console.log('Create new connection.');
 
         conn.onopen = function (e) {
+            console.log('START Onopen event');
             app.local.connected = true;
             if (Cookies.get('id')) {
+                console.log('cookie with id exists.');
                 if (Cookies.get('name')) {
+                    console.log('cookie with name exists. set the name');
                     app.game.local.name = Cookies.get('name');
                 }
             }
-            app.identify();
+            app.send();
+            console.log('END Onopen');
         };
 
         conn.onmessage = function (e) {
+            console.log('START onmessage');
             var data = JSON.parse(e.data);
+            console.log('Received new data: ', data);
             if (data.dataType === "game") {
                 app.loveletter.global = data.global;
                 app.loveletter.local = data.local;
@@ -60,29 +67,39 @@ var app = new Vue({
                 app.game = data;
             }
             if (data.local.newId) {
+                console.log('server responded with newId.');
                 Cookies.set('id', data.local.newId, {expires: 30});
             }
             if (!Cookies.get('id')) {
+                console.log('No id with cookie is set. Set id from newId');
                 Cookies.set('id', data.local.newId, {expires: 30});
                 if (Cookies.get('name')) {
+                    console.log('name from cookie exists, set it in game.local');
                     app.game.local.name = Cookies.get('name');
                 }
-                app.identify();
+                app.send();
             }
+            console.log('END onmessage');
         };
     },
     methods: {
-        identify: function () {
-            conn.send(JSON.stringify({
-                'id': Cookies.get('id'),
-                'name': app.game.local.name
-            }));
-        },
-        send: function (params, action = '') {
-            window.conn.send(JSON.stringify({
+        send: function (params = {}, action = '') {
+            var id = '';
+            var name = '';
+            if (Cookies.get('id')) {
+                id = Cookies.get('id');
+            }
+            if (Cookies.get('name')) {
+                name = Cookies.get('name');
+            }
+            var data = {
+                id: id,
+                name: name,
                 action: action,
-                params: params || {}
-            }));
+                params: params
+            };
+            window.conn.send(JSON.stringify(data));
+            console.log('send identity to server', data);
         },
 
         startGame: function () {
@@ -100,7 +117,7 @@ var app = new Vue({
         setUsername: function () {
             Cookies.set('name', document.getElementById('username').value, {expires: 30});
             this.game.local.name = Cookies.get('name');
-            this.identify();
+            this.send();
         },
 
         isUserConnected: function (id) {
