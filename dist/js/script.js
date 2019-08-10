@@ -43,12 +43,11 @@ var app = new Vue({
         conn.onopen = function (e) {
             app.local.connected = true;
             if (Cookies.get('id')) {
-                app.setId(Cookies.get('id'));
                 if (Cookies.get('name')) {
                     app.game.local.name = Cookies.get('name');
                 }
-                conn.send(JSON.stringify(app.game.local));
             }
+            app.identify();
         };
 
         conn.onmessage = function (e) {
@@ -60,16 +59,25 @@ var app = new Vue({
             } else {
                 app.game = data;
             }
+            if (data.local.newId) {
+                Cookies.set('id', data.local.newId, {expires: 30});
+            }
             if (!Cookies.get('id')) {
-                Cookies.set('id', app.getId(), {expires: 30});
+                Cookies.set('id', data.local.newId, {expires: 30});
                 if (Cookies.get('name')) {
                     app.game.local.name = Cookies.get('name');
                 }
-                conn.send(JSON.stringify(app.game.local));
+                app.identify();
             }
         };
     },
     methods: {
+        identify: function () {
+            conn.send(JSON.stringify({
+                'id': Cookies.get('id'),
+                'name': app.game.local.name
+            }));
+        },
         send: function (params, action = '') {
             window.conn.send(JSON.stringify({
                 action: action,
@@ -92,7 +100,7 @@ var app = new Vue({
         setUsername: function () {
             Cookies.set('name', document.getElementById('username').value, {expires: 30});
             this.game.local.name = Cookies.get('name');
-            conn.send(JSON.stringify(this.game.local));
+            this.identify();
         },
 
         isUserConnected: function (id) {
@@ -107,10 +115,6 @@ var app = new Vue({
 
         getId: function () {
             return this.game.local.id;
-        },
-
-        setId: function (id) {
-            this.game.local.id = id;
         },
 
         getCanStartGame: function () {
