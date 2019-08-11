@@ -14416,6 +14416,24 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./src/js/badge.js":
+/*!*************************!*\
+  !*** ./src/js/badge.js ***!
+  \*************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('badge', {
+  props: ['name', 'id'],
+  template: '<div class="badge badge-success mb-4">verbunden <span v-if="name">{{name}}</span> #{{id}}</div>'
+});
+
+/***/ }),
+
 /***/ "./src/js/index.js":
 /*!*************************!*\
   !*** ./src/js/index.js ***!
@@ -14438,6 +14456,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _badge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./badge */ "./src/js/badge.js");
+
 
 
 
@@ -14677,9 +14697,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
     isHost: function isHost() {
       return this.getId() === this.getHostId();
     },
-    isConnected: function isConnected() {
-      return this.local.connected;
-    },
     isGameFinished: function isGameFinished() {
       return this.loveletter.global.gameFinished;
     },
@@ -14696,9 +14713,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
         }
       });
       return count;
-    },
-    getName: function getName() {
-      return this.game.local.name;
     },
     getPriestEffectVisibleCard: function getPriestEffectVisibleCard() {
       return this.loveletter.local.priestEffectVisibleCard;

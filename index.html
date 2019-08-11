@@ -10,12 +10,7 @@
     <div id="app">
         <h1>Love Letter</h1>
         <!-- Connectivity -->
-        <div
-            class="badge badge-success mb-4"
-            v-if="isConnected"
-        >
-            verbunden <span v-if="getName">{{getName}}</span> #{{getId()}}
-        </div>
+        <badge v-if="local.connected" v-bind:name="game.local.name" v-bind:id="game.local.id"></badge>
         <div class="badge badge-info mb-4" v-if="isHost">Host</div>
 
         <!-- Lobby -->
@@ -36,7 +31,7 @@
             <!-- Connection list -->
             <ul>
                 <li class="font-weight-bold">
-                    <span v-if="getName">{{getName}}</span>
+                    <span v-if="game.local.name">{{game.local.name}}</span>
                     #{{getId()}}
                     <span class="badge badge-info" v-if="isHost">Host</span>
                 </li>

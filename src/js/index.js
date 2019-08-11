@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Cookies from 'js-cookie';
 
+import './badge';
+
 var conn;
 var app = new Vue({
     el: "#app",
@@ -242,10 +244,6 @@ var app = new Vue({
             return this.getId() === this.getHostId();
         },
 
-        isConnected: function () {
-            return this.local.connected;
-        },
-
         isGameFinished: function () {
             return this.loveletter.global.gameFinished;
         },
@@ -261,10 +259,6 @@ var app = new Vue({
                 }
             });
             return count;
-        },
-
-        getName: function () {
-            return this.game.local.name;
         },
 
         getPriestEffectVisibleCard: function () {
