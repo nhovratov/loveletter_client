@@ -1,3 +1,7 @@
+import Vue from 'vue';
+import Cookies from 'js-cookie';
+
+var conn;
 var app = new Vue({
     el: "#app",
     data: {
@@ -38,7 +42,7 @@ var app = new Vue({
         }
     },
     mounted: function () {
-        window.conn = new WebSocket('ws://192.168.178.63:8080');
+        conn = new WebSocket('ws://192.168.178.63:8080');
         console.log('Create new connection.');
 
         conn.onopen = function (e) {
@@ -98,7 +102,7 @@ var app = new Vue({
                 action: action,
                 params: params
             };
-            window.conn.send(JSON.stringify(data));
+            conn.send(JSON.stringify(data));
             console.log('send identity to server', data);
         },
 
