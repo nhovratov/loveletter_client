@@ -1,11 +1,16 @@
 import Vue from 'vue';
 import Cookies from 'js-cookie';
 
-import './badge';
+import badge from './components/badge';
+import lobby from './components/lobby';
 
 var conn;
 var app = new Vue({
     el: "#app",
+    components: {
+        badge,
+        lobby
+    },
     data: {
         loveletter: {
             global: {
@@ -32,10 +37,10 @@ var app = new Vue({
         game: {
             global: {
                 players: [],
-                hostid: ''
+                hostid: 0
             },
             local: {
-                id: '',
+                id: 0,
                 name: ''
             }
         },
@@ -267,10 +272,6 @@ var app = new Vue({
 
         getDiscardPile: function () {
             return this.loveletter.global.discardPile;
-        },
-
-        getStatus: function () {
-            return this.game.global.status;
         },
 
         getActiveCard: function () {

@@ -14,47 +14,19 @@
         <div class="badge badge-info mb-4" v-if="isHost">Host</div>
 
         <!-- Lobby -->
-        <div class="lobby">
-            <h2 class="lobby__header">Lobby</h2>
-            <!-- Game status -->
-            <span>{{getStatus}}</span>
-
-            <!-- Username enter -->
-            <div v-if="!getUsername()">
-                <label for="username">Dein Name:</label>
-                <input @keyup.enter="setUsername" class="form-control" type="text" id="username">
-            </div>
-
-            <!-- Player num -->
-            <div class="lobby__connections">Spieler online: {{getActivePlayerCount}}</div>
-
-            <!-- Connection list -->
-            <ul>
-                <li class="font-weight-bold">
-                    <span v-if="game.local.name">{{game.local.name}}</span>
-                    #{{getId()}}
-                    <span class="badge badge-info" v-if="isHost">Host</span>
-                </li>
-                <li
-                    v-for="player in getPlayers()"
-                    v-if="getPlayers() && player.id !== getId()"
-                >
-                    <span v-if="player.name">{{player.name}}</span>
-                    #{{player.id}}
-                    <span class="badge badge-info" v-if="player.id === getHostId()">Host</span>
-                    <span class="badge badge-danger" v-if="!player.connected">disconnected</span>
-                </li>
-            </ul>
-
-            <!-- Start game button, smash it! -->
-            <button
-                class="btn btn-primary"
-                v-if="canStartGame"
-                @click="startGame()"
-            >
-                Spiel starten
-            </button>
-        </div>
+        <lobby
+            v-bind:status="game.global.status"
+            v-bind:players="game.global.players"
+            v-bind:hostid="game.global.hostid"
+            v-bind:playercount="getActivePlayerCount"
+            v-bind:name="game.local.name"
+            v-bind:id="game.local.id"
+            v-bind:username="getUsername()"
+            v-bind:is-host="isHost"
+            v-bind:can-start-game="canStartGame"
+            v-on:start-game="startGame()"
+        >
+        </lobby>
 
         <!-- Game -->
         <div

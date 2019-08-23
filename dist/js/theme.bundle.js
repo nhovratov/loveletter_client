@@ -103,6 +103,25 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/a-possible-prototype.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/core-js/internals/a-possible-prototype.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+
+module.exports = function (it) {
+  if (!isObject(it) && it !== null) {
+    throw TypeError("Can't set " + String(it) + ' as a prototype');
+  }
+
+  return it;
+};
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/add-to-unscopables.js":
 /*!**************************************************************!*\
   !*** ./node_modules/core-js/internals/add-to-unscopables.js ***!
@@ -834,6 +853,28 @@ module.exports = fails(function () {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/inherit-if-required.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/internals/inherit-if-required.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+
+var setPrototypeOf = __webpack_require__(/*! ../internals/object-set-prototype-of */ "./node_modules/core-js/internals/object-set-prototype-of.js"); // makes subclassing work correct for wrapped built-ins
+
+
+module.exports = function ($this, dummy, Wrapper) {
+  var NewTarget, NewTargetPrototype;
+  if ( // it can work only with native `setPrototypeOf`
+  setPrototypeOf && // we haven't completely correct pre-ES6 way for getting `new.target`, so use this
+  typeof (NewTarget = dummy.constructor) == 'function' && NewTarget !== Wrapper && isObject(NewTargetPrototype = NewTarget.prototype) && NewTargetPrototype !== Wrapper.prototype) setPrototypeOf($this, NewTargetPrototype);
+  return $this;
+};
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/internal-state.js":
 /*!**********************************************************!*\
   !*** ./node_modules/core-js/internals/internal-state.js ***!
@@ -1345,6 +1386,45 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/object-set-prototype-of.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/core-js/internals/object-set-prototype-of.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var anObject = __webpack_require__(/*! ../internals/an-object */ "./node_modules/core-js/internals/an-object.js");
+
+var aPossiblePrototype = __webpack_require__(/*! ../internals/a-possible-prototype */ "./node_modules/core-js/internals/a-possible-prototype.js"); // `Object.setPrototypeOf` method
+// https://tc39.github.io/ecma262/#sec-object.setprototypeof
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+
+/* eslint-disable no-proto */
+
+
+module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
+  var CORRECT_SETTER = false;
+  var test = {};
+  var setter;
+
+  try {
+    setter = Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set;
+    setter.call(test, []);
+    CORRECT_SETTER = test instanceof Array;
+  } catch (error) {
+    /* empty */
+  }
+
+  return function setPrototypeOf(O, proto) {
+    anObject(O);
+    aPossiblePrototype(proto);
+    if (CORRECT_SETTER) setter.call(O, proto);else O.__proto__ = proto;
+    return O;
+  };
+}() : undefined);
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/own-keys.js":
 /*!****************************************************!*\
   !*** ./node_modules/core-js/internals/own-keys.js ***!
@@ -1540,6 +1620,44 @@ module.exports = function (METHOD_NAME, argument) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/string-trim.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/core-js/internals/string-trim.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
+
+var whitespaces = __webpack_require__(/*! ../internals/whitespaces */ "./node_modules/core-js/internals/whitespaces.js");
+
+var whitespace = '[' + whitespaces + ']';
+var ltrim = RegExp('^' + whitespace + whitespace + '*');
+var rtrim = RegExp(whitespace + whitespace + '*$'); // `String.prototype.{ trim, trimStart, trimEnd, trimLeft, trimRight }` methods implementation
+
+var createMethod = function (TYPE) {
+  return function ($this) {
+    var string = String(requireObjectCoercible($this));
+    if (TYPE & 1) string = string.replace(ltrim, '');
+    if (TYPE & 2) string = string.replace(rtrim, '');
+    return string;
+  };
+};
+
+module.exports = {
+  // `String.prototype.{ trimLeft, trimStart }` methods
+  // https://tc39.github.io/ecma262/#sec-string.prototype.trimstart
+  start: createMethod(1),
+  // `String.prototype.{ trimRight, trimEnd }` methods
+  // https://tc39.github.io/ecma262/#sec-string.prototype.trimend
+  end: createMethod(2),
+  // `String.prototype.trim` method
+  // https://tc39.github.io/ecma262/#sec-string.prototype.trim
+  trim: createMethod(3)
+};
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/to-absolute-index.js":
 /*!*************************************************************!*\
   !*** ./node_modules/core-js/internals/to-absolute-index.js ***!
@@ -1695,6 +1813,19 @@ module.exports = function (name) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/whitespaces.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/core-js/internals/whitespaces.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// a string of all valid unicode whitespaces
+// eslint-disable-next-line max-len
+module.exports = '\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.array.for-each.js":
 /*!***********************************************************!*\
   !*** ./node_modules/core-js/modules/es.array.for-each.js ***!
@@ -1782,6 +1913,126 @@ if (DESCRIPTORS && !(NAME in FunctionPrototype)) {
       }
     }
   });
+}
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.number.constructor.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/es.number.constructor.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "./node_modules/core-js/internals/descriptors.js");
+
+var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core-js/internals/global.js");
+
+var isForced = __webpack_require__(/*! ../internals/is-forced */ "./node_modules/core-js/internals/is-forced.js");
+
+var redefine = __webpack_require__(/*! ../internals/redefine */ "./node_modules/core-js/internals/redefine.js");
+
+var has = __webpack_require__(/*! ../internals/has */ "./node_modules/core-js/internals/has.js");
+
+var classof = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
+
+var inheritIfRequired = __webpack_require__(/*! ../internals/inherit-if-required */ "./node_modules/core-js/internals/inherit-if-required.js");
+
+var toPrimitive = __webpack_require__(/*! ../internals/to-primitive */ "./node_modules/core-js/internals/to-primitive.js");
+
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+
+var create = __webpack_require__(/*! ../internals/object-create */ "./node_modules/core-js/internals/object-create.js");
+
+var getOwnPropertyNames = __webpack_require__(/*! ../internals/object-get-own-property-names */ "./node_modules/core-js/internals/object-get-own-property-names.js").f;
+
+var getOwnPropertyDescriptor = __webpack_require__(/*! ../internals/object-get-own-property-descriptor */ "./node_modules/core-js/internals/object-get-own-property-descriptor.js").f;
+
+var defineProperty = __webpack_require__(/*! ../internals/object-define-property */ "./node_modules/core-js/internals/object-define-property.js").f;
+
+var trim = __webpack_require__(/*! ../internals/string-trim */ "./node_modules/core-js/internals/string-trim.js").trim;
+
+var NUMBER = 'Number';
+var NativeNumber = global[NUMBER];
+var NumberPrototype = NativeNumber.prototype; // Opera ~12 has broken Object#toString
+
+var BROKEN_CLASSOF = classof(create(NumberPrototype)) == NUMBER; // `ToNumber` abstract operation
+// https://tc39.github.io/ecma262/#sec-tonumber
+
+var toNumber = function (argument) {
+  var it = toPrimitive(argument, false);
+  var first, third, radix, maxCode, digits, length, index, code;
+
+  if (typeof it == 'string' && it.length > 2) {
+    it = trim(it);
+    first = it.charCodeAt(0);
+
+    if (first === 43 || first === 45) {
+      third = it.charCodeAt(2);
+      if (third === 88 || third === 120) return NaN; // Number('+0x1') should be NaN, old V8 fix
+    } else if (first === 48) {
+      switch (it.charCodeAt(1)) {
+        case 66:
+        case 98:
+          radix = 2;
+          maxCode = 49;
+          break;
+        // fast equal of /^0b[01]+$/i
+
+        case 79:
+        case 111:
+          radix = 8;
+          maxCode = 55;
+          break;
+        // fast equal of /^0o[0-7]+$/i
+
+        default:
+          return +it;
+      }
+
+      digits = it.slice(2);
+      length = digits.length;
+
+      for (index = 0; index < length; index++) {
+        code = digits.charCodeAt(index); // parseInt parses a string to a first unavailable symbol
+        // but ToNumber should return NaN if a string contains unavailable symbols
+
+        if (code < 48 || code > maxCode) return NaN;
+      }
+
+      return parseInt(digits, radix);
+    }
+  }
+
+  return +it;
+}; // `Number` constructor
+// https://tc39.github.io/ecma262/#sec-number-constructor
+
+
+if (isForced(NUMBER, !NativeNumber(' 0o1') || !NativeNumber('0b1') || NativeNumber('+0x1'))) {
+  var NumberWrapper = function Number(value) {
+    var it = arguments.length < 1 ? 0 : value;
+    var dummy = this;
+    return dummy instanceof NumberWrapper // check on 1..constructor(foo) case
+    && (BROKEN_CLASSOF ? fails(function () {
+      NumberPrototype.valueOf.call(dummy);
+    }) : classof(dummy) != NUMBER) ? inheritIfRequired(new NativeNumber(toNumber(it)), dummy, NumberWrapper) : toNumber(it);
+  };
+
+  for (var keys = DESCRIPTORS ? getOwnPropertyNames(NativeNumber) : ( // ES3:
+  'MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,' + // ES2015 (in case, if modules with ES2015 Number statics required before):
+  'EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,' + 'MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger').split(','), j = 0, key; keys.length > j; j++) {
+    if (has(NativeNumber, key = keys[j]) && !has(NumberWrapper, key)) {
+      defineProperty(NumberWrapper, key, getOwnPropertyDescriptor(NativeNumber, key));
+    }
+  }
+
+  NumberWrapper.prototype = NumberPrototype;
+  NumberPrototype.constructor = NumberWrapper;
+  redefine(global, NUMBER, NumberWrapper);
 }
 
 /***/ }),
@@ -14416,21 +14667,52 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./src/js/badge.js":
-/*!*************************!*\
-  !*** ./src/js/badge.js ***!
-  \*************************/
-/*! no exports provided */
+/***/ "./src/js/components/badge.js":
+/*!************************************!*\
+  !*** ./src/js/components/badge.js ***!
+  \************************************/
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
-vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('badge', {
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('badge', {
   props: ['name', 'id'],
   template: '<div class="badge badge-success mb-4">verbunden <span v-if="name">{{name}}</span> #{{id}}</div>'
-});
+}));
+
+/***/ }),
+
+/***/ "./src/js/components/lobby.js":
+/*!************************************!*\
+  !*** ./src/js/components/lobby.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('lobby', {
+  props: {
+    status: String,
+    players: Array,
+    hostid: Number,
+    playercount: Number,
+    name: String,
+    id: Number,
+    username: String,
+    isHost: Boolean,
+    canStartGame: Boolean
+  },
+  template: "\n           <div class=\"lobby\">\n            <h2 class=\"lobby__header\">Lobby</h2>\n            <!-- Game status -->\n            <span>{{status}}</span>\n\n            <!-- Username enter -->\n            <div v-if=\"!username\">\n                <label for=\"username\">Dein Name:</label>\n                <input @keyup.enter=\"setUsername\" class=\"form-control\" type=\"text\" id=\"username\">\n            </div>\n\n            <!-- Player num -->\n            <div class=\"lobby__connections\">Spieler online: {{playercount}}</div>\n\n            <!-- Connection list -->\n            <ul>\n                <li class=\"font-weight-bold\">\n                    <span v-if=\"name\">{{name}}</span>\n                    #{{id}}\n                    <span class=\"badge badge-info\" v-if=\"isHost\">Host</span>\n                </li>\n                <li\n                    v-for=\"player in players\"\n                    v-if=\"players && player.id !== id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}}</span>\n                    #{{player.id}}\n                    <span class=\"badge badge-info\" v-if=\"player.id === hostid\">Host</span>\n                    <span class=\"badge badge-danger\" v-if=\"!player.connected\">disconnected</span>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n            <button\n                class=\"btn btn-primary\"\n                v-if=\"canStartGame\"\n                v-on:click=\"$emit('start-game')\"\n            >\n                Spiel starten\n            </button>\n        </div>\n   "
+}));
 
 /***/ }),
 
@@ -14456,7 +14738,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _badge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./badge */ "./src/js/badge.js");
+/* harmony import */ var _components_badge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/badge */ "./src/js/components/badge.js");
+/* harmony import */ var _components_lobby__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/lobby */ "./src/js/components/lobby.js");
+
 
 
 
@@ -14468,6 +14752,10 @@ __webpack_require__.r(__webpack_exports__);
 var conn;
 var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
   el: "#app",
+  components: {
+    badge: _components_badge__WEBPACK_IMPORTED_MODULE_7__["default"],
+    lobby: _components_lobby__WEBPACK_IMPORTED_MODULE_8__["default"]
+  },
   data: {
     loveletter: {
       global: {
@@ -14494,10 +14782,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
     game: {
       global: {
         players: [],
-        hostid: ''
+        hostid: 0
       },
       local: {
-        id: '',
+        id: 0,
         name: ''
       }
     },
@@ -14719,9 +15007,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
     },
     getDiscardPile: function getDiscardPile() {
       return this.loveletter.global.discardPile;
-    },
-    getStatus: function getStatus() {
-      return this.game.global.status;
     },
     getActiveCard: function getActiveCard() {
       return this.loveletter.global.activeCard;
