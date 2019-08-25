@@ -27,10 +27,6 @@ export default Vue.component(
             },
         },
         computed: {
-            isOutOfGameCardsVisible: function () {
-                return this.global.outOfGameCards.length > 0
-            },
-
             isBoardVisible: function () {
                 return this.global.gameStarted || this.global.winners.length > 0
             },
@@ -61,7 +57,7 @@ export default Vue.component(
                 <!-- Removed cards (if only 2 people play) -->
                 <div
                     class="alert alert-warning"
-                    v-if="isOutOfGameCardsVisible"
+                    v-if="global.outOfGameCards.length > 0"
                 >
                     <span>Karten, die aus dem Spiel sind: </span>
                     <ul class="list-inline mb-0">
