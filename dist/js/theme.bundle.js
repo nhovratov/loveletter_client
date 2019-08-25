@@ -15081,11 +15081,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
 
       if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
         console.log('cookie with id exists.');
-
-        if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name')) {
-          console.log('cookie with name exists. set the name');
-          app.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
-        }
       }
 
       app.send();
@@ -15116,12 +15111,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
         js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('id', data.local.newId, {
           expires: 30
         });
-
-        if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name')) {
-          console.log('name from cookie exists, set it in game.local');
-          app.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
-        }
-
         app.send();
       }
 
@@ -15133,19 +15122,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
       var id = '';
-      var name = '';
 
       if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
         id = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id');
       }
 
-      if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name')) {
-        name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
-      }
-
       var data = {
         id: id,
-        name: name,
+        name: this.game.local.name,
         action: action,
         params: params
       };
@@ -15156,10 +15140,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
       this.send({}, 'start');
     },
     setUsername: function setUsername() {
-      js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('name', document.getElementById('username').value, {
-        expires: 30
-      });
-      this.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
+      this.game.local.name = document.getElementById('username').value;
       this.send();
     }
   },

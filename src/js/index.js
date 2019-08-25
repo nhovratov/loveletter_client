@@ -63,10 +63,6 @@ var app = new Vue({
             app.local.connected = true;
             if (Cookies.get('id')) {
                 console.log('cookie with id exists.');
-                if (Cookies.get('name')) {
-                    console.log('cookie with name exists. set the name');
-                    app.game.local.name = Cookies.get('name');
-                }
             }
             app.send();
             console.log('END Onopen');
@@ -89,10 +85,6 @@ var app = new Vue({
             if (!Cookies.get('id')) {
                 console.log('No id with cookie is set. Set id from newId');
                 Cookies.set('id', data.local.newId, {expires: 30});
-                if (Cookies.get('name')) {
-                    console.log('name from cookie exists, set it in game.local');
-                    app.game.local.name = Cookies.get('name');
-                }
                 app.send();
             }
             console.log('END onmessage');
@@ -101,16 +93,12 @@ var app = new Vue({
     methods: {
         send: function (params = {}, action = '') {
             var id = '';
-            var name = '';
             if (Cookies.get('id')) {
                 id = Cookies.get('id');
             }
-            if (Cookies.get('name')) {
-                name = Cookies.get('name');
-            }
             var data = {
                 id: id,
-                name: name,
+                name: this.game.local.name,
                 action: action,
                 params: params
             };
@@ -123,8 +111,7 @@ var app = new Vue({
         },
 
         setUsername: function () {
-            Cookies.set('name', document.getElementById('username').value, {expires: 30});
-            this.game.local.name = Cookies.get('name');
+            this.game.local.name = document.getElementById('username').value;
             this.send();
         },
     },
