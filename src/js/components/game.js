@@ -3,6 +3,7 @@ import Vue from 'vue';
 import players from './players';
 import guardian from './guardian';
 import cards from './cards';
+import active from './active';
 
 export default Vue.component(
     'game',
@@ -16,6 +17,7 @@ export default Vue.component(
             players,
             guardian,
             cards,
+            active,
         },
         methods: {
             can: function (action) {
@@ -81,41 +83,21 @@ export default Vue.component(
                 >
                 </guardian>
                 
+                <p>Deine Karten:</p>
                 <cards
                     v-bind:global="global"
                     v-bind:local="local"
                     v-on:send="$emit('send', $event)"
                 >
                 </cards>
-    
-                <!-- card on field -->
-                <p>Spielfeld:</p>
-                <div class="d-flex mb-4">
-                    <div class="card" v-if="global.activeCard">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                {{global.activeCard.name}} ({{global.activeCard.value}})
-                            </h5>
-                            <p class="card-text">
-                                {{global.activeCard.text}}
-                            </p>
-                            <button
-                                class="btn btn-danger"
-                                v-if="can('confirmDiscardCard')"
-                                v-on:click="$emit('send')"
-                            >
-                                Auf Ablagestapel
-                            </button>
-                            <button
-                                class="btn btn-success"
-                                v-if="can('placeMaidCard')"
-                                v-on:click="$emit('send')"
-                            >
-                                Offen vor dich hinlegen
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                
+                <p>Aktive Karte:</p>
+                <active
+                    v-bind:active-card="global.activeCard"
+                    v-bind:can="can"
+                    v-on:send="$emit('send', $event)"
+                >
+                </active>
     
                 <p>Ablagestapel:</p>
                 <div v-for="card in global.discardPile">
