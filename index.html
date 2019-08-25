@@ -9,11 +9,16 @@
 <div class="container">
     <div id="app">
         <h1>Love Letter</h1>
-        <!-- Connectivity -->
-        <badge v-if="local.connected" v-bind:name="game.local.name" v-bind:id="game.local.id"></badge>
+
+        <badge
+            v-if="local.connected"
+            v-bind:name="game.local.name"
+            v-bind:id="game.local.id"
+        >
+        </badge>
+
         <div class="badge badge-info mb-4" v-if="isHost">Host</div>
 
-        <!-- Lobby -->
         <lobby
             v-bind:status="game.global.status"
             v-bind:players="game.global.players"
