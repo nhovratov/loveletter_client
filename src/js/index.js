@@ -18,7 +18,7 @@ var app = new Vue({
             global: {
                 winners: {},
                 outOfGameCards: [],
-                guardianEffectChosenPlayer: '',
+                guardianEffectChosenPlayer: 0,
                 waitFor: '',
                 status: '',
                 outOfGamePlayers: [],
@@ -129,7 +129,6 @@ var app = new Vue({
             this.send();
         },
     },
-
     computed: {
         isHost: function () {
             return this.game.local.id === this.game.global.hostid;

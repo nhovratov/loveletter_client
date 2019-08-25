@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 import players from './players';
+import guardian from './guardian';
 
 export default Vue.component(
     'game',
@@ -11,7 +12,8 @@ export default Vue.component(
             id: Number
         },
         components: {
-           players
+            players,
+            guardian,
         },
         methods: {
             can: function (action) {
@@ -87,25 +89,14 @@ export default Vue.component(
                     v-on:send="$emit('send', $event)"
                 >
                 </players>
-    
-                <!-- Guardian Effect selectable cards -->
-                <div v-if="can('chooseGuardianEffectCard')">
-                    <p>Wähle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand hält!</p>
-                    <ul class="list-group mb-4">
-                        <li
-                            class="list-group-item d-flex align-items-center"
-                            v-for="card in global.guardianEffectSelectableCards"
-                        >
-                            {{card}}
-                            <button
-                                class="btn btn-sm btn-success ml-auto"
-                                v-on:click="$emit('send', {card: card})"
-                            >
-                                auswählen
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                
+                <guardian
+                    v-bind:global="global"
+                    v-bind:local="local"
+                    v-bind:can="can"
+                    v-on:send="$emit('send', $event)"
+                >
+                </guardian>
     
                 <!-- Hand cards -->
                 <p>Deine Karten:</p>
