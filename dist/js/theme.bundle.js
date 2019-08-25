@@ -14676,11 +14676,86 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('badge', {
-  props: ['name', 'id'],
-  template: '<div class="badge badge-success mb-4">verbunden <span v-if="name">{{name}}</span> #{{id}}</div>'
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('badge', {
+  props: {
+    name: String,
+    id: Number,
+    isHost: Boolean
+  },
+  template: "\n            <div>\n                <div class=\"badge badge-success mb-4\">verbunden <span v-if=\"name\">{{name}}</span> #{{id}}</div>\n                <div class=\"badge badge-info mb-4\" v-if=\"isHost\">Host</div>\n            </div>\n        "
+}));
+
+/***/ }),
+
+/***/ "./src/js/components/game.js":
+/*!***********************************!*\
+  !*** ./src/js/components/game.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.includes */ "./node_modules/core-js/modules/es.array.includes.js");
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./players */ "./src/js/components/players.js");
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('game', {
+  props: {
+    global: Object,
+    local: Object,
+    id: Number
+  },
+  components: {
+    players: _players__WEBPACK_IMPORTED_MODULE_4__["default"]
+  },
+  methods: {
+    can: function can(action) {
+      return action === this.local.allowedAction;
+    },
+    canChooseCard: function canChooseCard(card) {
+      return this.local.allowedAction === 'chooseCard' && !this.isPreventedByCountess(card.name);
+    },
+    isPreventedByCountess: function isPreventedByCountess(cardname) {
+      var cards = [];
+      var handCards = this.local.cards;
+
+      for (var key in handCards) {
+        if (handCards.hasOwnProperty(key)) {
+          cards.push(handCards[key]['name']);
+        }
+      }
+
+      if (!cards.includes('Gräfin')) {
+        return false;
+      }
+
+      return ['König', 'Prinz'].includes(cardname);
+    }
+  },
+  computed: {
+    isOutOfGameCardsVisible: function isOutOfGameCardsVisible() {
+      return this.global.outOfGameCards.length > 0;
+    },
+    isBoardVisible: function isBoardVisible() {
+      return this.global.gameStarted || this.global.winners.length > 0;
+    }
+  },
+  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Game status -->\n                <div v-if=\"global.status\" class=\"alert alert-info\">{{global.status}}</div>\n    \n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n    \n                <div\n                    class=\"alert alert-success d-flex align-items-center\"\n                    v-if=\"can('finishLookingAtCard')\"\n                >\n                    Diese Karte wurde durch den Priester aufgedeckt: {{local.priestEffectVisibleCard}}\n                    <button\n                            class=\"btn btn-success ml-auto\"\n                            v-on:click=\"$emit('send')\"\n                    >\n                        Fertig mit angucken\n                    </button>\n                </div>\n    \n                <!-- Removed cards (if only 2 people play) -->\n                <div\n                    class=\"alert alert-warning\"\n                    v-if=\"isOutOfGameCardsVisible\"\n                >\n                    <span>Karten, die aus dem Spiel sind: </span>\n                    <ul class=\"list-inline mb-0\">\n                        <li class=\"list-inline-item\" v-for=\"card in global.outOfGameCards\">{{card.name}}</li>\n                    </ul>\n                </div>\n                \n                <players\n                    v-bind:global=\"global\"\n                    v-bind:local=\"local\"\n                    v-bind:can=\"can\"\n                    v-bind:id=\"id\"\n                    v-on:send=\"$emit('send', $event)\"\n                >\n                </players>\n    \n                <!-- Guardian Effect selectable cards -->\n                <div v-if=\"can('chooseGuardianEffectCard')\">\n                    <p>W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</p>\n                    <ul class=\"list-group mb-4\">\n                        <li\n                            class=\"list-group-item d-flex align-items-center\"\n                            v-for=\"card in global.guardianEffectSelectableCards\"\n                        >\n                            {{card}}\n                            <button\n                                class=\"btn btn-sm btn-success ml-auto\"\n                                v-on:click=\"$emit('send', {card: card})\"\n                            >\n                                ausw\xE4hlen\n                            </button>\n                        </li>\n                    </ul>\n                </div>\n    \n                <!-- Hand cards -->\n                <p>Deine Karten:</p>\n                <transition-group\n                        tag=\"div\"\n                        class=\"mb-4 d-flex\"\n                        enter-active-class=\"animated fadeIn\"\n                        leave-active-class=\"animated fadeOut\"\n                >\n                    <div class=\"card mr-2\" v-for=\"(card, key) in local.cards\" :key=\"card.cardnumber\">\n                        <div class=\"card-body\">\n                            <h5 class=\"card-title\">\n                                {{card.name}} ({{card.value}})\n                            </h5>\n                            <p class=\"card-text\">\n                                {{card.text}}\n                            </p>\n                            <button\n                                    v-if=\"canChooseCard(card)\"\n                                    v-on:click=\"$emit('send', {key: key})\"\n                                    class=\"btn btn-primary\"\n                            >\n                                Karte spielen\n                            </button>\n                        </div>\n                    </div>\n                </transition-group>\n    \n                <!-- card on field -->\n                <p>Spielfeld:</p>\n                <div class=\"d-flex mb-4\">\n                    <div class=\"card\" v-if=\"global.activeCard\">\n                        <div class=\"card-body\">\n                            <h5 class=\"card-title\">\n                                {{global.activeCard.name}} ({{global.activeCard.value}})\n                            </h5>\n                            <p class=\"card-text\">\n                                {{global.activeCard.text}}\n                            </p>\n                            <button\n                                class=\"btn btn-danger\"\n                                v-if=\"can('confirmDiscardCard')\"\n                                v-on:click=\"$emit('send')\"\n                            >\n                                Auf Ablagestapel\n                            </button>\n                            <button\n                                class=\"btn btn-success\"\n                                v-if=\"can('placeMaidCard')\"\n                                v-on:click=\"$emit('send')\"\n                            >\n                                Offen vor dich hinlegen\n                            </button>\n                        </div>\n                    </div>\n                </div>\n    \n                <p>Ablagestapel:</p>\n                <div v-for=\"card in global.discardPile\">\n                    <div class=\"d-flex\">\n                        <div class=\"card\">\n                            <div class=\"card-body\">\n                                <h5 class=\"card-title\">\n                                    {{card.name}} ({{card.value}})\n                                </h5>\n                                <p class=\"card-text\">\n                                    {{card.text}}\n                                </p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        "
 }));
 
 /***/ }),
@@ -14694,12 +14769,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
 
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('lobby', {
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('lobby', {
   props: {
     status: String,
     players: Array,
@@ -14709,9 +14790,77 @@ __webpack_require__.r(__webpack_exports__);
     id: Number,
     username: String,
     isHost: Boolean,
-    canStartGame: Boolean
+    canStartGame: Boolean,
+    gameStarted: Boolean,
+    setUsername: Function
   },
-  template: "\n           <div class=\"lobby\">\n            <h2 class=\"lobby__header\">Lobby</h2>\n            <!-- Game status -->\n            <span>{{status}}</span>\n\n            <!-- Username enter -->\n            <div v-if=\"!username\">\n                <label for=\"username\">Dein Name:</label>\n                <input @keyup.enter=\"setUsername\" class=\"form-control\" type=\"text\" id=\"username\">\n            </div>\n\n            <!-- Player num -->\n            <div class=\"lobby__connections\">Spieler online: {{playercount}}</div>\n\n            <!-- Connection list -->\n            <ul>\n                <li class=\"font-weight-bold\">\n                    <span v-if=\"name\">{{name}}</span>\n                    #{{id}}\n                    <span class=\"badge badge-info\" v-if=\"isHost\">Host</span>\n                </li>\n                <li\n                    v-for=\"player in players\"\n                    v-if=\"players && player.id !== id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}}</span>\n                    #{{player.id}}\n                    <span class=\"badge badge-info\" v-if=\"player.id === hostid\">Host</span>\n                    <span class=\"badge badge-danger\" v-if=\"!player.connected\">disconnected</span>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n            <button\n                class=\"btn btn-primary\"\n                v-if=\"canStartGame\"\n                v-on:click=\"$emit('start-game')\"\n            >\n                Spiel starten\n            </button>\n        </div>\n   "
+  computed: {
+    getActivePlayerCount: function getActivePlayerCount() {
+      var count = 0;
+
+      if (!this.players) {
+        return 0;
+      }
+
+      this.players.forEach(function (player) {
+        if (player.connected) {
+          count += 1;
+        }
+      });
+      return count;
+    },
+    gameIsReady: function gameIsReady() {
+      return this.canStartGame && !this.gameStarted;
+    }
+  },
+  template: "\n           <div class=\"lobby\">\n            <h2 class=\"lobby__header\">Lobby</h2>\n            <!-- Game status -->\n            <span>{{status}}</span>\n\n            <!-- Username enter -->\n            <div v-if=\"!username\">\n                <label for=\"username\">Dein Name:</label>\n                <input @keyup.enter=\"setUsername\" class=\"form-control\" type=\"text\" id=\"username\">\n            </div>\n\n            <!-- Player num -->\n            <div class=\"lobby__connections\">Spieler online: {{getActivePlayerCount}}</div>\n\n            <!-- Connection list -->\n            <ul>\n                <li class=\"font-weight-bold\">\n                    <span v-if=\"name\">{{name}}</span>\n                    #{{id}}\n                    <span class=\"badge badge-info\" v-if=\"isHost\">Host</span>\n                </li>\n                <li\n                    v-for=\"player in players\"\n                    v-if=\"players && player.id !== id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}}</span>\n                    #{{player.id}}\n                    <span class=\"badge badge-info\" v-if=\"player.id === hostid\">Host</span>\n                    <span class=\"badge badge-danger\" v-if=\"!player.connected\">disconnected</span>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n            <button\n                class=\"btn btn-primary\"\n                v-if=\"gameIsReady\"\n                v-on:click=\"$emit('start-game')\"\n            >\n                Spiel starten\n            </button>\n        </div>\n   "
+}));
+
+/***/ }),
+
+/***/ "./src/js/components/players.js":
+/*!**************************************!*\
+  !*** ./src/js/components/players.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.includes */ "./node_modules/core-js/modules/es.array.includes.js");
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.includes */ "./node_modules/core-js/modules/es.string.includes.js");
+/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('players', {
+  props: {
+    global: Object,
+    local: Object,
+    id: Number,
+    can: Function
+  },
+  methods: {
+    canChoosePlayer: function canChoosePlayer(id) {
+      var allowedAction = this.local.allowedAction;
+      return ['choosePlayer', 'chooseAnyPlayer'].includes(allowedAction) && !this.isProtected(id) && !this.isOutOfGame(id) && (id !== this.id || allowedAction === 'chooseAnyPlayer');
+    },
+    isWinner: function isWinner(id) {
+      return this.global.gameFinished && this.global.winners.includes(id);
+    },
+    isProtected: function isProtected(id) {
+      return this.global.protectedPlayers.includes(id);
+    },
+    isOutOfGame: function isOutOfGame(id) {
+      return this.global.outOfGamePlayers.includes(id);
+    }
+  },
+  template: "\n            <ul class=\"list-group mb-4\">\n                <li\n                    class=\"list-group-item d-flex align-items-center\"\n                    v-for=\"player in global.players\"\n                    :class=\"[{\n                        active: player.id === global.playerTurn\n                    }]\"\n                >\n                    {{player.name}} #{{player.id}}\n                    <span\n                        class=\"ml-2 badge badge-dark\"\n                        v-if=\"isOutOfGame(player.id)\"\n                    >\n                        ausgeschieden\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-success\"\n                        v-if=\"isWinner(player.id)\"\n                    >\n                        gewonnen\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-info\"\n                        v-if=\"isProtected(player.id)\"\n                    >\n                        gesch\xFCtzt\n                    </span>\n                    <button\n                        class=\"btn btn-sm btn-warning ml-auto\"\n                        v-if=\"canChoosePlayer(player.id)\"\n                        v-on:click=\"$emit('send', {id: player.id})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                    <button\n                        class=\"ml-2 btn btn-primary btn-sm\"\n                        v-if=\"can('selectFirstPlayer')\"\n                        v-on:click=\"$emit('send', {id: player.id})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                </li>\n            </ul>\n    "
 }));
 
 /***/ }),
@@ -14725,24 +14874,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.includes */ "./node_modules/core-js/modules/es.array.includes.js");
-/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.includes */ "./node_modules/core-js/modules/es.string.includes.js");
-/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _components_badge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/badge */ "./src/js/components/badge.js");
-/* harmony import */ var _components_lobby__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/lobby */ "./src/js/components/lobby.js");
-
-
-
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_badge__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/badge */ "./src/js/components/badge.js");
+/* harmony import */ var _components_lobby__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/lobby */ "./src/js/components/lobby.js");
+/* harmony import */ var _components_game__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/game */ "./src/js/components/game.js");
 
 
 
@@ -14750,11 +14889,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var conn;
-var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
+var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
   el: "#app",
   components: {
-    badge: _components_badge__WEBPACK_IMPORTED_MODULE_7__["default"],
-    lobby: _components_lobby__WEBPACK_IMPORTED_MODULE_8__["default"]
+    badge: _components_badge__WEBPACK_IMPORTED_MODULE_3__["default"],
+    lobby: _components_lobby__WEBPACK_IMPORTED_MODULE_4__["default"],
+    game: _components_game__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   data: {
     loveletter: {
@@ -14763,11 +14903,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
         outOfGameCards: [],
         guardianEffectChosenPlayer: '',
         waitFor: '',
+        status: '',
         outOfGamePlayers: [],
         protectedPlayers: [],
         gameStarted: false,
         gameFinished: false,
-        playerTurn: '',
+        playerTurn: 0,
         guardianEffectSelectableCards: [],
         activeCard: {},
         discardPile: {}
@@ -14801,12 +14942,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
       console.log('START Onopen event');
       app.local.connected = true;
 
-      if (js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('id')) {
+      if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
         console.log('cookie with id exists.');
 
-        if (js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name')) {
+        if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name')) {
           console.log('cookie with name exists. set the name');
-          app.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name');
+          app.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
         }
       }
 
@@ -14822,27 +14963,26 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
       if (data.dataType === "game") {
         app.loveletter.global = data.global;
         app.loveletter.local = data.local;
-        app.fetchCards(data.local.cards);
       } else {
         app.game = data;
       }
 
       if (data.local.newId) {
         console.log('server responded with newId.');
-        js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.set('id', data.local.newId, {
+        js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('id', data.local.newId, {
           expires: 30
         });
       }
 
-      if (!js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('id')) {
+      if (!js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
         console.log('No id with cookie is set. Set id from newId');
-        js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.set('id', data.local.newId, {
+        js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('id', data.local.newId, {
           expires: 30
         });
 
-        if (js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name')) {
+        if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name')) {
           console.log('name from cookie exists, set it in game.local');
-          app.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name');
+          app.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
         }
 
         app.send();
@@ -14858,12 +14998,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
       var id = '';
       var name = '';
 
-      if (js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('id')) {
-        id = js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('id');
+      if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
+        id = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id');
       }
 
-      if (js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name')) {
-        name = js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name');
+      if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name')) {
+        name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
       }
 
       var data = {
@@ -14878,153 +15018,20 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
     startGame: function startGame() {
       this.send({}, 'start');
     },
-    fetchCards: function fetchCards(cards) {
-      this.setCards(cards);
-    },
     getUsername: function getUsername() {
-      return js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name');
+      return js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
     },
     setUsername: function setUsername() {
-      js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.set('name', document.getElementById('username').value, {
+      js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('name', document.getElementById('username').value, {
         expires: 30
       });
-      this.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_6___default.a.get('name');
+      this.game.local.name = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
       this.send();
-    },
-    isUserConnected: function isUserConnected(id) {
-      var connected = false;
-      this.getPlayers().forEach(function (player) {
-        if (player.id === id) {
-          connected = player.connected;
-        }
-      });
-      return connected;
-    },
-    getId: function getId() {
-      return this.game.local.id;
-    },
-    getCanStartGame: function getCanStartGame() {
-      return this.game.local.canStartGame;
-    },
-    getHostId: function getHostId() {
-      return this.game.global.hostid;
-    },
-    getPlayers: function getPlayers() {
-      return this.game.global.players;
-    },
-    can: function can(action) {
-      return action === this.getAllowedAction();
-    },
-    canChoosePlayer: function canChoosePlayer(id) {
-      return ['choosePlayer', 'chooseAnyPlayer'].includes(this.getAllowedAction()) && !this.isProtected(id) && !this.isOutOfGame(id) && (id !== this.getId() || this.getAllowedAction() === 'chooseAnyPlayer');
-    },
-    canChooseCard: function canChooseCard(card) {
-      return this.getAllowedAction() === 'chooseCard' && !this.isPreventedByCountess(card.name);
-    },
-    isPreventedByCountess: function isPreventedByCountess(cardname) {
-      var cards = [];
-      var mustPlayCards = ['König', 'Prinz'];
-      var handCards = this.getCards();
-
-      for (var key in handCards) {
-        if (handCards.hasOwnProperty(key)) {
-          cards.push(handCards[key]['name']);
-        }
-      }
-
-      if (!cards.includes('Gräfin')) {
-        return false;
-      }
-
-      return mustPlayCards.includes(cardname);
-    },
-    isProtected: function isProtected(id) {
-      return this.getProtectedPlayers().includes(id);
-    },
-    isOutOfGame: function isOutOfGame(id) {
-      return this.getOutOfGamePlayers().includes(id);
-    },
-    isWinner: function isWinner(id) {
-      return this.getWinners().includes(id);
-    },
-    isGameStarted: function isGameStarted() {
-      return this.loveletter.global.gameStarted;
-    },
-    getAllowedAction: function getAllowedAction() {
-      return this.loveletter.local.allowedAction;
-    },
-    getCards: function getCards() {
-      return this.loveletter.local.cards;
-    },
-    setCards: function setCards(cards) {
-      return this.loveletter.local.cards = cards;
-    },
-    getOutOfGameCards: function getOutOfGameCards() {
-      return this.loveletter.global.outOfGameCards;
-    },
-    getProtectedPlayers: function getProtectedPlayers() {
-      return this.loveletter.global.protectedPlayers;
-    },
-    getOutOfGamePlayers: function getOutOfGamePlayers() {
-      return this.loveletter.global.outOfGamePlayers;
-    },
-    getWinners: function getWinners() {
-      return this.loveletter.global.winners;
     }
   },
   computed: {
-    canStartGame: function canStartGame() {
-      return this.getCanStartGame() && !this.isGameStarted();
-    },
-    isOutOfGameCardsVisible: function isOutOfGameCardsVisible() {
-      return this.getOutOfGameCards().length > 0;
-    },
-    isBoardVisible: function isBoardVisible() {
-      return this.isGameStarted() || this.getWinners().length > 0;
-    },
     isHost: function isHost() {
-      return this.getId() === this.getHostId();
-    },
-    isGameFinished: function isGameFinished() {
-      return this.loveletter.global.gameFinished;
-    },
-    getActivePlayerCount: function getActivePlayerCount() {
-      var count = 0;
-
-      if (!this.getPlayers()) {
-        return 0;
-      }
-
-      this.getPlayers().forEach(function (player) {
-        if (player.connected) {
-          count += 1;
-        }
-      });
-      return count;
-    },
-    getPriestEffectVisibleCard: function getPriestEffectVisibleCard() {
-      return this.loveletter.local.priestEffectVisibleCard;
-    },
-    getDiscardPile: function getDiscardPile() {
-      return this.loveletter.global.discardPile;
-    },
-    getActiveCard: function getActiveCard() {
-      return this.loveletter.global.activeCard;
-    },
-    getGuardianEffectChosenPlayer: function getGuardianEffectChosenPlayer() {
-      return this.loveletter.global.guardianEffectChosenPlayer;
-    },
-    getGuardianEffectSelectableCards: function getGuardianEffectSelectableCards() {
-      return this.loveletter.global.guardianEffectSelectableCards;
-    },
-    getPlayerTurn: function getPlayerTurn() {
-      return this.loveletter.global.playerTurn;
-    },
-    getGameStatus: function getGameStatus() {
-      return this.loveletter.global.status;
-    },
-    getIngamePlayers: function getIngamePlayers() {
-      return this.loveletter.global.players;
+      return this.game.local.id === this.game.global.hostid;
     }
   }
 });

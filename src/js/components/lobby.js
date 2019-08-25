@@ -13,6 +13,26 @@ export default Vue.component(
             username: String,
             isHost: Boolean,
             canStartGame: Boolean,
+            gameStarted: Boolean,
+            setUsername: Function
+        },
+        computed: {
+            getActivePlayerCount: function () {
+                var count = 0;
+                if (!this.players) {
+                    return 0;
+                }
+                this.players.forEach(function (player) {
+                    if (player.connected) {
+                        count += 1;
+                    }
+                });
+                return count;
+            },
+
+            gameIsReady: function () {
+                return this.canStartGame && !this.gameStarted;
+            },
         },
         template: `
            <div class="lobby">
@@ -27,7 +47,7 @@ export default Vue.component(
             </div>
 
             <!-- Player num -->
-            <div class="lobby__connections">Spieler online: {{playercount}}</div>
+            <div class="lobby__connections">Spieler online: {{getActivePlayerCount}}</div>
 
             <!-- Connection list -->
             <ul>
@@ -50,7 +70,7 @@ export default Vue.component(
             <!-- Start game button, smash it! -->
             <button
                 class="btn btn-primary"
-                v-if="canStartGame"
+                v-if="gameIsReady"
                 v-on:click="$emit('start-game')"
             >
                 Spiel starten

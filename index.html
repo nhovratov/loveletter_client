@@ -14,198 +14,32 @@
             v-if="local.connected"
             v-bind:name="game.local.name"
             v-bind:id="game.local.id"
+            v-bind:is-host="isHost"
         >
         </badge>
-
-        <div class="badge badge-info mb-4" v-if="isHost">Host</div>
 
         <lobby
             v-bind:status="game.global.status"
             v-bind:players="game.global.players"
             v-bind:hostid="game.global.hostid"
-            v-bind:playercount="getActivePlayerCount"
             v-bind:name="game.local.name"
             v-bind:id="game.local.id"
             v-bind:username="getUsername()"
             v-bind:is-host="isHost"
-            v-bind:can-start-game="canStartGame"
-            v-on:start-game="startGame()"
+            v-bind:can-start-game="game.local.canStartGame"
+            v-bind:game-started="loveletter.global.gameStarted"
+            v-bind:set-username="setUsername"
+            v-on:start-game="startGame"
         >
         </lobby>
 
-        <!-- Game -->
-        <div
-            class="loveletter"
-            v-if="isBoardVisible"
+        <game
+            v-bind:global="loveletter.global"
+            v-bind:local="loveletter.local"
+            v-bind:id="game.local.id"
+            v-on:send="send"
         >
-            <!-- Game status -->
-            <div v-if="getGameStatus" class="alert alert-info">{{getGameStatus}}</div>
-
-            <!-- Select first player -->
-            <div class="mb-2" v-if="can('selectFirstPlayer')">
-                <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
-            </div>
-
-            <div class="alert alert-success d-flex align-items-center"
-                 v-if="can('finishLookingAtCard')"
-            >
-                Diese Karte wurde durch den Priester aufgedeckt: {{getPriestEffectVisibleCard}}
-                <button
-                        class="btn btn-success ml-auto"
-                        @click="send()"
-                >
-                    Fertig mit angucken
-                </button>
-            </div>
-
-            <!-- Removed cards (if only 2 people play) -->
-            <div
-                class="alert alert-warning"
-                v-if="isOutOfGameCardsVisible"
-            >
-                <span>Karten, die aus dem Spiel sind: </span>
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item" v-for="card in getOutOfGameCards()">{{card.name}}</li>
-                </ul>
-            </div>
-
-            <!-- Players in Love Letter -->
-            <p>Spieler:</p>
-            <ul class="list-group mb-4">
-                <li
-                    class="list-group-item d-flex align-items-center"
-                    v-for="player in getIngamePlayers"
-                    :class="[{
-                        active: player.id === getPlayerTurn,
-                        disabled: !isUserConnected(player.id)
-                    }]"
-                >
-                    {{player.name}} #{{player.id}}
-                    <span
-                        class="ml-2 badge badge-dark"
-                        v-if="isOutOfGame(player.id)"
-                    >
-                        ausgeschieden
-                    </span>
-                    <span
-                        class="ml-2 badge badge-success"
-                        v-if="isGameFinished && isWinner(player.id)"
-                    >
-                        gewonnen
-                    </span>
-                    <span
-                        class="ml-2 badge badge-info"
-                        v-if="isProtected(player.id)"
-                    >
-                        geschützt
-                    </span>
-                    <button
-                        class="btn btn-sm btn-warning ml-auto"
-                        v-if="canChoosePlayer(player.id)"
-                        @click="send({id: player.id})"
-                    >
-                        auswählen
-                    </button>
-                    <button
-                        class="ml-2 btn btn-primary btn-sm"
-                        v-if="can('selectFirstPlayer')"
-                        @click="send({id: player.id})"
-                    >
-                        auswählen
-                    </button>
-                </li>
-            </ul>
-
-            <!-- Guardian Effect selectable cards -->
-            <div v-if="can('chooseGuardianEffectCard')">
-                <p>Wähle die Karte, die {{getGuardianEffectChosenPlayer}} auf der Hand hält!</p>
-                <ul class="list-group mb-4">
-                    <li
-                        class="list-group-item d-flex align-items-center"
-                        v-for="card in getGuardianEffectSelectableCards"
-                    >
-                        {{card}}
-                        <button
-                            class="btn btn-sm btn-success ml-auto"
-                            @click="send({card: card})"
-                        >
-                            auswählen
-                        </button>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Hand cards -->
-            <p>Deine Karten:</p>
-            <transition-group
-                    tag="div"
-                    class="mb-4 d-flex"
-                    enter-active-class="animated fadeIn"
-                    leave-active-class="animated fadeOut"
-            >
-                <div class="card mr-2" v-for="(card, key) in getCards()" :key="card.cardnumber">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {{card.name}} ({{card.value}})
-                        </h5>
-                        <p class="card-text">
-                            {{card.text}}
-                        </p>
-                        <button
-                                v-if="canChooseCard(card)"
-                                @click="send({key: key})"
-                                class="btn btn-primary"
-                        >
-                            Karte spielen
-                        </button>
-                    </div>
-                </div>
-            </transition-group>
-
-            <!-- card on field -->
-            <p>Spielfeld:</p>
-            <div class="d-flex mb-4">
-                <div class="card" v-if="getActiveCard">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {{getActiveCard.name}} ({{getActiveCard.value}})
-                        </h5>
-                        <p class="card-text">
-                            {{getActiveCard.text}}
-                        </p>
-                        <button
-                            class="btn btn-danger"
-                            v-if="can('confirmDiscardCard')"
-                            @click="send()"
-                        >
-                            Auf Ablagestapel
-                        </button>
-                        <button class="btn btn-success"
-                                v-if="can('placeMaidCard')"
-                                @click="send()"
-                        >
-                            Offen vor dich hinlegen
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <p>Ablagestapel:</p>
-            <div v-for="card in getDiscardPile">
-                <div class="d-flex">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                {{card.name}} ({{card.value}})
-                            </h5>
-                            <p class="card-text">
-                                {{card.text}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </game>
     </div>
 </div>
 <script src="dist/js/theme.bundle.js"></script>
