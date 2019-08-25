@@ -52,7 +52,7 @@ export default Vue.component(
                     Diese Karte wurde durch den Priester aufgedeckt: {{local.priestEffectVisibleCard}}
                     <button
                             class="btn btn-success ml-auto"
-                            v-on:click="$emit('send')"
+                            @click="$emit('send')"
                     >
                         Fertig mit angucken
                     </button>
@@ -70,42 +70,42 @@ export default Vue.component(
                 </div>
                 
                 <players
-                    v-bind:global="global"
-                    v-bind:local="local"
-                    v-bind:can="can"
-                    v-bind:id="id"
-                    v-on:send="$emit('send', $event)"
+                    :global="global"
+                    :local="local"
+                    :can="can"
+                    :id="id"
+                    @send="$emit('send', $event)"
                 >
                 </players>
                 
                 <guardian
-                    v-bind:global="global"
-                    v-bind:can="can"
-                    v-on:send="$emit('send', $event)"
+                    :global="global"
+                    :can="can"
+                    @send="$emit('send', $event)"
                 >
                 </guardian>
                 
                 <p>Deine Karten:</p>
                 <cards
-                    v-bind:global="global"
-                    v-bind:local="local"
-                    v-on:send="$emit('send', $event)"
+                    :global="global"
+                    :local="local"
+                    @send="$emit('send', $event)"
                 >
                 </cards>
                 
                 <p>Aktive Karte:</p>
                 <active
-                    v-bind:active-card="global.activeCard"
-                    v-bind:can="can"
-                    v-on:send="$emit('send', $event)"
+                    :active-card="global.activeCard"
+                    :can="can"
+                    @send="$emit('send', $event)"
                 >
                 </active>
     
                 <p>Ablagestapel:</p>
                 <discard
                     v-for="card in global.discardPile"
-                    v-bind:key="card.id"
-                    v-bind:card="card"
+                    :key="card.id"
+                    :card="card"
                 >
                 </discard>
             </div>

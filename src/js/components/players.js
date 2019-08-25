@@ -61,14 +61,14 @@ export default Vue.component(
                     <button
                         class="btn btn-sm btn-warning ml-auto"
                         v-if="canChoosePlayer(player.id)"
-                        v-on:click="$emit('send', {id: player.id})"
+                        @click="$emit('send', {id: player.id})"
                     >
                         auswählen
                     </button>
                     <button
                         class="ml-2 btn btn-primary btn-sm"
                         v-if="can('selectFirstPlayer')"
-                        v-on:click="$emit('send', {id: player.id})"
+                        @click="$emit('send', {id: player.id})"
                     >
                         auswählen
                     </button>

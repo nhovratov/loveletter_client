@@ -12,32 +12,32 @@
 
         <badge
             v-if="local.connected"
-            v-bind:name="game.local.name"
-            v-bind:id="game.local.id"
-            v-bind:is-host="isHost"
+            :name="game.local.name"
+            :id="game.local.id"
+            :is-host="isHost"
         >
         </badge>
 
         <lobby
-            v-bind:status="game.global.status"
-            v-bind:players="game.global.players"
-            v-bind:hostid="game.global.hostid"
-            v-bind:name="game.local.name"
-            v-bind:id="game.local.id"
-            v-bind:username="getUsername()"
-            v-bind:is-host="isHost"
-            v-bind:can-start-game="game.local.canStartGame"
-            v-bind:game-started="loveletter.global.gameStarted"
-            v-bind:set-username="setUsername"
-            v-on:start-game="startGame"
+            :status="game.global.status"
+            :players="game.global.players"
+            :hostid="game.global.hostid"
+            :name="game.local.name"
+            :id="game.local.id"
+            :username="getUsername()"
+            :is-host="isHost"
+            :can-start-game="game.local.canStartGame"
+            :game-started="loveletter.global.gameStarted"
+            :set-username="setUsername"
+            @start-game="startGame"
         >
         </lobby>
 
         <game
-            v-bind:global="loveletter.global"
-            v-bind:local="loveletter.local"
-            v-bind:id="game.local.id"
-            v-on:send="send"
+            :global="loveletter.global"
+            :local="loveletter.local"
+            :id="game.local.id"
+            @send="send"
         >
         </game>
     </div>

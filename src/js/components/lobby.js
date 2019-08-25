@@ -71,7 +71,7 @@ export default Vue.component(
             <button
                 class="btn btn-primary"
                 v-if="gameIsReady"
-                v-on:click="$emit('start-game')"
+                @click="$emit('start-game')"
             >
                 Spiel starten
             </button>

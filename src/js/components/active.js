@@ -20,14 +20,14 @@ export default Vue.component(
                         <button
                             class="btn btn-danger"
                             v-if="can('confirmDiscardCard')"
-                            v-on:click="$emit('send')"
+                            @click="$emit('send')"
                         >
                             Auf Ablagestapel
                         </button>
                         <button
                             class="btn btn-success"
                             v-if="can('placeMaidCard')"
-                            v-on:click="$emit('send')"
+                            @click="$emit('send')"
                         >
                             Offen vor dich hinlegen
                         </button>
