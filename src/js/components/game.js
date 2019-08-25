@@ -5,6 +5,7 @@ import guardian from './guardian';
 import cards from './cards';
 import active from './active';
 import discard from './discard';
+import removed from './removed';
 
 export default Vue.component(
     'game',
@@ -20,6 +21,7 @@ export default Vue.component(
             cards,
             active,
             discard,
+            removed,
         },
         methods: {
             can: function (action) {
@@ -54,16 +56,10 @@ export default Vue.component(
                     </button>
                 </div>
     
-                <!-- Removed cards (if only 2 people play) -->
-                <div
-                    class="alert alert-warning"
-                    v-if="global.outOfGameCards.length > 0"
+                <removed
+                    :outOfGameCards="global.outOfGameCards"
                 >
-                    <span>Karten, die aus dem Spiel sind: </span>
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item" v-for="card in global.outOfGameCards">{{card.name}}</li>
-                    </ul>
-                </div>
+                </removed>
                 
                 <players
                     :global="global"
