@@ -4,6 +4,7 @@ import players from './players';
 import guardian from './guardian';
 import cards from './cards';
 import active from './active';
+import discard from './discard';
 
 export default Vue.component(
     'game',
@@ -18,6 +19,7 @@ export default Vue.component(
             guardian,
             cards,
             active,
+            discard,
         },
         methods: {
             can: function (action) {
@@ -100,20 +102,12 @@ export default Vue.component(
                 </active>
     
                 <p>Ablagestapel:</p>
-                <div v-for="card in global.discardPile">
-                    <div class="d-flex">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    {{card.name}} ({{card.value}})
-                                </h5>
-                                <p class="card-text">
-                                    {{card.text}}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <discard
+                    v-for="card in global.discardPile"
+                    v-bind:key="card.id"
+                    v-bind:card="card"
+                >
+                </discard>
             </div>
         </div>
         `
