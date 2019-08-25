@@ -6,6 +6,7 @@ import cards from './cards';
 import active from './active';
 import discard from './discard';
 import removed from './removed';
+import priest from './priest';
 
 export default Vue.component(
     'game',
@@ -22,6 +23,7 @@ export default Vue.component(
             active,
             discard,
             removed,
+            priest,
         },
         methods: {
             can: function (action) {
@@ -42,19 +44,13 @@ export default Vue.component(
                 <div class="mb-2" v-if="can('selectFirstPlayer')">
                     <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
                 </div>
-    
-                <div
-                    class="alert alert-success d-flex align-items-center"
+                
+                <priest
                     v-if="can('finishLookingAtCard')"
+                    :priestEffectVisibleCard="local.priestEffectVisibleCard"
+                    @send="$emit('send')"
                 >
-                    Diese Karte wurde durch den Priester aufgedeckt: {{local.priestEffectVisibleCard}}
-                    <button
-                            class="btn btn-success ml-auto"
-                            @click="$emit('send')"
-                    >
-                        Fertig mit angucken
-                    </button>
-                </div>
+                </priest>
     
                 <removed
                     :outOfGameCards="global.outOfGameCards"
