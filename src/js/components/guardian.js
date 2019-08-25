@@ -5,7 +5,6 @@ export default Vue.component(
     {
         props: {
             global: Object,
-            local: Object,
             can: Function
         },
         template: `

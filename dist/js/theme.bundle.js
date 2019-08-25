@@ -14692,10 +14692,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/components/game.js":
-/*!***********************************!*\
-  !*** ./src/js/components/game.js ***!
-  \***********************************/
+/***/ "./src/js/components/cards.js":
+/*!************************************!*\
+  !*** ./src/js/components/cards.js ***!
+  \************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14705,31 +14705,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
 /* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./players */ "./src/js/components/players.js");
-/* harmony import */ var _guardian__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./guardian */ "./src/js/components/guardian.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
 
 
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('game', {
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('cards', {
   props: {
     global: Object,
-    local: Object,
-    id: Number
-  },
-  components: {
-    players: _players__WEBPACK_IMPORTED_MODULE_4__["default"],
-    guardian: _guardian__WEBPACK_IMPORTED_MODULE_5__["default"]
+    local: Object
   },
   methods: {
-    can: function can(action) {
-      return action === this.local.allowedAction;
-    },
     canChooseCard: function canChooseCard(card) {
       return this.local.allowedAction === 'chooseCard' && !this.isPreventedByCountess(card.name);
     },
@@ -14750,6 +14735,47 @@ __webpack_require__.r(__webpack_exports__);
       return ['König', 'Prinz'].includes(cardname);
     }
   },
+  template: "\n            <transition-group\n                    tag=\"div\"\n                    class=\"mb-4 d-flex\"\n                    enter-active-class=\"animated fadeIn\"\n                    leave-active-class=\"animated fadeOut\"\n            >\n                <div class=\"card mr-2\" v-for=\"(card, key) in local.cards\" :key=\"card.cardnumber\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">\n                            {{card.name}} ({{card.value}})\n                        </h5>\n                        <p class=\"card-text\">\n                            {{card.text}}\n                        </p>\n                        <button\n                                v-if=\"canChooseCard(card)\"\n                                v-on:click=\"$emit('send', {key: key})\"\n                                class=\"btn btn-primary\"\n                        >\n                            Karte spielen\n                        </button>\n                    </div>\n                </div>\n            </transition-group>\n    "
+}));
+
+/***/ }),
+
+/***/ "./src/js/components/game.js":
+/*!***********************************!*\
+  !*** ./src/js/components/game.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./players */ "./src/js/components/players.js");
+/* harmony import */ var _guardian__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./guardian */ "./src/js/components/guardian.js");
+/* harmony import */ var _cards__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./cards */ "./src/js/components/cards.js");
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('game', {
+  props: {
+    global: Object,
+    local: Object,
+    id: Number
+  },
+  components: {
+    players: _players__WEBPACK_IMPORTED_MODULE_2__["default"],
+    guardian: _guardian__WEBPACK_IMPORTED_MODULE_3__["default"],
+    cards: _cards__WEBPACK_IMPORTED_MODULE_4__["default"]
+  },
+  methods: {
+    can: function can(action) {
+      return action === this.local.allowedAction;
+    }
+  },
   computed: {
     isOutOfGameCardsVisible: function isOutOfGameCardsVisible() {
       return this.global.outOfGameCards.length > 0;
@@ -14758,7 +14784,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.global.gameStarted || this.global.winners.length > 0;
     }
   },
-  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Game status -->\n                <div v-if=\"global.status\" class=\"alert alert-info\">{{global.status}}</div>\n    \n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n    \n                <div\n                    class=\"alert alert-success d-flex align-items-center\"\n                    v-if=\"can('finishLookingAtCard')\"\n                >\n                    Diese Karte wurde durch den Priester aufgedeckt: {{local.priestEffectVisibleCard}}\n                    <button\n                            class=\"btn btn-success ml-auto\"\n                            v-on:click=\"$emit('send')\"\n                    >\n                        Fertig mit angucken\n                    </button>\n                </div>\n    \n                <!-- Removed cards (if only 2 people play) -->\n                <div\n                    class=\"alert alert-warning\"\n                    v-if=\"isOutOfGameCardsVisible\"\n                >\n                    <span>Karten, die aus dem Spiel sind: </span>\n                    <ul class=\"list-inline mb-0\">\n                        <li class=\"list-inline-item\" v-for=\"card in global.outOfGameCards\">{{card.name}}</li>\n                    </ul>\n                </div>\n                \n                <players\n                    v-bind:global=\"global\"\n                    v-bind:local=\"local\"\n                    v-bind:can=\"can\"\n                    v-bind:id=\"id\"\n                    v-on:send=\"$emit('send', $event)\"\n                >\n                </players>\n                \n                <guardian\n                    v-bind:global=\"global\"\n                    v-bind:local=\"local\"\n                    v-bind:can=\"can\"\n                    v-on:send=\"$emit('send', $event)\"\n                >\n                </guardian>\n    \n                <!-- Hand cards -->\n                <p>Deine Karten:</p>\n                <transition-group\n                        tag=\"div\"\n                        class=\"mb-4 d-flex\"\n                        enter-active-class=\"animated fadeIn\"\n                        leave-active-class=\"animated fadeOut\"\n                >\n                    <div class=\"card mr-2\" v-for=\"(card, key) in local.cards\" :key=\"card.cardnumber\">\n                        <div class=\"card-body\">\n                            <h5 class=\"card-title\">\n                                {{card.name}} ({{card.value}})\n                            </h5>\n                            <p class=\"card-text\">\n                                {{card.text}}\n                            </p>\n                            <button\n                                    v-if=\"canChooseCard(card)\"\n                                    v-on:click=\"$emit('send', {key: key})\"\n                                    class=\"btn btn-primary\"\n                            >\n                                Karte spielen\n                            </button>\n                        </div>\n                    </div>\n                </transition-group>\n    \n                <!-- card on field -->\n                <p>Spielfeld:</p>\n                <div class=\"d-flex mb-4\">\n                    <div class=\"card\" v-if=\"global.activeCard\">\n                        <div class=\"card-body\">\n                            <h5 class=\"card-title\">\n                                {{global.activeCard.name}} ({{global.activeCard.value}})\n                            </h5>\n                            <p class=\"card-text\">\n                                {{global.activeCard.text}}\n                            </p>\n                            <button\n                                class=\"btn btn-danger\"\n                                v-if=\"can('confirmDiscardCard')\"\n                                v-on:click=\"$emit('send')\"\n                            >\n                                Auf Ablagestapel\n                            </button>\n                            <button\n                                class=\"btn btn-success\"\n                                v-if=\"can('placeMaidCard')\"\n                                v-on:click=\"$emit('send')\"\n                            >\n                                Offen vor dich hinlegen\n                            </button>\n                        </div>\n                    </div>\n                </div>\n    \n                <p>Ablagestapel:</p>\n                <div v-for=\"card in global.discardPile\">\n                    <div class=\"d-flex\">\n                        <div class=\"card\">\n                            <div class=\"card-body\">\n                                <h5 class=\"card-title\">\n                                    {{card.name}} ({{card.value}})\n                                </h5>\n                                <p class=\"card-text\">\n                                    {{card.text}}\n                                </p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        "
+  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Game status -->\n                <div v-if=\"global.status\" class=\"alert alert-info\">{{global.status}}</div>\n    \n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n    \n                <div\n                    class=\"alert alert-success d-flex align-items-center\"\n                    v-if=\"can('finishLookingAtCard')\"\n                >\n                    Diese Karte wurde durch den Priester aufgedeckt: {{local.priestEffectVisibleCard}}\n                    <button\n                            class=\"btn btn-success ml-auto\"\n                            v-on:click=\"$emit('send')\"\n                    >\n                        Fertig mit angucken\n                    </button>\n                </div>\n    \n                <!-- Removed cards (if only 2 people play) -->\n                <div\n                    class=\"alert alert-warning\"\n                    v-if=\"isOutOfGameCardsVisible\"\n                >\n                    <span>Karten, die aus dem Spiel sind: </span>\n                    <ul class=\"list-inline mb-0\">\n                        <li class=\"list-inline-item\" v-for=\"card in global.outOfGameCards\">{{card.name}}</li>\n                    </ul>\n                </div>\n                \n                <players\n                    v-bind:global=\"global\"\n                    v-bind:local=\"local\"\n                    v-bind:can=\"can\"\n                    v-bind:id=\"id\"\n                    v-on:send=\"$emit('send', $event)\"\n                >\n                </players>\n                \n                <guardian\n                    v-bind:global=\"global\"\n                    v-bind:can=\"can\"\n                    v-on:send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <cards\n                    v-bind:global=\"global\"\n                    v-bind:local=\"local\"\n                    v-on:send=\"$emit('send', $event)\"\n                >\n                </cards>\n    \n                <!-- card on field -->\n                <p>Spielfeld:</p>\n                <div class=\"d-flex mb-4\">\n                    <div class=\"card\" v-if=\"global.activeCard\">\n                        <div class=\"card-body\">\n                            <h5 class=\"card-title\">\n                                {{global.activeCard.name}} ({{global.activeCard.value}})\n                            </h5>\n                            <p class=\"card-text\">\n                                {{global.activeCard.text}}\n                            </p>\n                            <button\n                                class=\"btn btn-danger\"\n                                v-if=\"can('confirmDiscardCard')\"\n                                v-on:click=\"$emit('send')\"\n                            >\n                                Auf Ablagestapel\n                            </button>\n                            <button\n                                class=\"btn btn-success\"\n                                v-if=\"can('placeMaidCard')\"\n                                v-on:click=\"$emit('send')\"\n                            >\n                                Offen vor dich hinlegen\n                            </button>\n                        </div>\n                    </div>\n                </div>\n    \n                <p>Ablagestapel:</p>\n                <div v-for=\"card in global.discardPile\">\n                    <div class=\"d-flex\">\n                        <div class=\"card\">\n                            <div class=\"card-body\">\n                                <h5 class=\"card-title\">\n                                    {{card.name}} ({{card.value}})\n                                </h5>\n                                <p class=\"card-text\">\n                                    {{card.text}}\n                                </p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        "
 }));
 
 /***/ }),
@@ -14777,7 +14803,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('guardian', {
   props: {
     global: Object,
-    local: Object,
     can: Function
   },
   template: "\n            <div v-if=\"can('chooseGuardianEffectCard')\">\n                <p>W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</p>\n                <ul class=\"list-group mb-4\">\n                    <li\n                        class=\"list-group-item d-flex align-items-center\"\n                        v-for=\"card in global.guardianEffectSelectableCards\"\n                    >\n                        {{card}}\n                        <button\n                            class=\"btn btn-sm btn-success ml-auto\"\n                            v-on:click=\"$emit('send', {card: card})\"\n                        >\n                            ausw\xE4hlen\n                        </button>\n                    </li>\n                </ul>\n            </div>\n    "
