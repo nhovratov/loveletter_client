@@ -4,25 +4,19 @@ export default Vue.component(
     'lobby',
     {
         props: {
-            status: String,
-            players: Array,
-            hostid: Number,
+            global: Object,
+            local: Object,
             playercount: Number,
-            name: String,
-            id: Number,
-            username: String,
             isHost: Boolean,
-            canStartGame: Boolean,
-            gameStarted: Boolean,
-            setUsername: Function
+            gameStarted: Boolean
         },
         computed: {
             getActivePlayerCount: function () {
                 var count = 0;
-                if (!this.players) {
+                if (!this.global.players) {
                     return 0;
                 }
-                this.players.forEach(function (player) {
+                this.global.players.forEach(function (player) {
                     if (player.connected) {
                         count += 1;
                     }
@@ -30,20 +24,20 @@ export default Vue.component(
                 return count;
             },
 
-            gameIsReady: function () {
-                return this.canStartGame && !this.gameStarted;
+            gameIsReadyAndCanStart: function () {
+                return this.local.canStartGame && !this.gameStarted;
             },
         },
         template: `
            <div class="lobby">
             <h2 class="lobby__header">Lobby</h2>
             <!-- Game status -->
-            <span>{{status}}</span>
+            <span>{{global.status}}</span>
 
             <!-- Username enter -->
-            <div v-if="!username">
+            <div v-if="!local.name">
                 <label for="username">Dein Name:</label>
-                <input @keyup.enter="setUsername" class="form-control" type="text" id="username">
+                <input @keyup.enter="$emit('set-username')" class="form-control" type="text" id="username">
             </div>
 
             <!-- Player num -->
@@ -52,17 +46,17 @@ export default Vue.component(
             <!-- Connection list -->
             <ul>
                 <li class="font-weight-bold">
-                    <span v-if="name">{{name}}</span>
-                    #{{id}}
+                    <span v-if="local.name">{{local.name}}</span>
+                    #{{local.id}}
                     <span class="badge badge-info" v-if="isHost">Host</span>
                 </li>
                 <li
-                    v-for="player in players"
-                    v-if="players && player.id !== id"
+                    v-for="player in global.players"
+                    v-if="global.players && player.id !== local.id"
                 >
                     <span v-if="player.name">{{player.name}}</span>
                     #{{player.id}}
-                    <span class="badge badge-info" v-if="player.id === hostid">Host</span>
+                    <span class="badge badge-info" v-if="player.id === global.hostid">Host</span>
                     <span class="badge badge-danger" v-if="!player.connected">disconnected</span>
                 </li>
             </ul>
@@ -70,7 +64,7 @@ export default Vue.component(
             <!-- Start game button, smash it! -->
             <button
                 class="btn btn-primary"
-                v-if="gameIsReady"
+                v-if="gameIsReadyAndCanStart"
                 @click="$emit('start-game')"
             >
                 Spiel starten

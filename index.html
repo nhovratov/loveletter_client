@@ -19,17 +19,12 @@
         </badge>
 
         <lobby
-            :status="game.global.status"
-            :players="game.global.players"
-            :hostid="game.global.hostid"
-            :name="game.local.name"
-            :id="game.local.id"
-            :username="getUsername()"
+            :global="game.global"
+            :local="game.local"
             :is-host="isHost"
-            :can-start-game="game.local.canStartGame"
             :game-started="loveletter.global.gameStarted"
-            :set-username="setUsername"
-            @start-game="startGame"
+            @set-username="setUsername()"
+            @start-game="startGame()"
         >
         </lobby>
 

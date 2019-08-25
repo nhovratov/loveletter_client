@@ -40,11 +40,14 @@ var app = new Vue({
         game: {
             global: {
                 players: [],
-                hostid: 0
+                hostid: 0,
+                status: ''
             },
             local: {
                 id: 0,
-                name: ''
+                name: '',
+                canStartGame: false,
+                isHost: false
             }
         },
         local: {
@@ -117,10 +120,6 @@ var app = new Vue({
 
         startGame: function () {
             this.send({}, 'start');
-        },
-
-        getUsername: function () {
-            return Cookies.get('name');
         },
 
         setUsername: function () {

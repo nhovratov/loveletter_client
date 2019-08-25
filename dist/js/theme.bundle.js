@@ -14882,38 +14882,32 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('lobby', {
   props: {
-    status: String,
-    players: Array,
-    hostid: Number,
+    global: Object,
+    local: Object,
     playercount: Number,
-    name: String,
-    id: Number,
-    username: String,
     isHost: Boolean,
-    canStartGame: Boolean,
-    gameStarted: Boolean,
-    setUsername: Function
+    gameStarted: Boolean
   },
   computed: {
     getActivePlayerCount: function getActivePlayerCount() {
       var count = 0;
 
-      if (!this.players) {
+      if (!this.global.players) {
         return 0;
       }
 
-      this.players.forEach(function (player) {
+      this.global.players.forEach(function (player) {
         if (player.connected) {
           count += 1;
         }
       });
       return count;
     },
-    gameIsReady: function gameIsReady() {
-      return this.canStartGame && !this.gameStarted;
+    gameIsReadyAndCanStart: function gameIsReadyAndCanStart() {
+      return this.local.canStartGame && !this.gameStarted;
     }
   },
-  template: "\n           <div class=\"lobby\">\n            <h2 class=\"lobby__header\">Lobby</h2>\n            <!-- Game status -->\n            <span>{{status}}</span>\n\n            <!-- Username enter -->\n            <div v-if=\"!username\">\n                <label for=\"username\">Dein Name:</label>\n                <input @keyup.enter=\"setUsername\" class=\"form-control\" type=\"text\" id=\"username\">\n            </div>\n\n            <!-- Player num -->\n            <div class=\"lobby__connections\">Spieler online: {{getActivePlayerCount}}</div>\n\n            <!-- Connection list -->\n            <ul>\n                <li class=\"font-weight-bold\">\n                    <span v-if=\"name\">{{name}}</span>\n                    #{{id}}\n                    <span class=\"badge badge-info\" v-if=\"isHost\">Host</span>\n                </li>\n                <li\n                    v-for=\"player in players\"\n                    v-if=\"players && player.id !== id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}}</span>\n                    #{{player.id}}\n                    <span class=\"badge badge-info\" v-if=\"player.id === hostid\">Host</span>\n                    <span class=\"badge badge-danger\" v-if=\"!player.connected\">disconnected</span>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n            <button\n                class=\"btn btn-primary\"\n                v-if=\"gameIsReady\"\n                @click=\"$emit('start-game')\"\n            >\n                Spiel starten\n            </button>\n        </div>\n   "
+  template: "\n           <div class=\"lobby\">\n            <h2 class=\"lobby__header\">Lobby</h2>\n            <!-- Game status -->\n            <span>{{global.status}}</span>\n\n            <!-- Username enter -->\n            <div v-if=\"!local.name\">\n                <label for=\"username\">Dein Name:</label>\n                <input @keyup.enter=\"$emit('set-username')\" class=\"form-control\" type=\"text\" id=\"username\">\n            </div>\n\n            <!-- Player num -->\n            <div class=\"lobby__connections\">Spieler online: {{getActivePlayerCount}}</div>\n\n            <!-- Connection list -->\n            <ul>\n                <li class=\"font-weight-bold\">\n                    <span v-if=\"local.name\">{{local.name}}</span>\n                    #{{local.id}}\n                    <span class=\"badge badge-info\" v-if=\"isHost\">Host</span>\n                </li>\n                <li\n                    v-for=\"player in global.players\"\n                    v-if=\"global.players && player.id !== local.id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}}</span>\n                    #{{player.id}}\n                    <span class=\"badge badge-info\" v-if=\"player.id === global.hostid\">Host</span>\n                    <span class=\"badge badge-danger\" v-if=\"!player.connected\">disconnected</span>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n            <button\n                class=\"btn btn-primary\"\n                v-if=\"gameIsReadyAndCanStart\"\n                @click=\"$emit('start-game')\"\n            >\n                Spiel starten\n            </button>\n        </div>\n   "
 }));
 
 /***/ }),
@@ -15063,11 +15057,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
     game: {
       global: {
         players: [],
-        hostid: 0
+        hostid: 0,
+        status: ''
       },
       local: {
         id: 0,
-        name: ''
+        name: '',
+        canStartGame: false,
+        isHost: false
       }
     },
     local: {
@@ -15157,9 +15154,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
     },
     startGame: function startGame() {
       this.send({}, 'start');
-    },
-    getUsername: function getUsername() {
-      return js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('name');
     },
     setUsername: function setUsername() {
       js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('name', document.getElementById('username').value, {
