@@ -4,7 +4,6 @@ import players from './players';
 import guardian from './guardian';
 import cards from './cards';
 import active from './active';
-import discard from './discard';
 import removed from './removed';
 import priest from './priest';
 
@@ -21,7 +20,6 @@ export default Vue.component(
             guardian,
             cards,
             active,
-            discard,
             removed,
             priest,
         },
@@ -88,14 +86,6 @@ export default Vue.component(
                     @send="$emit('send', $event)"
                 >
                 </active>
-    
-                <p>Ablagestapel:</p>
-                <discard
-                    v-for="card in global.discardPile"
-                    :key="card.id"
-                    :card="card"
-                >
-                </discard>
             </div>
         </div>
         `

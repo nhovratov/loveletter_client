@@ -14761,26 +14761,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/components/discard.js":
-/*!**************************************!*\
-  !*** ./src/js/components/discard.js ***!
-  \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('discard', {
-  props: {
-    card: Object
-  },
-  template: "\n            <div class=\"d-flex\">\n                <div class=\"card\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">\n                            {{card.name}} ({{card.value}})\n                        </h5>\n                        <p class=\"card-text\">\n                            {{card.text}}\n                        </p>\n                    </div>\n                </div>\n            </div>\n    "
-}));
-
-/***/ }),
-
 /***/ "./src/js/components/game.js":
 /*!***********************************!*\
   !*** ./src/js/components/game.js ***!
@@ -14797,10 +14777,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _guardian__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./guardian */ "./src/js/components/guardian.js");
 /* harmony import */ var _cards__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./cards */ "./src/js/components/cards.js");
 /* harmony import */ var _active__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./active */ "./src/js/components/active.js");
-/* harmony import */ var _discard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./discard */ "./src/js/components/discard.js");
-/* harmony import */ var _removed__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./removed */ "./src/js/components/removed.js");
-/* harmony import */ var _priest__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./priest */ "./src/js/components/priest.js");
-
+/* harmony import */ var _removed__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./removed */ "./src/js/components/removed.js");
+/* harmony import */ var _priest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./priest */ "./src/js/components/priest.js");
 
 
 
@@ -14820,9 +14798,8 @@ __webpack_require__.r(__webpack_exports__);
     guardian: _guardian__WEBPACK_IMPORTED_MODULE_3__["default"],
     cards: _cards__WEBPACK_IMPORTED_MODULE_4__["default"],
     active: _active__WEBPACK_IMPORTED_MODULE_5__["default"],
-    discard: _discard__WEBPACK_IMPORTED_MODULE_6__["default"],
-    removed: _removed__WEBPACK_IMPORTED_MODULE_7__["default"],
-    priest: _priest__WEBPACK_IMPORTED_MODULE_8__["default"]
+    removed: _removed__WEBPACK_IMPORTED_MODULE_6__["default"],
+    priest: _priest__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   methods: {
     can: function can(action) {
@@ -14834,7 +14811,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.global.gameStarted || this.global.winners.length > 0;
     }
   },
-  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Game status -->\n                <div v-if=\"global.status\" class=\"alert alert-info\">{{global.status}}</div>\n    \n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n                \n                <priest\n                    v-if=\"can('finishLookingAtCard')\"\n                    :priestEffectVisibleCard=\"local.priestEffectVisibleCard\"\n                    @send=\"$emit('send')\"\n                >\n                </priest>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :local=\"local\"\n                    :can=\"can\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </players>\n                \n                <guardian\n                    :global=\"global\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <p>Deine Karten:</p>\n                <cards\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <p>Aktive Karte:</p>\n                <active\n                    :active-card=\"global.activeCard\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </active>\n    \n                <p>Ablagestapel:</p>\n                <discard\n                    v-for=\"card in global.discardPile\"\n                    :key=\"card.id\"\n                    :card=\"card\"\n                >\n                </discard>\n            </div>\n        </div>\n        "
+  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Game status -->\n                <div v-if=\"global.status\" class=\"alert alert-info\">{{global.status}}</div>\n    \n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n                \n                <priest\n                    v-if=\"can('finishLookingAtCard')\"\n                    :priestEffectVisibleCard=\"local.priestEffectVisibleCard\"\n                    @send=\"$emit('send')\"\n                >\n                </priest>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :local=\"local\"\n                    :can=\"can\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </players>\n                \n                <guardian\n                    :global=\"global\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <p>Deine Karten:</p>\n                <cards\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <p>Aktive Karte:</p>\n                <active\n                    :active-card=\"global.activeCard\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </active>\n            </div>\n        </div>\n        "
 }));
 
 /***/ }),
@@ -15044,8 +15021,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
         gameFinished: false,
         playerTurn: 0,
         guardianEffectSelectableCards: [],
-        activeCard: {},
-        discardPile: {}
+        activeCard: {}
       },
       local: {
         cards: {},

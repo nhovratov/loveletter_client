@@ -28,7 +28,6 @@ var app = new Vue({
                 playerTurn: 0,
                 guardianEffectSelectableCards: [],
                 activeCard: {},
-                discardPile: {}
             },
             local: {
                 cards: {},
