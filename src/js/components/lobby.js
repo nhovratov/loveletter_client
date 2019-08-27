@@ -6,7 +6,7 @@ export default Vue.component(
         props: {
             global: Object,
             local: Object,
-            playercount: Number,
+            players: Array,
             isHost: Boolean,
             gameStarted: Boolean
         },
@@ -25,7 +25,7 @@ export default Vue.component(
             },
 
             gameIsReadyAndCanStart: function () {
-                return this.local.canStartGame && !this.gameStarted;
+                return this.players.length >= 2 && !this.gameStarted && this.isHost;
             },
         },
         template: `

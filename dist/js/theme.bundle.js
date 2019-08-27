@@ -14848,20 +14848,17 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
 /* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
 
 
-
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('lobby', {
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('lobby', {
   props: {
     global: Object,
     local: Object,
-    playercount: Number,
+    players: Array,
     isHost: Boolean,
     gameStarted: Boolean
   },
@@ -14881,7 +14878,7 @@ __webpack_require__.r(__webpack_exports__);
       return count;
     },
     gameIsReadyAndCanStart: function gameIsReadyAndCanStart() {
-      return this.local.canStartGame && !this.gameStarted;
+      return this.players.length >= 2 && !this.gameStarted && this.isHost;
     }
   },
   template: "\n           <div class=\"lobby\">\n            <h2 class=\"lobby__header\">Lobby</h2>\n            <!-- Game status -->\n            <span>{{global.status}}</span>\n\n            <!-- Username enter -->\n            <div v-if=\"!local.name\">\n                <label for=\"username\">Dein Name:</label>\n                <input @keyup.enter=\"$emit('set-username')\" class=\"form-control\" type=\"text\" id=\"username\">\n            </div>\n\n            <!-- Player num -->\n            <div class=\"lobby__connections\">Spieler online: {{getActivePlayerCount}}</div>\n\n            <!-- Connection list -->\n            <ul>\n                <li class=\"font-weight-bold\">\n                    <span v-if=\"local.name\">{{local.name}}</span>\n                    #{{local.id}}\n                    <span class=\"badge badge-info\" v-if=\"isHost\">Host</span>\n                </li>\n                <li\n                    v-for=\"player in global.players\"\n                    v-if=\"global.players && player.id !== local.id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}}</span>\n                    #{{player.id}}\n                    <span class=\"badge badge-info\" v-if=\"player.id === global.hostid\">Host</span>\n                    <span class=\"badge badge-danger\" v-if=\"!player.connected\">disconnected</span>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n            <button\n                class=\"btn btn-primary\"\n                v-if=\"gameIsReadyAndCanStart\"\n                @click=\"$emit('start-game')\"\n            >\n                Spiel starten\n            </button>\n        </div>\n   "
