@@ -32,7 +32,7 @@ var app = new Vue({
             local: {
                 cards: {},
                 openEffectCards: [],
-                priestEffectVisibleCard: [],
+                effectVisibleCard: [],
                 allowedAction: ''
             }
         },

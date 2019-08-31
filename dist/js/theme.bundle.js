@@ -14811,7 +14811,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.global.gameStarted || this.global.winners.length > 0;
     }
   },
-  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Game status -->\n                <div v-if=\"global.status\" class=\"alert alert-info\">{{global.status}}</div>\n    \n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n                \n                <priest\n                    v-if=\"can('finishLookingAtCard')\"\n                    :priestEffectVisibleCard=\"local.priestEffectVisibleCard\"\n                    @send=\"$emit('send')\"\n                >\n                </priest>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :local=\"local\"\n                    :can=\"can\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </players>\n                \n                <guardian\n                    :global=\"global\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <p>Deine Karten:</p>\n                <cards\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <p>Aktive Karte:</p>\n                <active\n                    :active-card=\"global.activeCard\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </active>\n            </div>\n        </div>\n        "
+  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Game status -->\n                <div v-if=\"global.status\" class=\"alert alert-info\">{{global.status}}</div>\n    \n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n                \n                <priest\n                    v-if=\"can('finishLookingAtCard')\"\n                    :effectVisibleCard=\"local.effectVisibleCard\"\n                    @send=\"$emit('send')\"\n                >\n                </priest>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :local=\"local\"\n                    :can=\"can\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </players>\n                \n                <guardian\n                    :global=\"global\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <p>Deine Karten:</p>\n                <cards\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <p>Aktive Karte:</p>\n                <active\n                    :active-card=\"global.activeCard\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </active>\n            </div>\n        </div>\n        "
 }));
 
 /***/ }),
@@ -14946,9 +14946,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('priest', {
   props: {
-    priestEffectVisibleCard: String
+    effectVisibleCard: String
   },
-  template: "\n            <div class=\"alert alert-success d-flex align-items-center\">\n                Diese Karte wurde durch den Priester aufgedeckt: {{priestEffectVisibleCard}}\n                <button\n                    class=\"btn btn-success ml-auto\"\n                    @click=\"$emit('send')\"\n                >\n                    Fertig mit angucken\n                </button>\n            </div>\n    "
+  template: "\n            <div class=\"alert alert-success d-flex align-items-center\">\n                Diese Karte wurde durch den Priester aufgedeckt: {{effectVisibleCard}}\n                <button\n                    class=\"btn btn-success ml-auto\"\n                    @click=\"$emit('send')\"\n                >\n                    Fertig mit angucken\n                </button>\n            </div>\n    "
 }));
 
 /***/ }),
@@ -15023,7 +15023,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
       local: {
         cards: {},
         openEffectCards: [],
-        priestEffectVisibleCard: [],
+        effectVisibleCard: [],
         allowedAction: ''
       }
     },

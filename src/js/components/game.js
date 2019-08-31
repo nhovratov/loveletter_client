@@ -45,7 +45,7 @@ export default Vue.component(
                 
                 <priest
                     v-if="can('finishLookingAtCard')"
-                    :priestEffectVisibleCard="local.priestEffectVisibleCard"
+                    :effectVisibleCard="local.effectVisibleCard"
                     @send="$emit('send')"
                 >
                 </priest>

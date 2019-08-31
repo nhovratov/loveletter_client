@@ -4,11 +4,11 @@ export default Vue.component(
     'priest',
     {
         props: {
-            priestEffectVisibleCard: String
+            effectVisibleCard: String
         },
         template: `
             <div class="alert alert-success d-flex align-items-center">
-                Diese Karte wurde durch den Priester aufgedeckt: {{priestEffectVisibleCard}}
+                Diese Karte wurde durch den Priester aufgedeckt: {{effectVisibleCard}}
                 <button
                     class="btn btn-success ml-auto"
                     @click="$emit('send')"
