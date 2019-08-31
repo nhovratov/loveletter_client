@@ -5,7 +5,7 @@ import guardian from './guardian';
 import cards from './cards';
 import active from './active';
 import removed from './removed';
-import priest from './priest';
+import visibleCard from './visibleCard';
 
 export default Vue.component(
     'game',
@@ -21,7 +21,7 @@ export default Vue.component(
             cards,
             active,
             removed,
-            priest,
+            visibleCard,
         },
         methods: {
             can: function (action) {
@@ -43,12 +43,11 @@ export default Vue.component(
                     <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
                 </div>
                 
-                <priest
-                    v-if="can('finishLookingAtCard')"
+                <visible-card
+                    v-if="local.effectVisibleCard.name"
                     :effectVisibleCard="local.effectVisibleCard"
-                    @send="$emit('send')"
                 >
-                </priest>
+                </visible-card>
     
                 <removed
                     :outOfGameCards="global.outOfGameCards"

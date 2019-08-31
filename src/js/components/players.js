@@ -19,7 +19,7 @@ export default Vue.component(
             },
 
             isWinner: function (id) {
-                return this.global.gameFinished && this.global.winners.includes(id);
+                return this.global.winners.includes(id);
             },
 
             isProtected: function (id) {
