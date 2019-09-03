@@ -4,7 +4,7 @@ export default Vue.component(
     'visibleCard',
     {
         props: {
-            effectVisibleCard: Array
+            effectVisibleCard: Object
         },
         template: `
             <div class="alert alert-success d-flex align-items-center">

@@ -90,7 +90,7 @@ var app = new Vue({
         };
     },
     methods: {
-        send: function (params = {}, action = '') {
+        send: function (action = '', params = {}) {
             var id = '';
             if (Cookies.get('id')) {
                 id = Cookies.get('id');
@@ -103,10 +103,6 @@ var app = new Vue({
             };
             conn.send(JSON.stringify(data));
             console.log('send identity to server', data);
-        },
-
-        startGame: function () {
-            this.send({}, 'start');
         },
 
         setUsername: function () {

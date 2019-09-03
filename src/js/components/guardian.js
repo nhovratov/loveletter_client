@@ -18,7 +18,7 @@ export default Vue.component(
                         {{card}}
                         <button
                             class="btn btn-sm btn-success ml-auto"
-                            @click="$emit('send', {card: card})"
+                            @click="$emit('send', {action: 'chooseGuardianEffectCard', params: {card: card}})"
                         >
                             auswählen
                         </button>

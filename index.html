@@ -25,7 +25,7 @@
             :players="game.global.players"
             :game-started="loveletter.global.gameStarted"
             @set-username="setUsername()"
-            @start-game="startGame()"
+            @start-game="send('start')"
         >
         </lobby>
 
@@ -33,12 +33,12 @@
             :global="loveletter.global"
             :local="loveletter.local"
             :id="game.local.id"
-            @send="send"
+            @send="send($event.action, $event.params)"
         >
         </game>
         <button
                 class="btn btn-primary"
-                @click="send"
+                @click="send('next')"
         >
             Weiter
         </button>

@@ -43,7 +43,7 @@ export default Vue.component(
                         </p>
                         <button
                                 v-if="canChooseCard(card)"
-                                @click="$emit('send', {key: key})"
+                                @click="$emit('send', {action: 'chooseCard', params: {key: key}})"
                                 class="btn btn-primary"
                         >
                             Karte spielen

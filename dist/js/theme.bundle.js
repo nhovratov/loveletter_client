@@ -14755,7 +14755,7 @@ __webpack_require__.r(__webpack_exports__);
       return ['König', 'Prinz'].includes(cardname);
     }
   },
-  template: "\n            <transition-group\n                    tag=\"div\"\n                    class=\"mb-4 d-flex\"\n                    enter-active-class=\"animated fadeIn\"\n                    leave-active-class=\"animated fadeOut\"\n            >\n                <div class=\"card mr-2\" v-for=\"(card, key) in local.cards\" :key=\"card.cardnumber\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">\n                            {{card.name}} ({{card.value}})\n                        </h5>\n                        <p class=\"card-text\">\n                            {{card.text}}\n                        </p>\n                        <button\n                                v-if=\"canChooseCard(card)\"\n                                @click=\"$emit('send', {key: key})\"\n                                class=\"btn btn-primary\"\n                        >\n                            Karte spielen\n                        </button>\n                    </div>\n                </div>\n            </transition-group>\n    "
+  template: "\n            <transition-group\n                    tag=\"div\"\n                    class=\"mb-4 d-flex\"\n                    enter-active-class=\"animated fadeIn\"\n                    leave-active-class=\"animated fadeOut\"\n            >\n                <div class=\"card mr-2\" v-for=\"(card, key) in local.cards\" :key=\"card.cardnumber\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">\n                            {{card.name}} ({{card.value}})\n                        </h5>\n                        <p class=\"card-text\">\n                            {{card.text}}\n                        </p>\n                        <button\n                                v-if=\"canChooseCard(card)\"\n                                @click=\"$emit('send', {action: 'chooseCard', params: {key: key}})\"\n                                class=\"btn btn-primary\"\n                        >\n                            Karte spielen\n                        </button>\n                    </div>\n                </div>\n            </transition-group>\n    "
 }));
 
 /***/ }),
@@ -14831,7 +14831,7 @@ __webpack_require__.r(__webpack_exports__);
     global: Object,
     can: Function
   },
-  template: "\n            <div v-if=\"can('chooseGuardianEffectCard')\">\n                <p>W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</p>\n                <ul class=\"list-group mb-4\">\n                    <li\n                        class=\"list-group-item d-flex align-items-center\"\n                        v-for=\"card in global.guardianEffectSelectableCards\"\n                    >\n                        {{card}}\n                        <button\n                            class=\"btn btn-sm btn-success ml-auto\"\n                            @click=\"$emit('send', {card: card})\"\n                        >\n                            ausw\xE4hlen\n                        </button>\n                    </li>\n                </ul>\n            </div>\n    "
+  template: "\n            <div v-if=\"can('chooseGuardianEffectCard')\">\n                <p>W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</p>\n                <ul class=\"list-group mb-4\">\n                    <li\n                        class=\"list-group-item d-flex align-items-center\"\n                        v-for=\"card in global.guardianEffectSelectableCards\"\n                    >\n                        {{card}}\n                        <button\n                            class=\"btn btn-sm btn-success ml-auto\"\n                            @click=\"$emit('send', {action: 'chooseGuardianEffectCard', params: {card: card}})\"\n                        >\n                            ausw\xE4hlen\n                        </button>\n                    </li>\n                </ul>\n            </div>\n    "
 }));
 
 /***/ }),
@@ -14927,7 +14927,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.global.outOfGamePlayers.includes(id);
     }
   },
-  template: "\n            <ul class=\"list-group mb-4\">\n                <li\n                    class=\"list-group-item d-flex align-items-center\"\n                    v-for=\"player in global.players\"\n                    :class=\"[{\n                        active: player.id === global.playerTurn\n                    }]\"\n                >\n                    {{player.name}} #{{player.id}}\n                    <span\n                        class=\"ml-2 badge badge-dark\"\n                        v-if=\"isOutOfGame(player.id)\"\n                    >\n                        ausgeschieden\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-success\"\n                        v-if=\"isWinner(player.id)\"\n                    >\n                        gewonnen\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-info\"\n                        v-if=\"isProtected(player.id)\"\n                    >\n                        gesch\xFCtzt\n                    </span>\n                    <button\n                        class=\"btn btn-sm btn-warning ml-auto\"\n                        v-if=\"canChoosePlayer(player.id)\"\n                        @click=\"$emit('send', {id: player.id})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                    <button\n                        class=\"ml-2 btn btn-primary btn-sm\"\n                        v-if=\"can('selectFirstPlayer')\"\n                        @click=\"$emit('send', {id: player.id})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                </li>\n            </ul>\n    "
+  template: "\n            <ul class=\"list-group mb-4\">\n                <li\n                    class=\"list-group-item d-flex align-items-center\"\n                    v-for=\"player in global.players\"\n                    :class=\"[{\n                        active: player.id === global.playerTurn\n                    }]\"\n                >\n                    {{player.name}} #{{player.id}}\n                    <span\n                        class=\"ml-2 badge badge-dark\"\n                        v-if=\"isOutOfGame(player.id)\"\n                    >\n                        ausgeschieden\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-success\"\n                        v-if=\"isWinner(player.id)\"\n                    >\n                        gewonnen\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-info\"\n                        v-if=\"isProtected(player.id)\"\n                    >\n                        gesch\xFCtzt\n                    </span>\n                    <button\n                        class=\"btn btn-sm btn-warning ml-auto\"\n                        v-if=\"canChoosePlayer(player.id)\"\n                        @click=\"$emit('send', {action: 'choosePlayer', params: {id: player.id}})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                    <button\n                        class=\"ml-2 btn btn-primary btn-sm\"\n                        v-if=\"can('selectFirstPlayer')\"\n                        @click=\"$emit('send', {action: 'selectFirstPlayer', params: {id: player.id}})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                </li>\n            </ul>\n    "
 }));
 
 /***/ }),
@@ -14965,7 +14965,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('visibleCard', {
   props: {
-    effectVisibleCard: Array
+    effectVisibleCard: Object
   },
   template: "\n            <div class=\"alert alert-success d-flex align-items-center\">\n                Diese Karte wurde aufgedeckt: {{effectVisibleCard.name}} ({{effectVisibleCard.value}})\n            </div>\n    "
 }));
@@ -15091,8 +15091,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
   },
   methods: {
     send: function send() {
-      var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+      var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var id = '';
 
       if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
@@ -15107,9 +15107,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
       };
       conn.send(JSON.stringify(data));
       console.log('send identity to server', data);
-    },
-    startGame: function startGame() {
-      this.send({}, 'start');
     },
     setUsername: function setUsername() {
       this.game.local.name = document.getElementById('username').value;
