@@ -10488,12 +10488,21 @@ a.text-dark:hover, a.text-dark:focus {
   -webkit-animation-name: slideOutUp;
   animation-name: slideOutUp; }
 
+body {
+  background: -webkit-gradient(linear, left top, left bottom, from(#DBCBA1), to(#FBF7EF)) no-repeat;
+  background: linear-gradient(to bottom, #DBCBA1 0%, #FBF7EF 100%) no-repeat; }
+
+.app {
+  background: url(/res/img/background.svg) no-repeat 50% -12px;
+  background-size: 100% 102%;
+  height: 100vh; }
+
 .lobby {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 370px;
-  background-color: rgba(206, 212, 218, 0.5);
+  background-color: rgba(221, 221, 221, 0.5);
   padding: 15px; }
   .lobby__header {
     font-size: 18px; }
