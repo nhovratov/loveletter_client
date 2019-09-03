@@ -4,8 +4,7 @@ export default Vue.component(
     'active',
     {
         props: {
-            activeCard: Object,
-            can: Function
+            activeCard: Object
         },
         template: `
             <div class="d-flex mb-4">
@@ -17,20 +16,6 @@ export default Vue.component(
                         <p class="card-text">
                             {{activeCard.text}}
                         </p>
-                        <button
-                            class="btn btn-danger"
-                            v-if="can('confirmDiscardCard')"
-                            @click="$emit('send')"
-                        >
-                            Auf Ablagestapel
-                        </button>
-                        <button
-                            class="btn btn-success"
-                            v-if="can('placeMaidCard')"
-                            @click="$emit('send')"
-                        >
-                            Offen vor dich hinlegen
-                        </button>
                     </div>
                 </div>
             </div>

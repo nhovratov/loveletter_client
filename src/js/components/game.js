@@ -81,8 +81,6 @@ export default Vue.component(
                 <p>Aktive Karte:</p>
                 <active
                     :active-card="global.activeCard"
-                    :can="can"
-                    @send="$emit('send', $event)"
                 >
                 </active>
             </div>
