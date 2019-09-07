@@ -1,6 +1,13 @@
+@import "variables";
 @import "libs/bootstrap";
+@import "libs/fontawesome";
+@import "fa-icons";
 @import "libs/animate.css.scss";
 
 @import "blocks/global";
+@import "fonts";
 @import "blocks/lobby";
 @import "blocks/card";
+@import "blocks/headerbar";
+@import "blocks/game-start";
+@import "blocks/button";

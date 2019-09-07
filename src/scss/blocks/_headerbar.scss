@@ -1,0 +1,26 @@
+.headerbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 90px;
+  background-color: $primary;
+  color: #fff;
+  padding: 0 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(#000, 0.3) 0 3px 6px;
+
+  &__logo {
+    font-family: "Great Vibes", serif;
+    font-size: 60px;
+    line-height: 90px;
+    position: absolute;
+    left: 30px;
+  }
+
+  &__text {
+    font-size: 40px;
+  }
+}

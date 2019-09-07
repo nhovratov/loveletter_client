@@ -1,17 +1,19 @@
 import Vue from 'vue';
 import Cookies from 'js-cookie';
 
-import badge from './components/badge';
 import lobby from './components/lobby';
 import game from './components/game';
+import headerbar from './components/headerbar';
+import gameStart from './components/gameStart';
 
 var conn;
 var app = new Vue({
     el: "#app",
     components: {
-        badge,
         lobby,
         game,
+        headerbar,
+        gameStart,
     },
     data: {
         loveletter: {

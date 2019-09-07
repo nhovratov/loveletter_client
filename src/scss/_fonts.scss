@@ -1,0 +1,58 @@
+/* great-vibes-regular - latin */
+@font-face {
+  font-family: 'Great Vibes';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Great Vibes'), local('GreatVibes-Regular'),
+  url('/res/fonts/great-vibes/great-vibes-v7-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+  url('/res/fonts/great-vibes/great-vibes-v7-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* catamaran-300 - latin */
+@font-face {
+  font-family: 'Catamaran';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Catamaran Light'), local('Catamaran-Light'),
+  url('/res/fonts/catamaran/catamaran-v6-latin-300.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+  url('/res/fonts/catamaran/catamaran-v6-latin-300.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* catamaran-regular - latin */
+@font-face {
+  font-family: 'Catamaran';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Catamaran Regular'), local('Catamaran-Regular'),
+  url('/res/fonts/catamaran/catamaran-v6-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+  url('/res/fonts/catamaran/catamaran-v6-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* catamaran-700 - latin */
+@font-face {
+  font-family: 'Catamaran';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Catamaran Bold'), local('Catamaran-Bold'),
+  url('/res/fonts/catamaran/catamaran-v6-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+  url('/res/fonts/catamaran/catamaran-v6-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Pro';
+  font-style: normal;
+  font-weight: 900;
+  font-display: $fa-font-display;
+  src: url('#{$fa-font-path}/fa-solid-900.eot');
+  src: url('#{$fa-font-path}/fa-solid-900.eot?#iefix') format('embedded-opentype'),
+  url('#{$fa-font-path}/fa-solid-900.woff2') format('woff2'),
+  url('#{$fa-font-path}/fa-solid-900.woff') format('woff'),
+  url('#{$fa-font-path}/fa-solid-900.ttf') format('truetype'),
+  url('#{$fa-font-path}/fa-solid-900.svg#fontawesome') format('svg');
+}
+
+.fa,
+.fas {
+  font-family: 'Font Awesome 5 Pro';
+  font-weight: 900;
+}

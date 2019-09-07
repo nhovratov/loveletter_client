@@ -14687,31 +14687,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/js/components/badge.js":
-/*!************************************!*\
-  !*** ./src/js/components/badge.js ***!
-  \************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('badge', {
-  props: {
-    name: String,
-    id: Number,
-    isHost: Boolean
-  },
-  template: "\n            <div>\n                <div class=\"badge badge-success mb-4\">verbunden <span v-if=\"name\">{{name}}</span> #{{id}}</div>\n                <div class=\"badge badge-info mb-4\" v-if=\"isHost\">Host</div>\n            </div>\n        "
-}));
-
-/***/ }),
-
 /***/ "./src/js/components/cards.js":
 /*!************************************!*\
   !*** ./src/js/components/cards.js ***!
@@ -14815,6 +14790,53 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/gameStart.js":
+/*!****************************************!*\
+  !*** ./src/js/components/gameStart.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('game-start', {
+  props: {
+    players: Array,
+    gameStarted: Boolean,
+    isHost: Boolean
+  },
+  computed: {
+    getActivePlayerCount: function getActivePlayerCount() {
+      var count = 0;
+
+      if (!this.players) {
+        return 0;
+      }
+
+      this.players.forEach(function (player) {
+        if (player.connected) {
+          count += 1;
+        }
+      });
+      return count;
+    },
+    gameIsReadyAndCanStart: function gameIsReadyAndCanStart() {
+      return this.players.length >= 2 && !this.gameStarted && this.isHost;
+    }
+  },
+  template: "\n        <div class=\"game-start\">\n        <div class=\"game-start__header\">Mitspieler</div>\n            <div class=\"game-start__body\">\n                <div class=\"game-start__rules\">\n                    <div class=\"game-start__allowed\">Erlaubt: 2 - 4 Spieler</div>\n                    <div class=\"game-start__size\">{{getActivePlayerCount}} / 4</div>\n                </div>\n                <div class=\"game-start__players\">\n                    <div v-for=\"player in players\" class=\"game-start__player button\">{{player.name}} #{{player.id}}</div>\n                </div>\n            </div>\n            <div>\n                <div class=\"game-start__footer\">\n                    <div\n                        v-if=\"gameIsReadyAndCanStart\"\n                        @click=\"$emit('start-game')\"\n                        class=\"button button--primary\"\n                    >\n                        Spiel starten\n                    </div>\n                </div>\n            </div>\n        </div>\n    "
+}));
+
+/***/ }),
+
 /***/ "./src/js/components/guardian.js":
 /*!***************************************!*\
   !*** ./src/js/components/guardian.js ***!
@@ -14836,6 +14858,26 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/headerbar.js":
+/*!****************************************!*\
+  !*** ./src/js/components/headerbar.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('headerbar', {
+  props: {
+    status: String
+  },
+  template: "\n        <div class=\"headerbar\">\n            <div class=\"headerbar__logo\">\n                Love Letter\n            </div>\n            <div class=\"headerbar__text\">{{status}}</div>\n        </div>\n    "
+}));
+
+/***/ }),
+
 /***/ "./src/js/components/lobby.js":
 /*!************************************!*\
   !*** ./src/js/components/lobby.js ***!
@@ -14845,15 +14887,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
-
-
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('lobby', {
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('lobby', {
+  data: function data() {
+    return {
+      closed: false
+    };
+  },
   props: {
     global: Object,
     local: Object,
@@ -14861,26 +14902,12 @@ __webpack_require__.r(__webpack_exports__);
     isHost: Boolean,
     gameStarted: Boolean
   },
-  computed: {
-    getActivePlayerCount: function getActivePlayerCount() {
-      var count = 0;
-
-      if (!this.global.players) {
-        return 0;
-      }
-
-      this.global.players.forEach(function (player) {
-        if (player.connected) {
-          count += 1;
-        }
-      });
-      return count;
-    },
-    gameIsReadyAndCanStart: function gameIsReadyAndCanStart() {
-      return this.players.length >= 2 && !this.gameStarted && this.isHost;
+  methods: {
+    toggle: function toggle() {
+      this.closed = !this.closed;
     }
   },
-  template: "\n           <div class=\"lobby\">\n            <h2 class=\"lobby__header\">Lobby</h2>\n            <!-- Game status -->\n            <span>{{global.status}}</span>\n\n            <!-- Username enter -->\n            <div v-if=\"!local.name\">\n                <label for=\"username\">Dein Name:</label>\n                <input @keyup.enter=\"$emit('set-username')\" class=\"form-control\" type=\"text\" id=\"username\">\n            </div>\n\n            <!-- Player num -->\n            <div class=\"lobby__connections\">Spieler online: {{getActivePlayerCount}}</div>\n\n            <!-- Connection list -->\n            <ul>\n                <li class=\"font-weight-bold\">\n                    <span v-if=\"local.name\">{{local.name}}</span>\n                    #{{local.id}}\n                    <span class=\"badge badge-info\" v-if=\"isHost\">Host</span>\n                </li>\n                <li\n                    v-for=\"player in global.players\"\n                    v-if=\"global.players && player.id !== local.id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}}</span>\n                    #{{player.id}}\n                    <span class=\"badge badge-info\" v-if=\"player.id === global.hostid\">Host</span>\n                    <span class=\"badge badge-danger\" v-if=\"!player.connected\">disconnected</span>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n            <button\n                class=\"btn btn-primary\"\n                v-if=\"gameIsReadyAndCanStart\"\n                @click=\"$emit('start-game')\"\n            >\n                Spiel starten\n            </button>\n        </div>\n   "
+  template: "\n           <div class=\"lobby\" :class=\"{'lobby--closed': closed}\">\n            <div class=\"lobby__header\">\n                <div v-if=\"!local.name\">\n                    <input @keyup.enter=\"$emit('set-username')\" class=\"form-control lobby__name-input\" type=\"text\" id=\"username\" placeholder=\"Namen eingeben...\">\n                </div>\n                <div v-if=\"local.name\">\n                    <div class=\"lobby__name\">{{local.name}} #{{local.id}}</div>\n                </div>\n                <div class=\"lobby-status\">\n                    <div class=\"lobby-status__item\">\n                        <div class=\"dot dot--online\"></div>\n                    </div>\n                    <div v-if=\"isHost\" class=\"lobby-status__item\">\n                        <i class=\"fas fa-user-tie lobby-status__icon--host\"></i>\n                    </div>\n                </div>\n                <div class=\"lobby__toggle\" @click=\"toggle()\">\n                    <i class=\"fas lobby__toggle-icon\" :class=\"[closed ? 'fa-plus' : 'fa-minus']\"></i>\n                </div>\n            </div>\n\n            <!-- Connection list -->\n            <ul class=\"lobby__connections\">\n                <li\n                    class=\"lobby__connection\"\n                    v-for=\"player in global.players\"\n                    v-if=\"global.players && player.id !== local.id\"\n                >\n                    <span v-if=\"player.name\">{{player.name}} #{{player.id}}</span>\n                    <span v-if=\"!player.name\">Anonymous #{{player.id}}</span>\n                    <div class=\"lobby-status lobby-status--sm\">\n                        <div class=\"lobby-status__item\">\n                            <div class=\"dot\" :class=\"[player.connected ? 'dot--online' : 'dot--offline']\"></div>\n                        </div>\n                        <div class=\"lobby-status__item\" v-if=\"player.id === global.hostid\">\n                            <i class=\"fas fa-user-tie lobby-status__icon--host\"></i>\n                        </div>\n                    </div>\n                </li>\n            </ul>\n\n            <!-- Start game button, smash it! -->\n<!--            <button-->\n<!--                class=\"btn btn-primary\"-->\n<!--                v-if=\"gameIsReadyAndCanStart\"-->\n<!--                @click=\"$emit('start-game')\"-->\n<!--            >-->\n<!--                Spiel starten-->\n<!--            </button>-->\n        </div>\n   "
 }));
 
 /***/ }),
@@ -14986,9 +15013,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_badge__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/badge */ "./src/js/components/badge.js");
-/* harmony import */ var _components_lobby__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/lobby */ "./src/js/components/lobby.js");
-/* harmony import */ var _components_game__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/game */ "./src/js/components/game.js");
+/* harmony import */ var _components_lobby__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/lobby */ "./src/js/components/lobby.js");
+/* harmony import */ var _components_game__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/game */ "./src/js/components/game.js");
+/* harmony import */ var _components_headerbar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/headerbar */ "./src/js/components/headerbar.js");
+/* harmony import */ var _components_gameStart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/gameStart */ "./src/js/components/gameStart.js");
+
 
 
 
@@ -14999,9 +15028,10 @@ var conn;
 var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
   el: "#app",
   components: {
-    badge: _components_badge__WEBPACK_IMPORTED_MODULE_3__["default"],
-    lobby: _components_lobby__WEBPACK_IMPORTED_MODULE_4__["default"],
-    game: _components_game__WEBPACK_IMPORTED_MODULE_5__["default"]
+    lobby: _components_lobby__WEBPACK_IMPORTED_MODULE_3__["default"],
+    game: _components_game__WEBPACK_IMPORTED_MODULE_4__["default"],
+    headerbar: _components_headerbar__WEBPACK_IMPORTED_MODULE_5__["default"],
+    gameStart: _components_gameStart__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   data: {
     loveletter: {

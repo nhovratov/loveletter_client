@@ -7,42 +7,41 @@
 </head>
 <body>
 <div id="app" class="app">
-    <div class="container">
-        <h1>Love Letter</h1>
+    <headerbar
+        :status="loveletter.global.status"
+    >
+    </headerbar>
+    <lobby
+        :global="game.global"
+        :local="game.local"
+        :is-host="isHost"
+        :players="game.global.players"
+        @set-username="setUsername()"
+    >
+    </lobby>
 
-        <badge
-            v-if="local.connected"
-            :name="game.local.name"
-            :id="game.local.id"
-            :is-host="isHost"
-        >
-        </badge>
+    <game-start
+        :players="game.global.players"
+        :game-started="loveletter.global.gameStarted"
+        :is-host="isHost"
+        @start-game="send('start')"
+    >
+    </game-start>
 
-        <lobby
-            :global="game.global"
-            :local="game.local"
-            :is-host="isHost"
-            :players="game.global.players"
-            :game-started="loveletter.global.gameStarted"
-            @set-username="setUsername()"
-            @start-game="send('start')"
-        >
-        </lobby>
-
-        <game
-            :global="loveletter.global"
-            :local="loveletter.local"
-            :id="game.local.id"
-            @send="send($event.action, $event.params)"
-        >
-        </game>
-        <button
-                class="btn btn-primary"
-                @click="send('next')"
-        >
-            Weiter
-        </button>
-    </div>
+    <game
+        :global="loveletter.global"
+        :local="loveletter.local"
+        :id="game.local.id"
+        @send="send($event.action, $event.params)"
+    >
+    </game>
+    <button
+            v-if="loveletter.gameStarted"
+            class="btn btn-primary"
+            @click="send('next')"
+    >
+        Weiter
+    </button>
 </div>
 <script src="dist/js/theme.bundle.js"></script>
 </body>

@@ -1,0 +1,18 @@
+.button {
+  display: inline-block;
+  min-width: 230px;
+  background-color: $primary;
+  color: $secondary;
+  font-weight: 400;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 20px;
+
+  &--primary {
+    background-color: $secondary;
+    color: $primary;
+    border-radius: 4px;
+    font-size: 26px;
+  }
+}
