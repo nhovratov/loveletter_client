@@ -3,7 +3,7 @@ body {
 }
 
 .app {
-  background: url(/res/img/background.svg) no-repeat 50% -12px;
-  background-size: 100% 102%;
   height: 100vh;
+  background: url(/res/img/background.svg) no-repeat center;
+  background-size: cover;
 }
