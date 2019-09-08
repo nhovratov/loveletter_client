@@ -24,7 +24,7 @@
 
     @each $key, $card in $cards {
       &--#{$key} {
-        background: radial-gradient(lighten($card, 10), $card);
+        background: radial-gradient(lighten($card, 20), $card);
       }
     }
   }

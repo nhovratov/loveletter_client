@@ -87,7 +87,6 @@ export default Vue.component(
                 >
                 </guardian>
                 
-                <p>Deine Karten:</p>
                 <cards
                     :global="global"
                     :local="local"
@@ -95,7 +94,6 @@ export default Vue.component(
                 >
                 </cards>
                 
-                <p>Aktive Karte:</p>
                 <active
                     :active-card="global.activeCard"
                 >
