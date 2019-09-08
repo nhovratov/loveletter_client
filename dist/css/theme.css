@@ -10271,7 +10271,9 @@ body {
   background: -webkit-gradient(linear, left top, left bottom, from(#DBCBA1), to(#FBF7EF)) no-repeat;
   background: linear-gradient(to bottom, #DBCBA1 0%, #FBF7EF 100%) no-repeat;
   font-family: Catamaran, sans-serif;
-  font-weight: 300; }
+  font-weight: 300;
+  padding-top: 90px;
+  overflow: hidden; }
 
 .app {
   height: 100vh;
@@ -10433,7 +10435,7 @@ body {
             align-items: center;
     background-color: #5D3D32; }
   .lobby-status__icon--host {
-    color: #4CD9EF;
+    color: #A1D7DB;
     font-size: 19px; }
 
 .dot {
@@ -10441,9 +10443,9 @@ body {
   height: 15px;
   border-radius: 50%; }
   .dot--online {
-    background-color: #39E956; }
+    background-color: #A1DBA7; }
   .dot--offline {
-    background-color: #E64C51; }
+    background-color: #DBA1A1; }
 
 .card {
   width: 250px;
@@ -10478,68 +10480,32 @@ body {
   .headerbar__text {
     font-size: 40px; }
 
-.game-start {
-  width: 530px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 260px;
-  margin-left: auto;
-  margin-right: auto;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 3px 8px;
-          box-shadow: rgba(0, 0, 0, 0.3) 0 3px 8px; }
-  .game-start__header {
-    height: 65px;
-    background-color: #4C3229;
-    color: #DBCBA1;
-    font-size: 34px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
-  .game-start__body {
-    background-color: #DBCBA1;
-    color: #4C3229;
-    padding: 10px 25px 20px;
-    font-size: 24px; }
-  .game-start__rules {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center; }
-  .game-start__size {
-    font-size: 42px; }
-  .game-start__players {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    margin: 0 -10px; }
-  .game-start__player {
-    margin: 10px; }
-  .game-start__footer {
-    background-color: #4C3229;
-    height: 75px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+.game-start__rules {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+
+.game-start__size {
+  font-size: 42px; }
+
+.game-start__footer {
+  background-color: #4C3229;
+  height: 75px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 .button {
   display: inline-block;
@@ -10556,6 +10522,9 @@ body {
     color: #4C3229;
     border-radius: 4px;
     font-size: 26px; }
+  .button--inverse {
+    color: #DBCBA1;
+    background-color: #4C3229; }
 
 .removed-cards {
   width: 80px;
@@ -10599,5 +10568,50 @@ body {
       background: radial-gradient(#738d9a, #5B737F); }
     .removed-cards__item--8 {
       background: radial-gradient(#fcf9f6, #EEE1D1); }
+
+.window {
+  width: 530px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 260px;
+  margin-left: auto;
+  margin-right: auto;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 3px 8px;
+          box-shadow: rgba(0, 0, 0, 0.3) 0 3px 8px; }
+  .window__header {
+    text-align: center;
+    background-color: #4C3229;
+    color: #DBCBA1;
+    font-size: 34px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    padding: 7px 15px; }
+  .window__body {
+    background-color: #DBCBA1;
+    color: #4C3229;
+    padding: 10px 25px 20px;
+    font-size: 24px; }
+  .window__players {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    margin: 0 -10px; }
+  .window__player {
+    margin: 10px; }
+
+.next {
+  position: absolute;
+  right: 10px;
+  bottom: 10px; }
 
 /*# sourceMappingURL=theme.css.map */

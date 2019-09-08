@@ -15,4 +15,9 @@
     border-radius: 4px;
     font-size: 26px;
   }
+
+  &--inverse {
+    color: $secondary;
+    background-color: $primary;
+  }
 }

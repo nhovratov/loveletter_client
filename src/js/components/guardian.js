@@ -5,25 +5,21 @@ export default Vue.component(
     {
         props: {
             global: Object,
-            can: Function
         },
         template: `
-            <div v-if="can('chooseGuardianEffectCard')">
-                <p>Wähle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand hält!</p>
-                <ul class="list-group mb-4">
-                    <li
-                        class="list-group-item d-flex align-items-center"
-                        v-for="card in global.guardianEffectSelectableCards"
-                    >
-                        {{card}}
-                        <button
-                            class="btn btn-sm btn-success ml-auto"
+            <div class="window">
+                <div class="window__header">Wähle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand hält!</div>
+                <div class="window__body">
+                    <div class="window__players">
+                        <div
+                            class="window__player button"
+                            v-for="card in global.guardianEffectSelectableCards"
                             @click="$emit('send', {action: 'chooseGuardianEffectCard', params: {card: card}})"
                         >
-                            auswählen
-                        </button>
-                    </li>
-                </ul>
+                        {{card}}
+                        </div>
+                    </div>
+                </div>
             </div>
     `
     }

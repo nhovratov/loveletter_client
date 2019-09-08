@@ -6,6 +6,9 @@ import cards from './cards';
 import active from './active';
 import removed from './removed';
 import visibleCard from './visibleCard';
+import chooseFirstPlayer from './chooseFirstPlayer';
+import choosePlayer from './choosePlayer';
+import next from './next';
 
 export default Vue.component(
     'game',
@@ -22,6 +25,9 @@ export default Vue.component(
             active,
             removed,
             visibleCard,
+            chooseFirstPlayer,
+            choosePlayer,
+            next,
         },
         methods: {
             can: function (action) {
@@ -32,14 +38,14 @@ export default Vue.component(
             isBoardVisible: function () {
                 return this.global.gameStarted || this.global.winners.length > 0
             },
+
+            canChoosePlayer: function () {
+                return ['choosePlayer', 'chooseAnyPlayer'].includes(this.local.allowedAction);
+            }
         },
         template: `
             <div class="loveletter" v-if="isBoardVisible">
-                <!-- Select first player -->
-                <div class="mb-2" v-if="can('selectFirstPlayer')">
-                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>
-                </div>
-                
+            
                 <visible-card
                     v-if="local.effectVisibleCard.name"
                     :effectVisibleCard="local.effectVisibleCard"
@@ -53,16 +59,30 @@ export default Vue.component(
                 
                 <players
                     :global="global"
-                    :local="local"
-                    :can="can"
                     :id="id"
-                    @send="$emit('send', $event)"
                 >
                 </players>
                 
-                <guardian
+                <choose-first-player
+                    v-if="can('selectFirstPlayer')"
                     :global="global"
-                    :can="can"
+                    :id="id"
+                    @send="$emit('send', $event)"
+                >
+                </choose-first-player>
+                
+                <choose-player
+                    v-if="canChoosePlayer"
+                    :global="global"
+                    :local="local"
+                    :id="id"
+                    @send="$emit('send', $event)"
+                >
+                </choose-player>
+                
+                <guardian
+                    v-if="can('chooseGuardianEffectCard')"
+                    :global="global"
                     @send="$emit('send', $event)"
                 >
                 </guardian>
@@ -80,6 +100,12 @@ export default Vue.component(
                     :active-card="global.activeCard"
                 >
                 </active>
+                
+                <next
+                    v-if="global.gameStarted"
+                    @send="$emit('send', $event)"
+                >
+                </next>
             </div>
         </div>
         `

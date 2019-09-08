@@ -109,7 +109,7 @@
   }
 
   &__icon--host {
-    color: $picton-blue;
+    color: $host;
     font-size: 19px;
   }
 }
@@ -120,10 +120,10 @@
   border-radius: 50%;
 
   &--online {
-    background-color: $malachite;
+    background-color: $online;
   }
 
   &--offline {
-    background-color: $mandy;
+    background-color: $offline;
   }
 }

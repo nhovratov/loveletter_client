@@ -14735,6 +14735,73 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/chooseFirstPlayer.js":
+/*!************************************************!*\
+  !*** ./src/js/components/chooseFirstPlayer.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('choose-first-player', {
+  props: {
+    global: Object,
+    id: Number
+  },
+  template: "\n            <div class=\"window\">\n                <div class=\"window__header\">Der Spieler der als letztes ein Rendezvous hatte beginnt</div>\n                    <div class=\"window__body\">\n                        <div class=\"window__players\">\n                        <div\n                            v-for=\"player in global.players\"\n                            :class=\"['window__player', 'button']\"\n                            @click=\"$emit('send', {action: 'selectFirstPlayer', params: {id: player.id}})\"\n                        >\n                            {{player.name}} #{{player.id}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    "
+}));
+
+/***/ }),
+
+/***/ "./src/js/components/choosePlayer.js":
+/*!*******************************************!*\
+  !*** ./src/js/components/choosePlayer.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.includes */ "./node_modules/core-js/modules/es.array.includes.js");
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.includes */ "./node_modules/core-js/modules/es.string.includes.js");
+/* harmony import */ var core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_includes__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('choose-player', {
+  props: {
+    global: Object,
+    local: Object,
+    id: Number
+  },
+  methods: {
+    canChoosePlayer: function canChoosePlayer(id) {
+      var allowedAction = this.local.allowedAction;
+      return ['choosePlayer', 'chooseAnyPlayer'].includes(allowedAction) && !this.isProtected(id) && !this.isOutOfGame(id) && (id !== this.id || allowedAction === 'chooseAnyPlayer');
+    },
+    isProtected: function isProtected(id) {
+      return this.global.protectedPlayers.includes(id);
+    },
+    isOutOfGame: function isOutOfGame(id) {
+      return this.global.outOfGamePlayers.includes(id);
+    }
+  },
+  template: "\n            <div class=\"window\">\n                <div class=\"window__header\">W\xE4hle einen Spieler</div>\n                    <div class=\"window__body\">\n                        <div class=\"window__players\">\n                            <div\n                                v-for=\"player in global.players\"\n                                v-if=\"canChoosePlayer(player.id)\"\n                                :class=\"['window__player', 'button']\"\n                                @click=\"$emit('send', {action: 'choosePlayer', params: {id: player.id}})\"\n                            >\n                                {{player.name}} #{{player.id}}\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n    "
+}));
+
+/***/ }),
+
 /***/ "./src/js/components/game.js":
 /*!***********************************!*\
   !*** ./src/js/components/game.js ***!
@@ -14744,15 +14811,20 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
-/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./players */ "./src/js/components/players.js");
-/* harmony import */ var _guardian__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./guardian */ "./src/js/components/guardian.js");
-/* harmony import */ var _cards__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./cards */ "./src/js/components/cards.js");
-/* harmony import */ var _active__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./active */ "./src/js/components/active.js");
-/* harmony import */ var _removed__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./removed */ "./src/js/components/removed.js");
-/* harmony import */ var _visibleCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./visibleCard */ "./src/js/components/visibleCard.js");
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.includes */ "./node_modules/core-js/modules/es.array.includes.js");
+/* harmony import */ var core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_includes__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.number.constructor */ "./node_modules/core-js/modules/es.number.constructor.js");
+/* harmony import */ var core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./players */ "./src/js/components/players.js");
+/* harmony import */ var _guardian__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./guardian */ "./src/js/components/guardian.js");
+/* harmony import */ var _cards__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./cards */ "./src/js/components/cards.js");
+/* harmony import */ var _active__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./active */ "./src/js/components/active.js");
+/* harmony import */ var _removed__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./removed */ "./src/js/components/removed.js");
+/* harmony import */ var _visibleCard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./visibleCard */ "./src/js/components/visibleCard.js");
+/* harmony import */ var _chooseFirstPlayer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./chooseFirstPlayer */ "./src/js/components/chooseFirstPlayer.js");
+/* harmony import */ var _choosePlayer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./choosePlayer */ "./src/js/components/choosePlayer.js");
+/* harmony import */ var _next__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./next */ "./src/js/components/next.js");
 
 
 
@@ -14761,19 +14833,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('game', {
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('game', {
   props: {
     global: Object,
     local: Object,
     id: Number
   },
   components: {
-    players: _players__WEBPACK_IMPORTED_MODULE_2__["default"],
-    guardian: _guardian__WEBPACK_IMPORTED_MODULE_3__["default"],
-    cards: _cards__WEBPACK_IMPORTED_MODULE_4__["default"],
-    active: _active__WEBPACK_IMPORTED_MODULE_5__["default"],
-    removed: _removed__WEBPACK_IMPORTED_MODULE_6__["default"],
-    visibleCard: _visibleCard__WEBPACK_IMPORTED_MODULE_7__["default"]
+    players: _players__WEBPACK_IMPORTED_MODULE_3__["default"],
+    guardian: _guardian__WEBPACK_IMPORTED_MODULE_4__["default"],
+    cards: _cards__WEBPACK_IMPORTED_MODULE_5__["default"],
+    active: _active__WEBPACK_IMPORTED_MODULE_6__["default"],
+    removed: _removed__WEBPACK_IMPORTED_MODULE_7__["default"],
+    visibleCard: _visibleCard__WEBPACK_IMPORTED_MODULE_8__["default"],
+    chooseFirstPlayer: _chooseFirstPlayer__WEBPACK_IMPORTED_MODULE_9__["default"],
+    choosePlayer: _choosePlayer__WEBPACK_IMPORTED_MODULE_10__["default"],
+    next: _next__WEBPACK_IMPORTED_MODULE_11__["default"]
   },
   methods: {
     can: function can(action) {
@@ -14783,9 +14862,12 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     isBoardVisible: function isBoardVisible() {
       return this.global.gameStarted || this.global.winners.length > 0;
+    },
+    canChoosePlayer: function canChoosePlayer() {
+      return ['choosePlayer', 'chooseAnyPlayer'].includes(this.local.allowedAction);
     }
   },
-  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n                <!-- Select first player -->\n                <div class=\"mb-2\" v-if=\"can('selectFirstPlayer')\">\n                    <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>\n                </div>\n                \n                <visible-card\n                    v-if=\"local.effectVisibleCard.name\"\n                    :effectVisibleCard=\"local.effectVisibleCard\"\n                >\n                </visible-card>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :local=\"local\"\n                    :can=\"can\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </players>\n                \n                <guardian\n                    :global=\"global\"\n                    :can=\"can\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <p>Deine Karten:</p>\n                <cards\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <p>Aktive Karte:</p>\n                <active\n                    :active-card=\"global.activeCard\"\n                >\n                </active>\n            </div>\n        </div>\n        "
+  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n            \n                <visible-card\n                    v-if=\"local.effectVisibleCard.name\"\n                    :effectVisibleCard=\"local.effectVisibleCard\"\n                >\n                </visible-card>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :id=\"id\"\n                >\n                </players>\n                \n                <choose-first-player\n                    v-if=\"can('selectFirstPlayer')\"\n                    :global=\"global\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </choose-first-player>\n                \n                <choose-player\n                    v-if=\"canChoosePlayer\"\n                    :global=\"global\"\n                    :local=\"local\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </choose-player>\n                \n                <guardian\n                    v-if=\"can('chooseGuardianEffectCard')\"\n                    :global=\"global\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <p>Deine Karten:</p>\n                <cards\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <p>Aktive Karte:</p>\n                <active\n                    :active-card=\"global.activeCard\"\n                >\n                </active>\n                \n                <next\n                    v-if=\"global.gameStarted\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </next>\n            </div>\n        </div>\n        "
 }));
 
 /***/ }),
@@ -14829,10 +14911,10 @@ __webpack_require__.r(__webpack_exports__);
       return count;
     },
     gameIsReadyAndCanStart: function gameIsReadyAndCanStart() {
-      return this.players.length >= 2 && !this.gameStarted && this.isHost;
+      return this.players.length >= 2 && !this.gameStarted;
     }
   },
-  template: "\n        <div v-if=\"!gameStarted\" class=\"game-start\">\n        <div class=\"game-start__header\">Mitspieler</div>\n            <div class=\"game-start__body\">\n                <div class=\"game-start__rules\">\n                    <div class=\"game-start__allowed\">Erlaubt: 2 - 4 Spieler</div>\n                    <div class=\"game-start__size\">{{getActivePlayerCount}} / 4</div>\n                </div>\n                <div class=\"game-start__players\">\n                    <div v-for=\"player in players\" class=\"game-start__player button\">{{player.name}} #{{player.id}}</div>\n                </div>\n            </div>\n            <div>\n                <div class=\"game-start__footer\">\n                    <div\n                        v-if=\"gameIsReadyAndCanStart\"\n                        @click=\"$emit('start-game')\"\n                        class=\"button button--primary\"\n                    >\n                        Spiel starten\n                    </div>\n                </div>\n            </div>\n        </div>\n    "
+  template: "\n        <div v-if=\"!gameStarted\" class=\"window game-start\">\n        <div class=\"window__header\">Mitspieler</div>\n            <div class=\"window__body\">\n                <div class=\"game-start__rules\">\n                    <div class=\"game-start__allowed\">Erlaubt: 2 - 4 Spieler</div>\n                    <div class=\"game-start__size\">{{getActivePlayerCount}} / 4</div>\n                </div>\n                <div class=\"window__players\">\n                    <div v-for=\"player in players\" class=\"window__player button\">{{player.name}} #{{player.id}}</div>\n                </div>\n            </div>\n            <div\n                v-if=\"isHost\"\n                class=\"game-start__footer\"\n            >\n                <div\n                    v-if=\"gameIsReadyAndCanStart\"\n                    @click=\"$emit('start-game')\"\n                    class=\"button button--primary\"\n                >\n                    Spiel starten\n                </div>\n            </div>\n        </div>\n    "
 }));
 
 /***/ }),
@@ -14850,10 +14932,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('guardian', {
   props: {
-    global: Object,
-    can: Function
+    global: Object
   },
-  template: "\n            <div v-if=\"can('chooseGuardianEffectCard')\">\n                <p>W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</p>\n                <ul class=\"list-group mb-4\">\n                    <li\n                        class=\"list-group-item d-flex align-items-center\"\n                        v-for=\"card in global.guardianEffectSelectableCards\"\n                    >\n                        {{card}}\n                        <button\n                            class=\"btn btn-sm btn-success ml-auto\"\n                            @click=\"$emit('send', {action: 'chooseGuardianEffectCard', params: {card: card}})\"\n                        >\n                            ausw\xE4hlen\n                        </button>\n                    </li>\n                </ul>\n            </div>\n    "
+  template: "\n            <div class=\"window\">\n                <div class=\"window__header\">W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</div>\n                <div class=\"window__body\">\n                    <div class=\"window__players\">\n                        <div\n                            class=\"window__player button\"\n                            v-for=\"card in global.guardianEffectSelectableCards\"\n                            @click=\"$emit('send', {action: 'chooseGuardianEffectCard', params: {card: card}})\"\n                        >\n                        {{card}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    "
 }));
 
 /***/ }),
@@ -14912,6 +14993,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/next.js":
+/*!***********************************!*\
+  !*** ./src/js/components/next.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+/* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('next', {
+  template: "\n        <div\n            class=\"next button button--primary button--inverse\"\n            @click=\"$emit('send', {action: 'next'})\"\n        >\n            Weiter\n        </div>\n    "
+}));
+
+/***/ }),
+
 /***/ "./src/js/components/players.js":
 /*!**************************************!*\
   !*** ./src/js/components/players.js ***!
@@ -14935,15 +15033,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('players', {
   props: {
     global: Object,
-    local: Object,
-    id: Number,
-    can: Function
+    id: Number
   },
   methods: {
-    canChoosePlayer: function canChoosePlayer(id) {
-      var allowedAction = this.local.allowedAction;
-      return ['choosePlayer', 'chooseAnyPlayer'].includes(allowedAction) && !this.isProtected(id) && !this.isOutOfGame(id) && (id !== this.id || allowedAction === 'chooseAnyPlayer');
-    },
     isWinner: function isWinner(id) {
       return this.global.winners.includes(id);
     },
@@ -14954,7 +15046,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.global.outOfGamePlayers.includes(id);
     }
   },
-  template: "\n            <ul class=\"list-group mb-4\">\n                <li\n                    class=\"list-group-item d-flex align-items-center\"\n                    v-for=\"player in global.players\"\n                    :class=\"[{\n                        active: player.id === global.playerTurn\n                    }]\"\n                >\n                    {{player.name}} #{{player.id}}\n                    <span\n                        class=\"ml-2 badge badge-dark\"\n                        v-if=\"isOutOfGame(player.id)\"\n                    >\n                        ausgeschieden\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-success\"\n                        v-if=\"isWinner(player.id)\"\n                    >\n                        gewonnen\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-info\"\n                        v-if=\"isProtected(player.id)\"\n                    >\n                        gesch\xFCtzt\n                    </span>\n                    <button\n                        class=\"btn btn-sm btn-warning ml-auto\"\n                        v-if=\"canChoosePlayer(player.id)\"\n                        @click=\"$emit('send', {action: 'choosePlayer', params: {id: player.id}})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                    <button\n                        class=\"ml-2 btn btn-primary btn-sm\"\n                        v-if=\"can('selectFirstPlayer')\"\n                        @click=\"$emit('send', {action: 'selectFirstPlayer', params: {id: player.id}})\"\n                    >\n                        ausw\xE4hlen\n                    </button>\n                </li>\n            </ul>\n    "
+  template: "\n            <ul class=\"list-group mb-4\">\n                <li\n                    class=\"list-group-item d-flex align-items-center\"\n                    v-for=\"player in global.players\"\n                    :class=\"[{\n                        active: player.id === global.playerTurn\n                    }]\"\n                >\n                    {{player.name}} #{{player.id}}\n                    <span\n                        class=\"ml-2 badge badge-dark\"\n                        v-if=\"isOutOfGame(player.id)\"\n                    >\n                        ausgeschieden\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-success\"\n                        v-if=\"isWinner(player.id)\"\n                    >\n                        gewonnen\n                    </span>\n                    <span\n                        class=\"ml-2 badge badge-info\"\n                        v-if=\"isProtected(player.id)\"\n                    >\n                        gesch\xFCtzt\n                    </span>\n                </li>\n            </ul>\n    "
 }));
 
 /***/ }),

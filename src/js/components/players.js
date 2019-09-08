@@ -5,18 +5,9 @@ export default Vue.component(
     {
         props: {
             global: Object,
-            local: Object,
             id: Number,
-            can: Function,
         },
         methods: {
-            canChoosePlayer: function (id) {
-                let allowedAction = this.local.allowedAction;
-                return ['choosePlayer', 'chooseAnyPlayer'].includes(allowedAction)
-                    && !this.isProtected(id)
-                    && !this.isOutOfGame(id)
-                    && (id !== this.id || allowedAction === 'chooseAnyPlayer');
-            },
 
             isWinner: function (id) {
                 return this.global.winners.includes(id);
@@ -58,20 +49,6 @@ export default Vue.component(
                     >
                         geschützt
                     </span>
-                    <button
-                        class="btn btn-sm btn-warning ml-auto"
-                        v-if="canChoosePlayer(player.id)"
-                        @click="$emit('send', {action: 'choosePlayer', params: {id: player.id}})"
-                    >
-                        auswählen
-                    </button>
-                    <button
-                        class="ml-2 btn btn-primary btn-sm"
-                        v-if="can('selectFirstPlayer')"
-                        @click="$emit('send', {action: 'selectFirstPlayer', params: {id: player.id}})"
-                    >
-                        auswählen
-                    </button>
                 </li>
             </ul>
     `
