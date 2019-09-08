@@ -27,7 +27,7 @@ export default Vue.component(
             },
         },
         template: `
-        <div v-if="!gameStarted" class="window game-start">
+        <div v-if="!gameStarted" class="window window--center game-start">
         <div class="window__header">Mitspieler</div>
             <div class="window__body">
                 <div class="game-start__rules">

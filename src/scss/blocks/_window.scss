@@ -1,12 +1,18 @@
 .window {
   width: 530px;
   position: absolute;
-  left: 0;
-  right: 0;
+  right: 180px;
   top: 260px;
   margin-left: auto;
   margin-right: auto;
   box-shadow: rgba(#000, 0.3) 0 3px 8px;
+
+  &--center {
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
   &__header {
     text-align: center;

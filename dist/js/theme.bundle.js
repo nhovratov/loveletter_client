@@ -14682,7 +14682,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     activeCard: Object
   },
-  template: "\n            <div class=\"d-flex mb-4\">\n                <div class=\"card\" v-if=\"activeCard\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">\n                            {{activeCard.name}} ({{activeCard.value}})\n                        </h5>\n                        <p class=\"card-text\">\n                            {{activeCard.text}}\n                        </p>\n                    </div>\n                </div>\n            </div>\n    "
+  template: "\n            <img\n                v-if=\"activeCard\"\n                :src=\"'/res/img/cards/' + activeCard.name + '.png'\"\n                :class=\"['active-card']\"\n            />\n    "
 }));
 
 /***/ }),
@@ -14710,9 +14710,6 @@ __webpack_require__.r(__webpack_exports__);
     local: Object
   },
   methods: {
-    canChooseCard: function canChooseCard(card) {
-      return this.local.allowedAction === 'chooseCard' && !this.isPreventedByCountess(card.name);
-    },
     isPreventedByCountess: function isPreventedByCountess(cardname) {
       var cards = [];
       var handCards = this.local.cards;
@@ -14723,14 +14720,14 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      if (!cards.includes('Gräfin')) {
+      if (!cards.includes('countess')) {
         return false;
       }
 
-      return ['König', 'Prinz'].includes(cardname);
+      return ['king', 'prince'].includes(cardname);
     }
   },
-  template: "\n            <transition-group\n                    tag=\"div\"\n                    class=\"mb-4 d-flex\"\n                    enter-active-class=\"animated fadeIn\"\n                    leave-active-class=\"animated fadeOut\"\n            >\n                <div class=\"card mr-2\" v-for=\"(card, key) in local.cards\" :key=\"card.cardnumber\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">\n                            {{card.name}} ({{card.value}})\n                        </h5>\n                        <p class=\"card-text\">\n                            {{card.text}}\n                        </p>\n                        <button\n                                v-if=\"canChooseCard(card)\"\n                                @click=\"$emit('send', {action: 'chooseCard', params: {key: key}})\"\n                                class=\"btn btn-primary\"\n                        >\n                            Karte spielen\n                        </button>\n                    </div>\n                </div>\n            </transition-group>\n    "
+  template: "\n            <transition-group\n                    class=\"cards\"\n                    tag=\"div\"\n                    enter-active-class=\"animated fadeIn\"\n                    leave-active-class=\"animated fadeOut\"\n            >\n                <img\n                    :src=\"'/res/img/cards/' + card.name + '.png'\"\n                    :class=\"['card', {disabled: isPreventedByCountess(card.name)}]\"\n                    v-for=\"(card, key) in local.cards\"\n                    :key=\"card.cardnumber\"\n                    @click=\"$emit('send', {action: 'chooseCard', params: {key: key}})\"\n                />\n            </transition-group>\n    "
 }));
 
 /***/ }),
@@ -14754,7 +14751,7 @@ __webpack_require__.r(__webpack_exports__);
     global: Object,
     id: Number
   },
-  template: "\n            <div class=\"window\">\n                <div class=\"window__header\">Der Spieler der als letztes ein Rendezvous hatte beginnt</div>\n                    <div class=\"window__body\">\n                        <div class=\"window__players\">\n                        <div\n                            v-for=\"player in global.players\"\n                            :class=\"['window__player', 'button']\"\n                            @click=\"$emit('send', {action: 'selectFirstPlayer', params: {id: player.id}})\"\n                        >\n                            {{player.name}} #{{player.id}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    "
+  template: "\n            <div class=\"window window--center\">\n                <div class=\"window__header\">Der Spieler der als letztes ein Rendezvous hatte beginnt</div>\n                    <div class=\"window__body\">\n                        <div class=\"window__players\">\n                        <div\n                            v-for=\"player in global.players\"\n                            :class=\"['window__player', 'button']\"\n                            @click=\"$emit('send', {action: 'selectFirstPlayer', params: {id: player.id}})\"\n                        >\n                            {{player.name}} #{{player.id}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    "
 }));
 
 /***/ }),
@@ -14867,7 +14864,7 @@ __webpack_require__.r(__webpack_exports__);
       return ['choosePlayer', 'chooseAnyPlayer'].includes(this.local.allowedAction);
     }
   },
-  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n            \n                <visible-card\n                    v-if=\"local.effectVisibleCard.name\"\n                    :effectVisibleCard=\"local.effectVisibleCard\"\n                >\n                </visible-card>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :id=\"id\"\n                >\n                </players>\n                \n                <choose-first-player\n                    v-if=\"can('selectFirstPlayer')\"\n                    :global=\"global\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </choose-first-player>\n                \n                <choose-player\n                    v-if=\"canChoosePlayer\"\n                    :global=\"global\"\n                    :local=\"local\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </choose-player>\n                \n                <guardian\n                    v-if=\"can('chooseGuardianEffectCard')\"\n                    :global=\"global\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <cards\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <active\n                    :active-card=\"global.activeCard\"\n                >\n                </active>\n                \n                <next\n                    v-if=\"global.gameStarted\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </next>\n            </div>\n        </div>\n        "
+  template: "\n            <div class=\"loveletter\" v-if=\"isBoardVisible\">\n            \n                <visible-card\n                    v-if=\"global.gameStarted && local.effectVisibleCard.name\"\n                    :effectVisibleCard=\"local.effectVisibleCard\"\n                >\n                </visible-card>\n    \n                <removed\n                    :outOfGameCards=\"global.outOfGameCards\"\n                >\n                </removed>\n                \n                <players\n                    :global=\"global\"\n                    :id=\"id\"\n                >\n                </players>\n                \n                <choose-first-player\n                    v-if=\"can('selectFirstPlayer')\"\n                    :global=\"global\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </choose-first-player>\n                \n                <choose-player\n                    v-if=\"canChoosePlayer\"\n                    :global=\"global\"\n                    :local=\"local\"\n                    :id=\"id\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </choose-player>\n                \n                <guardian\n                    v-if=\"can('chooseGuardianEffectCard')\"\n                    :global=\"global\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </guardian>\n                \n                <cards\n                    v-if=\"global.gameStarted\"\n                    :global=\"global\"\n                    :local=\"local\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </cards>\n                \n                <active\n                    v-if=\"global.gameStarted\"\n                    :active-card=\"global.activeCard\"\n                >\n                </active>\n                \n                <next\n                    v-if=\"global.gameStarted\"\n                    @send=\"$emit('send', $event)\"\n                >\n                </next>\n            </div>\n        </div>\n        "
 }));
 
 /***/ }),
@@ -14914,7 +14911,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.players.length >= 2 && !this.gameStarted;
     }
   },
-  template: "\n        <div v-if=\"!gameStarted\" class=\"window game-start\">\n        <div class=\"window__header\">Mitspieler</div>\n            <div class=\"window__body\">\n                <div class=\"game-start__rules\">\n                    <div class=\"game-start__allowed\">Erlaubt: 2 - 4 Spieler</div>\n                    <div class=\"game-start__size\">{{getActivePlayerCount}} / 4</div>\n                </div>\n                <div class=\"window__players\">\n                    <div v-for=\"player in players\" class=\"window__player button\">{{player.name}} #{{player.id}}</div>\n                </div>\n            </div>\n            <div\n                v-if=\"isHost\"\n                class=\"game-start__footer\"\n            >\n                <div\n                    v-if=\"gameIsReadyAndCanStart\"\n                    @click=\"$emit('start-game')\"\n                    class=\"button button--primary\"\n                >\n                    Spiel starten\n                </div>\n            </div>\n        </div>\n    "
+  template: "\n        <div v-if=\"!gameStarted\" class=\"window window--center game-start\">\n        <div class=\"window__header\">Mitspieler</div>\n            <div class=\"window__body\">\n                <div class=\"game-start__rules\">\n                    <div class=\"game-start__allowed\">Erlaubt: 2 - 4 Spieler</div>\n                    <div class=\"game-start__size\">{{getActivePlayerCount}} / 4</div>\n                </div>\n                <div class=\"window__players\">\n                    <div v-for=\"player in players\" class=\"window__player button\">{{player.name}} #{{player.id}}</div>\n                </div>\n            </div>\n            <div\n                v-if=\"isHost\"\n                class=\"game-start__footer\"\n            >\n                <div\n                    v-if=\"gameIsReadyAndCanStart\"\n                    @click=\"$emit('start-game')\"\n                    class=\"button button--primary\"\n                >\n                    Spiel starten\n                </div>\n            </div>\n        </div>\n    "
 }));
 
 /***/ }),
@@ -14934,7 +14931,20 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     global: Object
   },
-  template: "\n            <div class=\"window\">\n                <div class=\"window__header\">W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</div>\n                <div class=\"window__body\">\n                    <div class=\"window__players\">\n                        <div\n                            class=\"window__player button\"\n                            v-for=\"card in global.guardianEffectSelectableCards\"\n                            @click=\"$emit('send', {action: 'chooseGuardianEffectCard', params: {card: card}})\"\n                        >\n                        {{card}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    "
+  data: function data() {
+    return {
+      translation: {
+        'priest': 'Priester',
+        'baron': 'Baron',
+        'maid': 'Zofe',
+        'prince': 'Prinz',
+        'king': 'König',
+        'countess': 'Gäfin',
+        'princess': 'Prinzessin'
+      }
+    };
+  },
+  template: "\n            <div class=\"window\">\n                <div class=\"window__header\">W\xE4hle die Karte, die {{global.guardianEffectChosenPlayer}} auf der Hand h\xE4lt!</div>\n                <div class=\"window__body\">\n                    <div class=\"window__players\">\n                        <div\n                            class=\"window__player button\"\n                            v-for=\"card in global.guardianEffectSelectableCards\"\n                            @click=\"$emit('send', {action: 'chooseGuardianEffectCard', params: {card: card}})\"\n                        >\n                        {{translation[card]}}\n                        </div>\n                    </div>\n                </div>\n            </div>\n    "
 }));
 
 /***/ }),
@@ -14954,7 +14964,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     status: String
   },
-  template: "\n        <div class=\"headerbar\">\n            <div class=\"headerbar__logo\">\n                Love Letter\n            </div>\n            <div class=\"headerbar__text\">{{status}}</div>\n        </div>\n    "
+  template: "\n        <div class=\"headerbar\">\n            <div class=\"headerbar__logo\">\n                Love Letter\n            </div>\n            <div v-if=\"status\" class=\"headerbar__text\">{{status}}</div>\n            <div v-else class=\"headerbar__text\">Warte auf Mitspieler...</div>\n        </div>\n    "
 }));
 
 /***/ }),
@@ -15086,7 +15096,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     effectVisibleCard: Object
   },
-  template: "\n            <div class=\"alert alert-success d-flex align-items-center\">\n                Diese Karte wurde aufgedeckt: {{effectVisibleCard.name}} ({{effectVisibleCard.value}})\n            </div>\n    "
+  template: "\n            <div class=\"visible-card\">\n                <div class=\"visible-card__header\">\n                    Aufgedeckte Karte\n                </div>\n                <img\n                    :src=\"'/res/img/cards/' + effectVisibleCard.name + '.png'\"\n                    :class=\"['visible-card__card']\"\n                />\n            </div>\n    "
 }));
 
 /***/ }),

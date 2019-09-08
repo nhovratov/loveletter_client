@@ -8,10 +8,6 @@ export default Vue.component(
             local: Object
         },
         methods: {
-            canChooseCard: function (card) {
-                return this.local.allowedAction === 'chooseCard' && !this.isPreventedByCountess(card.name);
-            },
-
             isPreventedByCountess: function (cardname) {
                 var cards = [];
                 var handCards = this.local.cards;
@@ -20,36 +16,26 @@ export default Vue.component(
                         cards.push(handCards[key]['name']);
                     }
                 }
-                if (!cards.includes('Gräfin')) {
+                if (!cards.includes('countess')) {
                     return false;
                 }
-                return ['König', 'Prinz'].includes(cardname);
+                return ['king', 'prince'].includes(cardname);
             },
         },
         template: `
             <transition-group
+                    class="cards"
                     tag="div"
-                    class="mb-4 d-flex"
                     enter-active-class="animated fadeIn"
                     leave-active-class="animated fadeOut"
             >
-                <div class="card mr-2" v-for="(card, key) in local.cards" :key="card.cardnumber">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {{card.name}} ({{card.value}})
-                        </h5>
-                        <p class="card-text">
-                            {{card.text}}
-                        </p>
-                        <button
-                                v-if="canChooseCard(card)"
-                                @click="$emit('send', {action: 'chooseCard', params: {key: key}})"
-                                class="btn btn-primary"
-                        >
-                            Karte spielen
-                        </button>
-                    </div>
-                </div>
+                <img
+                    :src="'/res/img/cards/' + card.name + '.png'"
+                    :class="['card', {disabled: isPreventedByCountess(card.name)}]"
+                    v-for="(card, key) in local.cards"
+                    :key="card.cardnumber"
+                    @click="$emit('send', {action: 'chooseCard', params: {key: key}})"
+                />
             </transition-group>
     `
     }

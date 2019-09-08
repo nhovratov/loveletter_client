@@ -1,0 +1,17 @@
+.visible-card {
+  position: absolute;
+  right: 280px;
+  top: 100px;
+  background-color: $primary;
+  padding: 20px 10px 10px;
+  box-shadow: rgba(#000, 0.3) 0 3px 8px;
+  border-radius: 15px;
+
+  &__header {
+    color: $secondary;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+    padding-bottom: 10px;
+  }
+}

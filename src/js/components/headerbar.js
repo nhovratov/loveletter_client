@@ -11,7 +11,8 @@ export default Vue.component(
             <div class="headerbar__logo">
                 Love Letter
             </div>
-            <div class="headerbar__text">{{status}}</div>
+            <div v-if="status" class="headerbar__text">{{status}}</div>
+            <div v-else class="headerbar__text">Warte auf Mitspieler...</div>
         </div>
     `
     }

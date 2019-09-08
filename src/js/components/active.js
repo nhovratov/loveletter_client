@@ -7,18 +7,11 @@ export default Vue.component(
             activeCard: Object
         },
         template: `
-            <div class="d-flex mb-4">
-                <div class="card" v-if="activeCard">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {{activeCard.name}} ({{activeCard.value}})
-                        </h5>
-                        <p class="card-text">
-                            {{activeCard.text}}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <img
+                v-if="activeCard"
+                :src="'/res/img/cards/' + activeCard.name + '.png'"
+                :class="['active-card']"
+            />
     `
     }
 );

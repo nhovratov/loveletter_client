@@ -7,8 +7,14 @@ export default Vue.component(
             effectVisibleCard: Object
         },
         template: `
-            <div class="alert alert-success d-flex align-items-center">
-                Diese Karte wurde aufgedeckt: {{effectVisibleCard.name}} ({{effectVisibleCard.value}})
+            <div class="visible-card">
+                <div class="visible-card__header">
+                    Aufgedeckte Karte
+                </div>
+                <img
+                    :src="'/res/img/cards/' + effectVisibleCard.name + '.png'"
+                    :class="['visible-card__card']"
+                />
             </div>
     `
     }

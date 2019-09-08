@@ -8,7 +8,7 @@ export default Vue.component(
             id: Number,
         },
         template: `
-            <div class="window">
+            <div class="window window--center">
                 <div class="window__header">Der Spieler der als letztes ein Rendezvous hatte beginnt</div>
                     <div class="window__body">
                         <div class="window__players">

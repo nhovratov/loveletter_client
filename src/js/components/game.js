@@ -47,7 +47,7 @@ export default Vue.component(
             <div class="loveletter" v-if="isBoardVisible">
             
                 <visible-card
-                    v-if="local.effectVisibleCard.name"
+                    v-if="global.gameStarted && local.effectVisibleCard.name"
                     :effectVisibleCard="local.effectVisibleCard"
                 >
                 </visible-card>
@@ -88,6 +88,7 @@ export default Vue.component(
                 </guardian>
                 
                 <cards
+                    v-if="global.gameStarted"
                     :global="global"
                     :local="local"
                     @send="$emit('send', $event)"
@@ -95,6 +96,7 @@ export default Vue.component(
                 </cards>
                 
                 <active
+                    v-if="global.gameStarted"
                     :active-card="global.activeCard"
                 >
                 </active>

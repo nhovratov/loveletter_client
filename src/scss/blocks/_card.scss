@@ -1,4 +1,25 @@
+.cards {
+  position: absolute;
+  left: 600px;
+  bottom: 10px;
+  display: flex;
+}
+
 .card {
-  width: 250px;
-  height: 250px;
+  cursor: pointer;
+  margin-right: 30px;
+  box-shadow: rgba(#000, 0.3) 0 3px 8px;
+  border-radius: 15px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.active-card {
+  position: absolute;
+  left: 600px;
+  top: 100px;
+  box-shadow: rgba(#000, 0.3) 0 3px 8px;
+  border-radius: 15px;
 }
