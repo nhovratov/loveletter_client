@@ -35,9 +35,6 @@ export default Vue.component(
         },
         template: `
             <div class="loveletter" v-if="isBoardVisible">
-                <!-- Game status -->
-                <div v-if="global.status" class="alert alert-info">{{global.status}}</div>
-    
                 <!-- Select first player -->
                 <div class="mb-2" v-if="can('selectFirstPlayer')">
                     <p>Der Spieler der als letztes ein Rendezvous hatte beginnt:</p>

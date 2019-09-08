@@ -10557,4 +10557,47 @@ body {
     border-radius: 4px;
     font-size: 26px; }
 
+.removed-cards {
+  width: 80px;
+  background-color: #4C3229;
+  position: absolute;
+  right: 0;
+  top: 210px;
+  padding: 10px 0; }
+  .removed-cards__item {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 45px;
+    font-weight: 400;
+    color: #4C3229;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin: 0 auto 15px; }
+    .removed-cards__item:last-child {
+      margin-bottom: 0; }
+    .removed-cards__item--1 {
+      background: radial-gradient(#cd823d, #AB692C); }
+    .removed-cards__item--2 {
+      background: radial-gradient(#bf4a40, #993B33); }
+    .removed-cards__item--3 {
+      background: radial-gradient(#9a787f, #805F66); }
+    .removed-cards__item--4 {
+      background: radial-gradient(#dde7ec, #BDCFD9); }
+    .removed-cards__item--5 {
+      background: radial-gradient(#c7b383, #B79D60); }
+    .removed-cards__item--6 {
+      background: radial-gradient(#9fa18b, #878A6F); }
+    .removed-cards__item--7 {
+      background: radial-gradient(#738d9a, #5B737F); }
+    .removed-cards__item--8 {
+      background: radial-gradient(#fcf9f6, #EEE1D1); }
+
 /*# sourceMappingURL=theme.css.map */
