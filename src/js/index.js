@@ -58,22 +58,14 @@ var app = new Vue({
     },
     mounted: function () {
         conn = new WebSocket(`ws://${this.config.server}:${this.config.port}`);
-        console.log('Create new connection.');
 
         conn.onopen = function (e) {
-            console.log('START Onopen event');
             app.local.connected = true;
-            if (Cookies.get('id')) {
-                console.log('cookie with id exists.');
-            }
             app.send();
-            console.log('END Onopen');
         };
 
         conn.onmessage = function (e) {
-            console.log('START onmessage');
             var data = JSON.parse(e.data);
-            console.log('Received new data: ', data);
             if (data.dataType === "game") {
                 app.loveletter.global = data.global;
                 app.loveletter.local = data.local;
@@ -81,15 +73,12 @@ var app = new Vue({
                 app.game = data;
             }
             if (data.local.newId) {
-                console.log('server responded with newId.');
                 Cookies.set('id', data.local.newId, {expires: 30});
             }
             if (!Cookies.get('id')) {
-                console.log('No id with cookie is set. Set id from newId');
                 Cookies.set('id', data.local.newId, {expires: 30});
                 app.send();
             }
-            console.log('END onmessage');
         };
     },
     methods: {
@@ -105,7 +94,6 @@ var app = new Vue({
                 params: params
             };
             conn.send(JSON.stringify(data));
-            console.log('send identity to server', data);
         },
 
         setUsername: function () {

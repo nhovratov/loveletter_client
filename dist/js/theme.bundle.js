@@ -15317,24 +15317,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
   },
   mounted: function mounted() {
     conn = new WebSocket("ws://".concat(this.config.server, ":").concat(this.config.port));
-    console.log('Create new connection.');
 
     conn.onopen = function (e) {
-      console.log('START Onopen event');
       app.local.connected = true;
-
-      if (js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.get('id')) {
-        console.log('cookie with id exists.');
-      }
-
       app.send();
-      console.log('END Onopen');
     };
 
     conn.onmessage = function (e) {
-      console.log('START onmessage');
       var data = JSON.parse(e.data);
-      console.log('Received new data: ', data);
 
       if (data.dataType === "game") {
         app.loveletter.global = data.global;
@@ -15344,21 +15334,17 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
       }
 
       if (data.local.newId) {
-        console.log('server responded with newId.');
         js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.set('id', data.local.newId, {
           expires: 30
         });
       }
 
       if (!js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.get('id')) {
-        console.log('No id with cookie is set. Set id from newId');
         js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.set('id', data.local.newId, {
           expires: 30
         });
         app.send();
       }
-
-      console.log('END onmessage');
     };
   },
   methods: {
@@ -15378,7 +15364,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
         params: params
       };
       conn.send(JSON.stringify(data));
-      console.log('send identity to server', data);
     },
     setUsername: function setUsername() {
       this.game.local.name = document.getElementById('username').value;
