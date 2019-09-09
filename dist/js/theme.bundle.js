@@ -329,6 +329,36 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/array-method-has-species-support.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/core-js/internals/array-method-has-species-support.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var SPECIES = wellKnownSymbol('species');
+
+module.exports = function (METHOD_NAME) {
+  return !fails(function () {
+    var array = [];
+    var constructor = array.constructor = {};
+
+    constructor[SPECIES] = function () {
+      return {
+        foo: 1
+      };
+    };
+
+    return array[METHOD_NAME](Boolean).foo !== 1;
+  });
+};
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/array-species-create.js":
 /*!****************************************************************!*\
   !*** ./node_modules/core-js/internals/array-species-create.js ***!
@@ -494,6 +524,29 @@ module.exports = function (bitmap, value) {
     writable: !(bitmap & 4),
     value: value
   };
+};
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/create-property.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/internals/create-property.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var toPrimitive = __webpack_require__(/*! ../internals/to-primitive */ "./node_modules/core-js/internals/to-primitive.js");
+
+var definePropertyModule = __webpack_require__(/*! ../internals/object-define-property */ "./node_modules/core-js/internals/object-define-property.js");
+
+var createPropertyDescriptor = __webpack_require__(/*! ../internals/create-property-descriptor */ "./node_modules/core-js/internals/create-property-descriptor.js");
+
+module.exports = function (object, key, value) {
+  var propertyKey = toPrimitive(key);
+  if (propertyKey in object) definePropertyModule.f(object, propertyKey, createPropertyDescriptor(0, value));else object[propertyKey] = value;
 };
 
 /***/ }),
@@ -1823,6 +1876,89 @@ module.exports = function (name) {
 // a string of all valid unicode whitespaces
 // eslint-disable-next-line max-len
 module.exports = '\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.array.concat.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.concat.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+
+var isArray = __webpack_require__(/*! ../internals/is-array */ "./node_modules/core-js/internals/is-array.js");
+
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+
+var toObject = __webpack_require__(/*! ../internals/to-object */ "./node_modules/core-js/internals/to-object.js");
+
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+
+var createProperty = __webpack_require__(/*! ../internals/create-property */ "./node_modules/core-js/internals/create-property.js");
+
+var arraySpeciesCreate = __webpack_require__(/*! ../internals/array-species-create */ "./node_modules/core-js/internals/array-species-create.js");
+
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var IS_CONCAT_SPREADABLE = wellKnownSymbol('isConcatSpreadable');
+var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF;
+var MAXIMUM_ALLOWED_INDEX_EXCEEDED = 'Maximum allowed index exceeded';
+var IS_CONCAT_SPREADABLE_SUPPORT = !fails(function () {
+  var array = [];
+  array[IS_CONCAT_SPREADABLE] = false;
+  return array.concat()[0] !== array;
+});
+var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('concat');
+
+var isConcatSpreadable = function (O) {
+  if (!isObject(O)) return false;
+  var spreadable = O[IS_CONCAT_SPREADABLE];
+  return spreadable !== undefined ? !!spreadable : isArray(O);
+};
+
+var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT; // `Array.prototype.concat` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.concat
+// with adding support of @@isConcatSpreadable and @@species
+
+$({
+  target: 'Array',
+  proto: true,
+  forced: FORCED
+}, {
+  concat: function concat(arg) {
+    // eslint-disable-line no-unused-vars
+    var O = toObject(this);
+    var A = arraySpeciesCreate(O, 0);
+    var n = 0;
+    var i, k, length, len, E;
+
+    for (i = -1, length = arguments.length; i < length; i++) {
+      E = i === -1 ? O : arguments[i];
+
+      if (isConcatSpreadable(E)) {
+        len = toLength(E.length);
+        if (n + len > MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+
+        for (k = 0; k < len; k++, n++) if (k in E) createProperty(A, n, E[k]);
+      } else {
+        if (n >= MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+        createProperty(A, n++, E);
+      }
+    }
+
+    A.length = n;
+    return A;
+  }
+});
 
 /***/ }),
 
@@ -15110,15 +15246,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_lobby__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/lobby */ "./src/js/components/lobby.js");
-/* harmony import */ var _components_game__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/game */ "./src/js/components/game.js");
-/* harmony import */ var _components_headerbar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/headerbar */ "./src/js/components/headerbar.js");
-/* harmony import */ var _components_gameStart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/gameStart */ "./src/js/components/gameStart.js");
+/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat */ "./node_modules/core-js/modules/es.array.concat.js");
+/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _components_lobby__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/lobby */ "./src/js/components/lobby.js");
+/* harmony import */ var _components_game__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/game */ "./src/js/components/game.js");
+/* harmony import */ var _components_headerbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/headerbar */ "./src/js/components/headerbar.js");
+/* harmony import */ var _components_gameStart__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/gameStart */ "./src/js/components/gameStart.js");
+
 
 
 
@@ -15127,15 +15266,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var conn;
-var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
+var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
   el: "#app",
   components: {
-    lobby: _components_lobby__WEBPACK_IMPORTED_MODULE_3__["default"],
-    game: _components_game__WEBPACK_IMPORTED_MODULE_4__["default"],
-    headerbar: _components_headerbar__WEBPACK_IMPORTED_MODULE_5__["default"],
-    gameStart: _components_gameStart__WEBPACK_IMPORTED_MODULE_6__["default"]
+    lobby: _components_lobby__WEBPACK_IMPORTED_MODULE_4__["default"],
+    game: _components_game__WEBPACK_IMPORTED_MODULE_5__["default"],
+    headerbar: _components_headerbar__WEBPACK_IMPORTED_MODULE_6__["default"],
+    gameStart: _components_gameStart__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   data: {
+    config: window.config,
     loveletter: {
       global: {
         winners: {},
@@ -15176,14 +15316,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
     }
   },
   mounted: function mounted() {
-    conn = new WebSocket('ws://192.168.178.63:8080');
+    conn = new WebSocket("ws://".concat(this.config.server, ":").concat(this.config.port));
     console.log('Create new connection.');
 
     conn.onopen = function (e) {
       console.log('START Onopen event');
       app.local.connected = true;
 
-      if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
+      if (js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.get('id')) {
         console.log('cookie with id exists.');
       }
 
@@ -15205,14 +15345,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
 
       if (data.local.newId) {
         console.log('server responded with newId.');
-        js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('id', data.local.newId, {
+        js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.set('id', data.local.newId, {
           expires: 30
         });
       }
 
-      if (!js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
+      if (!js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.get('id')) {
         console.log('No id with cookie is set. Set id from newId');
-        js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.set('id', data.local.newId, {
+        js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.set('id', data.local.newId, {
           expires: 30
         });
         app.send();
@@ -15227,8 +15367,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var id = '';
 
-      if (js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id')) {
-        id = js_cookie__WEBPACK_IMPORTED_MODULE_2___default.a.get('id');
+      if (js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.get('id')) {
+        id = js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.get('id');
       }
 
       var data = {

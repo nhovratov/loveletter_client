@@ -16,6 +16,7 @@ var app = new Vue({
         gameStart,
     },
     data: {
+        config: window.config,
         loveletter: {
             global: {
                 winners: {},
@@ -56,7 +57,7 @@ var app = new Vue({
         }
     },
     mounted: function () {
-        conn = new WebSocket('ws://192.168.178.63:8080');
+        conn = new WebSocket(`ws://${this.config.server}:${this.config.port}`);
         console.log('Create new connection.');
 
         conn.onopen = function (e) {
