@@ -11,6 +11,7 @@ export default Vue.component(
                 <div
                     v-for="card in outOfGameCards"
                     :class="['removed-cards__item', 'removed-cards__item--' + card.value]"
+                    :title="card.name"
                 >
                 {{card.value}}
                 </div>

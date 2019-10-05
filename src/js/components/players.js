@@ -45,7 +45,13 @@ export default Vue.component(
                         <div class="players__bottom">
                             <i class="players__discard-icon fas fa-layer-minus"></i>
                             <div class="players__discards">
-                                <div v-for="card in player.discardPile" :class="['players__discard', 'players__discard--' + card.value]">{{card.value}}</div>
+                                <div
+                                    v-for="card in player.discardPile"
+                                    :class="['players__discard', 'players__discard--' + card.value]"
+                                    :title="card.name"
+                                    >
+                                        {{card.value}}
+                                    </div>
                             </div>
                         </div>
                     </div>
