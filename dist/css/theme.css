@@ -10293,9 +10293,6 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -10305,10 +10302,16 @@ body {
     font-family: "Great Vibes", serif;
     font-size: 60px;
     line-height: 90px;
-    position: absolute;
-    left: 30px; }
+    left: 30px;
+    margin-right: 40px;
+    -ms-flex-negative: 0;
+        flex-shrink: 0; }
   .headerbar__text {
-    font-size: 40px; }
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    font-size: 32px;
+    line-height: 32px; }
 
 .game-start__rules {
   display: -webkit-box;
