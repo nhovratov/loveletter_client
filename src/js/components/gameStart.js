@@ -23,8 +23,18 @@ export default Vue.component(
             },
 
             gameIsReadyAndCanStart: function () {
-                return this.players.length >= 2 && !this.gameStarted;
+                return this.getActivePlayerCount >= 2 && !this.gameStarted;
             },
+
+            getActivePlayers: function () {
+                var players = [];
+                this.players.forEach(function (player) {
+                    if (player.connected) {
+                        players.push(player);
+                    }
+                });
+                return players;
+            }
         },
         template: `
         <div v-if="!gameStarted" class="window window--center game-start">
@@ -35,7 +45,7 @@ export default Vue.component(
                     <div class="game-start__size">{{getActivePlayerCount}} / 4</div>
                 </div>
                 <div class="window__players">
-                    <div v-for="player in players" class="window__player button">{{player.name}} #{{player.id}}</div>
+                    <div v-for="player in getActivePlayers" class="window__player button">{{player.name}} #{{player.id}}</div>
                 </div>
             </div>
             <div

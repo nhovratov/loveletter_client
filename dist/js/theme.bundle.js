@@ -15044,10 +15044,19 @@ __webpack_require__.r(__webpack_exports__);
       return count;
     },
     gameIsReadyAndCanStart: function gameIsReadyAndCanStart() {
-      return this.players.length >= 2 && !this.gameStarted;
+      return this.getActivePlayerCount >= 2 && !this.gameStarted;
+    },
+    getActivePlayers: function getActivePlayers() {
+      var players = [];
+      this.players.forEach(function (player) {
+        if (player.connected) {
+          players.push(player);
+        }
+      });
+      return players;
     }
   },
-  template: "\n        <div v-if=\"!gameStarted\" class=\"window window--center game-start\">\n        <div class=\"window__header\">Mitspieler</div>\n            <div class=\"window__body\">\n                <div class=\"game-start__rules\">\n                    <div class=\"game-start__allowed\">Erlaubt: 2 - 4 Spieler</div>\n                    <div class=\"game-start__size\">{{getActivePlayerCount}} / 4</div>\n                </div>\n                <div class=\"window__players\">\n                    <div v-for=\"player in players\" class=\"window__player button\">{{player.name}} #{{player.id}}</div>\n                </div>\n            </div>\n            <div\n                v-if=\"isHost\"\n                class=\"game-start__footer\"\n            >\n                <div\n                    v-if=\"gameIsReadyAndCanStart\"\n                    @click=\"$emit('start-game')\"\n                    class=\"button button--primary\"\n                >\n                    Spiel starten\n                </div>\n            </div>\n        </div>\n    "
+  template: "\n        <div v-if=\"!gameStarted\" class=\"window window--center game-start\">\n        <div class=\"window__header\">Mitspieler</div>\n            <div class=\"window__body\">\n                <div class=\"game-start__rules\">\n                    <div class=\"game-start__allowed\">Erlaubt: 2 - 4 Spieler</div>\n                    <div class=\"game-start__size\">{{getActivePlayerCount}} / 4</div>\n                </div>\n                <div class=\"window__players\">\n                    <div v-for=\"player in getActivePlayers\" class=\"window__player button\">{{player.name}} #{{player.id}}</div>\n                </div>\n            </div>\n            <div\n                v-if=\"isHost\"\n                class=\"game-start__footer\"\n            >\n                <div\n                    v-if=\"gameIsReadyAndCanStart\"\n                    @click=\"$emit('start-game')\"\n                    class=\"button button--primary\"\n                >\n                    Spiel starten\n                </div>\n            </div>\n        </div>\n    "
 }));
 
 /***/ }),
