@@ -15,7 +15,7 @@ export default Vue.component(
                     'maid': 'Zofe',
                     'prince': 'Prinz',
                     'king': 'König',
-                    'countess': 'Gäfin',
+                    'countess': 'Gräfin',
                     'princess': 'Prinzessin'
                 }
             }

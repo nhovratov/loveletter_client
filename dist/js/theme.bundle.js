@@ -15075,7 +15075,7 @@ __webpack_require__.r(__webpack_exports__);
         'maid': 'Zofe',
         'prince': 'Prinz',
         'king': 'König',
-        'countess': 'Gäfin',
+        'countess': 'Gräfin',
         'princess': 'Prinzessin'
       }
     };
