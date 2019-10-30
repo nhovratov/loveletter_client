@@ -15048,6 +15048,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     getActivePlayers: function getActivePlayers() {
       var players = [];
+
+      if (!this.players) {
+        return players;
+      }
+
       this.players.forEach(function (player) {
         if (player.connected) {
           players.push(player);

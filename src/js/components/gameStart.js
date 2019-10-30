@@ -28,6 +28,9 @@ export default Vue.component(
 
             getActivePlayers: function () {
                 var players = [];
+                if (!this.players) {
+                    return players;
+                }
                 this.players.forEach(function (player) {
                     if (player.connected) {
                         players.push(player);
