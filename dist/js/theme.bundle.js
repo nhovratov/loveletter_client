@@ -15330,7 +15330,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
     }
   },
   mounted: function mounted() {
-    conn = new WebSocket("ws://".concat(this.config.server, ":").concat(this.config.port));
+    conn = new WebSocket("".concat(this.config.ssl, "://").concat(this.config.server, ":").concat(this.config.port));
 
     conn.onopen = function (e) {
       app.local.connected = true;

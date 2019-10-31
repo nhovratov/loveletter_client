@@ -57,7 +57,7 @@ var app = new Vue({
         }
     },
     mounted: function () {
-        conn = new WebSocket(`ws://${this.config.server}:${this.config.port}`);
+        conn = new WebSocket(`${this.config.ssl}://${this.config.server}:${this.config.port}`);
 
         conn.onopen = function (e) {
             app.local.connected = true;
