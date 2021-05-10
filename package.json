@@ -29,7 +29,7 @@
     "gulp-sass": "^3.2.1",
     "gulp-sourcemaps": "^2.6.5",
     "js-cookie": "^2.2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lodash.template": "^4.5.0",
     "natives": "^1.1.6",
     "postcss-flexbugs-fixes": "^3.3.1",
