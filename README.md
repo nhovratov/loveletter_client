@@ -10,3 +10,7 @@ This app uses websockets to connect to the game server in order exchange data be
 
 ## Vue
 Vue is used as the frontend rendering framework
+
+## Run locally
+
+`docker run -d --name loveletter_client -p 8888:80 nikitah/loveletter_client`
