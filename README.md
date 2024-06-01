@@ -14,3 +14,11 @@ Vue is used as the frontend rendering framework
 ## Run locally
 
 `docker run -d --name loveletter_client -p 8888:80 nikitah/loveletter_client`
+
+With server:
+
+`docker compose up -d`
+
+## Frontend
+
+http://localhost:8888

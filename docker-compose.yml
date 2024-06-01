@@ -1,0 +1,11 @@
+version: "3"
+services:
+  loveletter_client:
+    image: nikitah/loveletter_client
+    ports:
+      - 8888:80
+  loveletter_server:
+    image: nikitah/loveletter_server
+    ports:
+      - 8080:8080
+
